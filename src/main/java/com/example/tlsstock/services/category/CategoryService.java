@@ -15,4 +15,5 @@ public interface CategoryService {
 
     boolean deleteCategory(CategoryDto categoryDto);
 
+    List<CategoryDto> getCategoriesByName(String name);
 }

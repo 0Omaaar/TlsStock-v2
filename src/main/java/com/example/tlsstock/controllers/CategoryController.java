@@ -59,4 +59,13 @@ public class CategoryController {
         }
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed To Get Categories !");
     }
+
+    @GetMapping("/categories/search")
+    public ResponseEntity<List<CategoryDto>> getCategoriesByName(@RequestParam(name = "name", defaultValue = "") String name){
+        List<CategoryDto> categoryDtos = categoryService.getCategoriesByName(name);
+        if(categoryDtos != null){
+            return ResponseEntity.ok(categoryDtos);
+        }
+        return ResponseEntity.notFound().build();
+    }
 }
