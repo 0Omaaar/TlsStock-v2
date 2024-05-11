@@ -14,6 +14,10 @@ export class CategoryService {
     return this.http.get(API + 'categories');
   }
 
+  getCategoriesByName(name: string): Observable<any>{
+    return this.http.get(API + 'categories/search?name='+name);
+  }
+
   addCategorie(CategorieDto: any): Observable<any> {
     return this.http.post(API + 'saveCategory', CategorieDto);
   }

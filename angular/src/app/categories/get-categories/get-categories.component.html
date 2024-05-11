@@ -1,10 +1,20 @@
 <div class="row">
     <div class="col-xl-12">
         <app-card cardTitle="Liste des Categories" blockClass="table-border-style">
-            <button type="button" style="margin-top: -25px;" class="btn btn-outline-primary" data-bs-toggle="modal"
-                data-bs-target="#addCategory" (click)="toggleAddModal()">
-                Ajouter Categorie
-            </button>
+            <div class="row">
+                <div class="col-md-6">
+                    <button type="button" style="margin-top: -25px;" class="btn btn-outline-primary" data-bs-toggle="modal"
+                        data-bs-target="#addCategory" (click)="toggleAddModal()">
+                        Ajouter Categorie
+                    </button>
+                </div>
+                <div class="col-md-6" style="margin-top: -2%;" *ngIf="searchForm">
+                    <form [formGroup]="searchForm" class="d-flex">
+                        <input type="text" formControlName="name" class="form-control me-2" placeholder="Search" aria-label="Search" (input)="getCategoriesByName()">
+                    </form>
+                </div>
+            </div>
+            
             <div class="table-responsive" style="margin-top: 7px;">
                 <table class="table table-hover">
                     <thead>
@@ -42,7 +52,7 @@
                 <div class="modal fade" id="addCategory" tabindex="-1" aria-labelledby="exampleModalLabel"
                     aria-hidden="true">
                     <div class="modal-dialog">
-                        <div class="modal-content">
+                        <div class="modal-content" *ngIf="addCategoryForm">
                             <form [formGroup]="addCategoryForm" action="javascript:" class="was-validated"
                                 (submit)="ajouterCategorie()">
                                 <div class="modal-header">
@@ -80,7 +90,7 @@
                 <div class="modal fade" id="updateCategory" tabindex="-1" aria-labelledby="exampleModalLabel"
                     aria-hidden="true">
                     <div class="modal-dialog">
-                        <div class="modal-content">
+                        <div class="modal-content" *ngIf="updateCategoryForm">
                             <form [formGroup]="updateCategoryForm" (submit)="updateCategory()" action="javascript:"
                                 class="was-validated">
                                 <div class="modal-header">

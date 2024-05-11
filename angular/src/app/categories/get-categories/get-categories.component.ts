@@ -4,7 +4,6 @@ import { SharedModule } from 'src/app/theme/shared/shared.module';
 import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 import { ColorPickerModule } from 'ngx-color-picker';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { PaginationModule } from 'ngx-pagination';
 
 
 @Component({
@@ -15,13 +14,14 @@ import { PaginationModule } from 'ngx-pagination';
   styleUrl: './get-categories.component.scss'
 })
 export class GetCategoriesComponent {
-  // @ViewChild('deleteCategoryModal') deleteCategoryModal!: any;
+
   @ViewChild('closeButton') closeButton!: ElementRef;
 
 
   categories!: any;
   addCategoryForm!: FormGroup;
   updateCategoryForm!: FormGroup;
+  searchForm!: FormGroup;
   addModal: boolean = false;
   updateModal: boolean = false;
   isAdding: boolean = false;
@@ -91,6 +91,13 @@ export class GetCategoriesComponent {
     });
   }
 
+  getCategoriesByName() {
+    const name = this.searchForm.get('name')?.value;
+    this.categoryService.getCategoriesByName(name).subscribe(res => {
+      this.categories = res;
+    })
+  }
+
   ajouterCategorie() {
     if (this.addCategoryForm.valid) {
       this.categoryService.addCategorie(this.addCategoryForm.value).subscribe((res) => {
@@ -112,6 +119,11 @@ export class GetCategoriesComponent {
   }
 
   ngOnInit() {
+
+    this.searchForm = this.fb.group({
+      name: [""]
+    });
+
     this.initAddCategoryForm();
     this.getCategories();
   }
