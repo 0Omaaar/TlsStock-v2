@@ -103,6 +103,12 @@ export const NavigationItems: NavigationItem[] = [
             title: 'Categories',
             type: 'item',
             url: '/categories'
+          },
+          {
+            id: 'articles',
+            title: 'Articles',
+            type: 'item',
+            url: '/articles'
           }
         ]
       }

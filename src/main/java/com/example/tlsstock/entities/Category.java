@@ -13,7 +13,7 @@ import org.hibernate.annotations.OnDeleteAction;
 
 import java.util.List;
 
-@Entity @Data @EqualsAndHashCode(callSuper = true)
+@Entity @Data
 public class Category extends AbstractClass {
 
     private String name;
