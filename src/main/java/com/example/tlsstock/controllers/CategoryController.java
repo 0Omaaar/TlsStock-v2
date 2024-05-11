@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController @RequestMapping("/api")
+@RestController @RequestMapping("/api") @CrossOrigin(origins = "http://localhost:4200")
 public class CategoryController {
 
     @Autowired
@@ -29,7 +29,7 @@ public class CategoryController {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed To Save Category !");
     }
 
-    @PostMapping("/updateCategory")
+    @PutMapping("/updateCategory")
     public ResponseEntity<?> updateCategory(@RequestBody CategoryDto categoryDto){
         if(categoryDto == null || categoryDto.getName() == null || categoryDto.getDescription() == null){
             return ResponseEntity.badRequest().body("Category is Invalid !");
@@ -43,12 +43,12 @@ public class CategoryController {
     }
 
     @DeleteMapping("/deleteCategory")
-    public ResponseEntity<?> deleteCategory(@RequestBody CategoryDto categoryDto){
+    public boolean deleteCategory(@RequestBody CategoryDto categoryDto){
         boolean deleted = categoryService.deleteCategory(categoryDto);
         if(deleted){
-            return ResponseEntity.ok("Category Deleted Successfully !");
+            return true;
         }
-        return ResponseEntity.badRequest().build();
+        return false;
     }
 
     @GetMapping("/categories")

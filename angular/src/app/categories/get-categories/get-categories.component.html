@@ -1,0 +1,146 @@
+<div class="row">
+    <div class="col-xl-12">
+        <app-card cardTitle="Liste des Categories" blockClass="table-border-style">
+            <button type="button" style="margin-top: -25px;" class="btn btn-outline-primary" data-bs-toggle="modal"
+                data-bs-target="#addCategory" (click)="toggleAddModal()">
+                Ajouter Categorie
+            </button>
+            <div class="table-responsive" style="margin-top: 7px;">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Nom</th>
+                            <th>Description</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let category of categories; index as i">
+                            <td>{{i+1}}</td>
+                            <td>{{category.name}}</td>
+                            <td>{{category.description}}</td>
+                            <td>
+                                <button data-bs-toggle="modal" data-bs-target="#updateCategory"
+                                    (click)="editCategory(category)" type="button"
+                                    class="btn btn-icon btn-warning text-dark d-inline-flex m-1">
+                                    <i class="feather icon-edit"></i>
+                                </button>
+                                <button data-bs-toggle="modal" data-bs-target="#deleteCategory" type="button"
+                                    (click)="deleteCategoryStore(category)"
+                                    class="btn btn-icon btn-danger d-inline-flex m-1">
+                                    <i class="feather icon-trash"></i>
+                                </button>
+                                <button type="button" class="btn btn-icon btn-info d-inline-flex">
+                                    <i class="feather icon-info"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <!-- add category modal form -->
+                <div class="modal fade" id="addCategory" tabindex="-1" aria-labelledby="exampleModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <form [formGroup]="addCategoryForm" action="javascript:" class="was-validated"
+                                (submit)="ajouterCategorie()">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Ajouter Une Nouvelle Categorie</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="mb-3">
+                                        <label for="validationTextarea" class="form-label">Nom</label>
+                                        <input formControlName="name" class="form-control is-invalid" required
+                                            id="validationTextarea" placeholder="Nom De La Categorie" />
+                                        <div class="invalid-feedback" *ngIf="addCategoryForm.get('name')?.invalid">
+                                            Veuillez Entrer Un Nom !</div>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="validationDescription" class="form-label">Description</label>
+                                        <input formControlName="description" class="form-control is-invalid" required
+                                            id="validationDescription" placeholder="Description De La Categorie" />
+                                        <div class="invalid-feedback"
+                                            *ngIf="addCategoryForm.get('description')?.invalid">Veuillez Entrer Une
+                                            Description !</div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Ferner</button>
+                                    <button type="submit" class="btn btn-primary">Ajouter</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <!-- update category modal form -->
+                <div class="modal fade" id="updateCategory" tabindex="-1" aria-labelledby="exampleModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <form [formGroup]="updateCategoryForm" (submit)="updateCategory()" action="javascript:"
+                                class="was-validated">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">Modifier Categorie</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <input type="hidden" formArrayName="id">
+                                    <div class="mb-3">
+                                        <label for="validationTextarea" class="form-label">Nom</label>
+                                        <input formControlName="name" class="form-control is-invalid" required
+                                            id="validationTextarea" placeholder="Nom De La Categorie" />
+                                        <div class="invalid-feedback" *ngIf="updateCategoryForm.get('name')?.invalid">
+                                            Veuillez Entrer Un Nom !</div>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="validationDescription" class="form-label">Description</label>
+                                        <input formControlName="description" class="form-control is-invalid" required
+                                            id="validationDescription" placeholder="Description De La Categorie" />
+                                        <div class="invalid-feedback"
+                                            *ngIf="updateCategoryForm.get('description')?.invalid">Veuillez Entrer Une
+                                            Description !</div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Fermer</button>
+                                    <button type="submit" class="btn btn-primary">Modifier</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <!-- delete category modal  -->
+                <div class="modal fade" id="deleteCategory" tabindex="-1" aria-labelledby="exampleModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Supprimer Categorie</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="mb-3">
+                                    <h3>Veuillez Confirmer la Suppression !</h3>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" #closeButton
+                                    data-bs-dismiss="modal">Annuler</button>
+                                <button type="button" class="btn btn-danger"
+                                    (click)="deleteCategory()">Supprimer</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </app-card>
+    </div>
+</div>
