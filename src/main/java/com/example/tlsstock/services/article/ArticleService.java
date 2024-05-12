@@ -11,4 +11,8 @@ public interface ArticleService {
     ArticleDto saveArticle(ArticleDto articleDto) throws IOException;
 
     List<ArticleDto> getArticles();
+
+    List<ArticleDto> searchArticlesByKeyword(String keyword);
+
+    boolean deleteArticle(ArticleDto articleDto);
 }

@@ -49,4 +49,24 @@ public class ArticleServiceImpl implements ArticleService{
         }
         return null;
     }
+
+    @Override
+    public List<ArticleDto> searchArticlesByKeyword(String keyword) {
+        List<ArticleDto> articleDtos = articleRepository.findByCodeContainingOrNameContaining(keyword).stream()
+                .map(Article::getDto).collect(Collectors.toList());
+        if(articleDtos != null){
+            return articleDtos;
+        }
+        return null;
+    }
+
+    @Override
+    public boolean deleteArticle(ArticleDto articleDto) {
+        Article article = articleRepository.findById(articleDto.getId()).orElse(null);
+        if(article != null){
+            articleRepository.deleteById(articleDto.getId());
+            return true;
+        }
+        return false;
+    }
 }

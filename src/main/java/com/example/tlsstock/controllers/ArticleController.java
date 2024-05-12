@@ -2,6 +2,7 @@ package com.example.tlsstock.controllers;
 
 import com.example.tlsstock.dtos.ArticleDto;
 import com.example.tlsstock.services.article.ArticleService;
+import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +26,20 @@ public class ArticleController {
         }
         System.out.println("second");
         return ResponseEntity.notFound().build();
+    }
+
+    @GetMapping("/articles/search")
+    public ResponseEntity<?> searchArticles(@RequestParam(name = "keyword", defaultValue = "") String keyword){
+        List<ArticleDto> articleDtos = articleService.searchArticlesByKeyword(keyword);
+        if(articleDtos != null){
+            return ResponseEntity.ok(articleDtos);
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+    @DeleteMapping("/article/delete")
+    public boolean deleteArticle(@RequestBody ArticleDto articleDto){
+        return articleService.deleteArticle(articleDto);
     }
 
     @PostMapping("/article/save")

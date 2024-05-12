@@ -8,14 +8,23 @@ const API = 'http://localhost:8080/api/';
   providedIn: 'root'
 })
 export class ArticleService {
+  constructor(private http: HttpClient) {}
 
-  constructor(private http: HttpClient) { }
-
-  addArticle(articleDto: any): Observable<any>{
+  addArticle(articleDto: any): Observable<any> {
     return this.http.post(API + 'article/save', articleDto);
   }
 
-  getArticles(): Observable<any>{
+  getArticles(): Observable<any> {
     return this.http.get(API + 'articles');
+  }
+
+  searchArticles(keyword: string): Observable<any> {
+    return this.http.get(API + 'articles/search?keyword=' + keyword);
+  }
+
+  deleteArticle(articleDto: any): Observable<any> {
+    return this.http.delete(API + 'article/delete', {
+      body: articleDto
+    });
   }
 }

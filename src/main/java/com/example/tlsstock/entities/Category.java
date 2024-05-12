@@ -1,10 +1,7 @@
 package com.example.tlsstock.entities;
 
 import com.example.tlsstock.dtos.CategoryDto;
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.Cascade;
@@ -20,7 +17,7 @@ public class Category extends AbstractClass {
 
     private String description;
 
-    @OneToMany(mappedBy = "category")
+    @OneToMany(mappedBy = "category",  orphanRemoval = true, fetch = FetchType.LAZY)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private List<Article> articles;
 
