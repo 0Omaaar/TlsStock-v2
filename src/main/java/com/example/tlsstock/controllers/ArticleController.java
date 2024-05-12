@@ -1,6 +1,7 @@
 package com.example.tlsstock.controllers;
 
 import com.example.tlsstock.dtos.ArticleDto;
+import com.example.tlsstock.entities.Article;
 import com.example.tlsstock.services.article.ArticleService;
 import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +38,15 @@ public class ArticleController {
         return ResponseEntity.notFound().build();
     }
 
+    @GetMapping("/article/{id}")
+    public ResponseEntity<?> findArticle(@PathVariable Long id){
+        ArticleDto articleDto = articleService.getArticle(id);
+        if(articleDto != null){
+            return ResponseEntity.ok(articleDto);
+        }
+        return ResponseEntity.notFound().build();
+    }
+
     @DeleteMapping("/article/delete")
     public boolean deleteArticle(@RequestBody ArticleDto articleDto){
         return articleService.deleteArticle(articleDto);
@@ -47,6 +57,15 @@ public class ArticleController {
         if(articleDto != null){
             ArticleDto savedArticle = articleService.saveArticle(articleDto);
             return ResponseEntity.ok(savedArticle);
+        }
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+    }
+
+    @PutMapping("/article/update")
+    public ResponseEntity<?> updateArticle(@RequestBody ArticleDto articleDto) throws IOException{
+        if(articleDto != null){
+            ArticleDto articleDto1 = articleService.updateArticle(articleDto);
+            return ResponseEntity.ok(articleDto1);
         }
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }

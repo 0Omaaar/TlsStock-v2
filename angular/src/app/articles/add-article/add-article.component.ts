@@ -4,11 +4,14 @@ import { Router } from '@angular/router';
 import { ArticleService } from 'src/app/services/articles/article.service';
 import { CategoryService } from 'src/app/services/category.service';
 import { SharedModule } from 'src/app/theme/shared/shared.module';
+import { ColorPickerModule } from 'ngx-color-picker';
+import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
+
 
 @Component({
   selector: 'app-add-article',
   standalone: true,
-  imports: [SharedModule],
+  imports: [SharedModule, ColorPickerModule, NgbDropdownModule],
   templateUrl: './add-article.component.html',
   styleUrl: './add-article.component.scss'
 })

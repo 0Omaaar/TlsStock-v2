@@ -10,9 +10,13 @@ public interface ArticleService {
 
     ArticleDto saveArticle(ArticleDto articleDto) throws IOException;
 
+    ArticleDto updateArticle(ArticleDto articleDto) throws IOException;
+
     List<ArticleDto> getArticles();
 
     List<ArticleDto> searchArticlesByKeyword(String keyword);
+
+    ArticleDto getArticle(Long id);
 
     boolean deleteArticle(ArticleDto articleDto);
 }

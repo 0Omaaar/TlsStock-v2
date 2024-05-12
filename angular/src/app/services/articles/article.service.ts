@@ -22,6 +22,10 @@ export class ArticleService {
     return this.http.get(API + 'articles/search?keyword=' + keyword);
   }
 
+  getArticle(articleId: number): Observable<any> {
+    return this.http.get(API + 'article/' + articleId);
+  }
+
   deleteArticle(articleDto: any): Observable<any> {
     return this.http.delete(API + 'article/delete', {
       body: articleDto

@@ -42,6 +42,27 @@ public class ArticleServiceImpl implements ArticleService{
     }
 
     @Override
+    public ArticleDto updateArticle(ArticleDto articleDto) throws IOException {
+        Article article = articleRepository.findById(articleDto.getId()).orElse(null);
+        if(article != null){
+            article.setName(articleDto.getName());
+            article.setCode(articleDto.getCode());
+            article.setDescription(articleDto.getDescription());
+            article.setQuantity(articleDto.getQuantity());
+
+            Category category = categoryRepository.findById(articleDto.getCategoryId()).orElse(null);
+            if(articleDto.getImage() != null){
+                article.setImage(articleDto.getImage().getBytes());
+            }
+            if(category != null){
+                article.setCategory(category);
+            }
+            return articleRepository.save(article).getDto();
+        }
+        return null;
+    }
+
+    @Override
     public List<ArticleDto> getArticles() {
         List<ArticleDto> articleDtos = articleRepository.findAll().stream().map(Article::getDto).collect(Collectors.toList());
         if(articleDtos != null){
@@ -56,6 +77,15 @@ public class ArticleServiceImpl implements ArticleService{
                 .map(Article::getDto).collect(Collectors.toList());
         if(articleDtos != null){
             return articleDtos;
+        }
+        return null;
+    }
+
+    @Override
+    public ArticleDto getArticle(Long id) {
+        ArticleDto articleDto = articleRepository.findById(id).get().getDto();
+        if(articleDto != null){
+            return articleDto;
         }
         return null;
     }

@@ -17,7 +17,7 @@ public class Category extends AbstractClass {
 
     private String description;
 
-    @OneToMany(mappedBy = "category",  orphanRemoval = true, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private List<Article> articles;
 

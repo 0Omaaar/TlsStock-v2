@@ -8,6 +8,7 @@ import { GuestComponent } from './theme/layout/guest/guest.component';
 import { GetCategoriesComponent } from './categories/get-categories/get-categories.component';
 import { ArticleComponent } from './articles/articles/article.component';
 import { AddArticleComponent } from './articles/add-article/add-article.component';
+import { UpdateArticleComponent } from './articles/update-article/update-article.component';
 
 const routes: Routes = [
   {
@@ -30,6 +31,10 @@ const routes: Routes = [
       {
         path: 'ajouterArticle',
         component: AddArticleComponent
+      },
+      {
+        path: 'modifierArticle/:id',
+        component: UpdateArticleComponent
       },
       {
         path: 'analytics',

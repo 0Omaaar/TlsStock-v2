@@ -24,6 +24,7 @@ import { NavGroupComponent } from './theme/layout/admin/navigation/nav-content/n
 import { NavItemComponent } from './theme/layout/admin/navigation/nav-content/nav-item/nav-item.component';
 import { SharedModule } from './theme/shared/shared.module';
 import { provideHttpClient } from '@angular/common/http';
+import { DemoAngularMaterailModule } from './DemoAngularMaterialModule';
 
 @NgModule({
   declarations: [
@@ -42,9 +43,17 @@ import { provideHttpClient } from '@angular/common/http';
     NavContentComponent,
     NavItemComponent,
     NavCollapseComponent,
-    NavGroupComponent,
+    NavGroupComponent
   ],
-  imports: [BrowserModule, AppRoutingModule, SharedModule, FormsModule, ReactiveFormsModule, BrowserAnimationsModule],
+  imports: [
+    BrowserModule,
+    DemoAngularMaterailModule,
+    AppRoutingModule,
+    SharedModule,
+    FormsModule,
+    ReactiveFormsModule,
+    BrowserAnimationsModule
+  ],
   providers: [provideHttpClient()],
   bootstrap: [AppComponent]
 })

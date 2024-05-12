@@ -1,22 +1,29 @@
 <div class="row">
     <div class="col-sm-12">
         <app-card cardTitle="Ajouter Article" [options]="true">
-            <form action="javascript:" [formGroup]="addArticleForm" (submit)="addArticle()">
+            <form action="javascript:" [formGroup]="addArticleForm" (submit)="addArticle()" class="was-validated">
                 <div class="row">
                     <div class="form-group col-md-6">
                         <label for="inputEmail4">Code</label>
-                        <input formControlName="code" type="text" class="form-control" id="inputEmail4" placeholder="Code D'Article" />
+                        <input formControlName="code" type="text" class="form-control is-invalid" id="inputEmail4"
+                            placeholder="Code D'Article" />
+                        <div class="invalid-feedback" *ngIf="addArticleForm.get('code')!.invalid">
+                            Veuillez Entrer Un Code !</div>
                     </div>
                     <div class="form-group col-md-6">
                         <label for="inputPassword4">Nom</label>
-                        <input type="text" formControlName="name" class="form-control" id="inputPassword4"
+                        <input type="text" formControlName="name" class="form-control is-invalid " id="inputPassword4"
                             placeholder="Nom" />
+                        <div class="invalid-feedback" *ngIf="addArticleForm.get('name')?.invalid">
+                            Veuillez Entrer Un Nom !</div>
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="inputAddress">Description</label>
-                    <textarea formControlName="description" class="form-control" id="inputAddress"
+                    <textarea formControlName="description" class="form-control is-invalid" id="inputAddress"
                         placeholder="Description"></textarea>
+                    <div class="invalid-feedback" *ngIf="addArticleForm.get('description')?.invalid">
+                        Veuillez Entrer Une Description !</div>
                 </div>
                 <div class="row">
                     <div class="form-group col-md-2">
@@ -32,14 +39,19 @@
 
                     <div class="form-group col-md-4">
                         <label for="category">Categorie</label>
-                        <select id="category" class="form-control" formControlName="categoryId">
+                        <select id="category" class="form-control is-invalid" formControlName="categoryId">
                             <option selected disabled>Choisir Categorie</option>
-                            <option *ngFor="let category of categories" value="{{category.id}}">{{category.name}}</option>
+                            <option *ngFor="let category of categories" value="{{category.id}}">{{category.name}}
+                            </option>
                         </select>
+                        <div class="invalid-feedback" *ngIf="addArticleForm.get('categoryId')?.invalid">
+                            Veuillez Entrer Une Category !</div>
                     </div>
                     <div class="form-group col-md-2">
                         <label for="inputZip">Quantité</label>
-                        <input type="number" formControlName="quantity" class="form-control" id="inputZip" />
+                        <input type="number" formControlName="quantity" class="form-control is-invalid" id="inputZip" />
+                        <div class="invalid-feedback" *ngIf="addArticleForm.get('quantity')?.invalid">
+                            Veuillez Entrer Une Quantite !</div>
                     </div>
                 </div>
                 <button type="submit" class="btn btn-primary">Ajouter Article</button>
@@ -47,5 +59,3 @@
         </app-card>
     </div>
 </div>
-
-
