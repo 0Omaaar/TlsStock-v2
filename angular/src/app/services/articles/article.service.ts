@@ -14,4 +14,8 @@ export class ArticleService {
   addArticle(articleDto: any): Observable<any>{
     return this.http.post(API + 'article/save', articleDto);
   }
+
+  getArticles(): Observable<any>{
+    return this.http.get(API + 'articles');
+  }
 }

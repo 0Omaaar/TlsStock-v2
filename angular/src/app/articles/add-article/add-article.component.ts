@@ -1,17 +1,18 @@
 import { Component } from '@angular/core';
-import { SharedModule } from 'src/app/theme/shared/shared.module';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { ArticleService } from 'src/app/services/articles/article.service';
 import { CategoryService } from 'src/app/services/category.service';
+import { SharedModule } from 'src/app/theme/shared/shared.module';
 
 @Component({
-  selector: 'app-article',
+  selector: 'app-add-article',
   standalone: true,
   imports: [SharedModule],
-  templateUrl: './article.component.html',
-  styleUrl: './article.component.scss'
+  templateUrl: './add-article.component.html',
+  styleUrl: './add-article.component.scss'
 })
-export class ArticleComponent {
+export class AddArticleComponent {
   addArticleForm!: FormGroup;
   selectedFile!: File;
   imagePreview!: string | ArrayBuffer | null;
@@ -20,7 +21,8 @@ export class ArticleComponent {
   constructor(
     private articleService: ArticleService,
     private categoryService: CategoryService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private router: Router
   ) {}
 
   ngOnInit() {
@@ -51,7 +53,9 @@ export class ArticleComponent {
   addArticle() {
     if (this.addArticleForm.valid) {
       const formData: FormData = new FormData();
-      formData.append('image', this.selectedFile);
+      if(this.selectedFile != null){
+        formData.append('image', this.selectedFile);
+      }
       formData.append('code', this.addArticleForm.get('code')?.value);
       formData.append('name', this.addArticleForm.get('name')?.value);
       formData.append('description', this.addArticleForm.get('description')?.value);
@@ -61,6 +65,7 @@ export class ArticleComponent {
       this.articleService.addArticle(formData).subscribe((res) => {
         if (res.id != null) {
           console.log('success');
+          this.router.navigateByUrl("/articles");
         }
       });
     } else {

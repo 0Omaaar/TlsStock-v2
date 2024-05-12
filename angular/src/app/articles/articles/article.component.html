@@ -1,0 +1,111 @@
+<div class="row">
+    <div class="col-xl-12">
+        <app-card cardTitle="Liste des Articles" blockClass="table-border-style">
+            <div class="row">
+                <div class="col-md-6">
+                    <button type="button" routerLink="/ajouterArticle" style="margin-top: -25px;"
+                        class="btn btn-outline-primary">
+                        Ajouter Article
+                    </button>
+                </div>
+                <div class="col-md-6" style="margin-top: -2%;">
+                    <!-- <form  class="d-flex">
+                        <input type="text" formControlName="name" class="form-control me-2" placeholder="Search"
+                            aria-label="Search" >
+                    </form> -->
+                </div>
+            </div>
+
+            <div class="table-responsive" style="margin-top: 7px;">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Code</th>
+                            <th>Nom</th>
+                            <th>Description</th>
+                            <th>Quantite</th>
+                            <th>Photo</th>
+                            <th>Categorie</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let article of articles; index as i">
+                            <td>{{i+1}}</td>
+                            <td>{{article.code}}</td>
+                            <td>{{article.name}}</td>
+                            <td>{{article.description}}</td>
+                            <td>{{article.quantity}}</td>
+                            <td>
+                                <div data-bs-toggle="modal" [attr.data-bs-target]="'#displayImage' + article.id"
+                                    class="preview-container" *ngIf="article.processedImg">
+                                    <img [src]="article.processedImg" alt="{{article.name}}" class="preview-image">
+                                </div>
+                                <p *ngIf="!article.processedImg" style="font-size: 100%;margin-top: 5%;"
+                                    class="badge m-r-5 badge-light-danger">Pas De Photo</p>
+                            </td>
+                            <td>{{article.categoryName}}</td>
+                            <td>
+                                <button data-bs-toggle="modal" data-bs-target="#updateCategory" type="button"
+                                    class="btn btn-icon btn-warning text-dark d-inline-flex m-1">
+                                    <i class="feather icon-edit"></i>
+                                </button>
+                                <button data-bs-toggle="modal" data-bs-target="#deleteCategory" type="button"
+                                    class="btn btn-icon btn-danger d-inline-flex m-1">
+                                    <i class="feather icon-trash"></i>
+                                </button>
+                                <button type="button" class="btn btn-icon btn-info d-inline-flex">
+                                    <i class="feather icon-info"></i>
+                                </button>
+                            </td>
+                            <!-- Modal For Displaying Image Clearly -->
+                            <div class="modal fade" [id]="'displayImage' + article.id" data-bs-backdrop="static"
+                                data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel"
+                                aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-scrollable">
+                                    <div class="modal-content">
+                                        <div class="modal-body">
+                                            <img [src]="article.processedImg" class="img-fluid" alt="{{article.name}}">
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-success"
+                                                data-bs-dismiss="modal">Fermer</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </tr>
+
+                    </tbody>
+                </table>
+
+
+                <!-- delete category modal  -->
+                <!-- <div class="modal fade" id="deleteCategory" tabindex="-1" aria-labelledby="exampleModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Supprimer Categorie</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="mb-3">
+                                    <h3>Veuillez Confirmer la Suppression !</h3>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" #closeButton
+                                    data-bs-dismiss="modal">Annuler</button>
+                                <button type="button" class="btn btn-danger"
+                                    (click)="deleteCategory()">Supprimer</button>
+                            </div>
+                        </div>
+                    </div>
+                </div> -->
+
+            </div>
+        </app-card>
+    </div>
+</div>

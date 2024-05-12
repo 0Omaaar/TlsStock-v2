@@ -109,6 +109,12 @@ export const NavigationItems: NavigationItem[] = [
             title: 'Articles',
             type: 'item',
             url: '/articles'
+          },
+          {
+            id: 'ajouter-article',
+            title: 'Ajouter Article',
+            type: 'item',
+            url: '/ajouterArticle'
           }
         ]
       }

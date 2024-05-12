@@ -23,7 +23,7 @@ public class Article extends AbstractClass{
     @Column(columnDefinition = "longblob")
     private byte[] image;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JsonIgnore
     private Category category;
 

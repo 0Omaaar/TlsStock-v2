@@ -8,12 +8,24 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.List;
 
 @RestController @RequestMapping("/api")
 public class ArticleController {
 
     @Autowired
     private ArticleService articleService;
+
+    @GetMapping("/articles")
+    public ResponseEntity<?> getArticles(){
+        List<ArticleDto> articleDtos = articleService.getArticles();
+        if(articleDtos != null){
+            System.out.println(articleDtos);
+            return ResponseEntity.ok(articleDtos);
+        }
+        System.out.println("second");
+        return ResponseEntity.notFound().build();
+    }
 
     @PostMapping("/article/save")
     public ResponseEntity<?> addArticle(@ModelAttribute ArticleDto articleDto) throws IOException {

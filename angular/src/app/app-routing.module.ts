@@ -6,7 +6,8 @@ import { Routes, RouterModule } from '@angular/router';
 import { AdminComponent } from './theme/layout/admin/admin.component';
 import { GuestComponent } from './theme/layout/guest/guest.component';
 import { GetCategoriesComponent } from './categories/get-categories/get-categories.component';
-import { ArticleComponent } from './articles/article/article.component';
+import { ArticleComponent } from './articles/articles/article.component';
+import { AddArticleComponent } from './articles/add-article/add-article.component';
 
 const routes: Routes = [
   {
@@ -25,6 +26,10 @@ const routes: Routes = [
       {
         path: 'articles',
         component: ArticleComponent
+      },
+      {
+        path: 'ajouterArticle',
+        component: AddArticleComponent
       },
       {
         path: 'analytics',
