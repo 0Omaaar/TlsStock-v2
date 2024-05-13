@@ -14,8 +14,12 @@ export class ArticleService {
     return this.http.post(API + 'article/save', articleDto);
   }
 
+  updateArticle(articleDto: any): Observable<any>{
+    return this.http.put(API + 'article/update', articleDto);
+  }
+
   getArticles(): Observable<any> {
-    return this.http.get(API + 'articles');
+    return this.http.get(API + `articles`);
   }
 
   searchArticles(keyword: string): Observable<any> {

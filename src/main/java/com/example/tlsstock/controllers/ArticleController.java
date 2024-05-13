@@ -62,7 +62,7 @@ public class ArticleController {
     }
 
     @PutMapping("/article/update")
-    public ResponseEntity<?> updateArticle(@RequestBody ArticleDto articleDto) throws IOException{
+    public ResponseEntity<?> updateArticle(@ModelAttribute ArticleDto articleDto) throws IOException{
         if(articleDto != null){
             ArticleDto articleDto1 = articleService.updateArticle(articleDto);
             return ResponseEntity.ok(articleDto1);

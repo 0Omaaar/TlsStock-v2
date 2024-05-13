@@ -1,11 +1,12 @@
 <div class="row">
     <div class="col-sm-12">
         <app-card cardTitle="Modifier Article" [options]="true" *ngIf="updateArticleForm">
-            <form action="javascript:" [formGroup]="updateArticleForm">
+            <form action="javascript:" [formGroup]="updateArticleForm" (submit)="modifierArticle()">
                 <div class="row">
                     <div class="form-group col-md-6">
                         <label for="inputEmail4">Code</label>
-                        <input formControlName="code" type="text" class="form-control" id="inputEmail4" placeholder="Code D'Article" />
+                        <input formControlName="code" type="text" class="form-control" id="inputEmail4"
+                            placeholder="Code D'Article" />
                     </div>
                     <div class="form-group col-md-6">
                         <label for="inputPassword4">Nom</label>
@@ -19,22 +20,22 @@
                         placeholder="Description"></textarea>
                 </div>
                 <div class="row">
-                    <!-- <div class="form-group col-md-2">
+                    <div class="form-group col-md-2">
                         <label for="fileInput">Image</label>
                         <input type="file" class="form-control" id="fileInput" (change)="onFileSelected($event)">
-                    </div> -->
+                    </div>
 
-                    <!-- <div *ngIf="selectedFile" class="image-preview col-md-2">
+                    <div *ngIf="selectedFile || imageSrc" class="image-preview col-md-2">
                         <div class="preview-container">
-                            <img [src]="imagePreview" alt="Selected Image" class="preview-image">
+                            <img *ngIf="imageSrc" [src]="imageSrc" alt="Selected Image" class="preview-image">
+                            <img *ngIf="selectedFile" [src]="imagePreview" alt="Selected Image" class="preview-image">
                         </div>
-                    </div> -->
-
+                    </div>
                     <div class="form-group col-md-4">
                         <label for="category">Categorie</label>
                         <select id="category" class="form-control" formControlName="categoryId">
                             <option selected disabled>Choisir Categorie</option>
-                            <!-- <option *ngFor="let category of categories" value="{{category.id}}">{{category.name}}</option> -->
+                            <option *ngFor="let category of categories" value="{{category.id}}">{{category.name}}</option>
                         </select>
                     </div>
                     <div class="form-group col-md-2">
@@ -42,10 +43,8 @@
                         <input type="number" formControlName="quantity" class="form-control" id="inputZip" />
                     </div>
                 </div>
-                <button type="submit" class="btn btn-primary">Ajouter Article</button>
+                <button type="submit" class="btn btn-primary">Modifier Article</button>
             </form>
         </app-card>
     </div>
 </div>
-
-
