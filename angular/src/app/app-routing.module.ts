@@ -9,6 +9,7 @@ import { GetCategoriesComponent } from './categories/get-categories/get-categori
 import { ArticleComponent } from './articles/articles/article.component';
 import { AddArticleComponent } from './articles/add-article/add-article.component';
 import { UpdateArticleComponent } from './articles/update-article/update-article.component';
+import { TestMaterialComponent } from './test-material/test-material.component';
 
 const routes: Routes = [
   {
@@ -31,6 +32,10 @@ const routes: Routes = [
       {
         path: 'ajouterArticle',
         component: AddArticleComponent
+      },
+      {
+        path: 'test',
+        component: TestMaterialComponent
       },
       {
         path: 'modifierArticle/:id',

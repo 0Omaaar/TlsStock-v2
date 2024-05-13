@@ -4,19 +4,25 @@ import { SharedModule } from 'src/app/theme/shared/shared.module';
 import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 import { ColorPickerModule } from 'ngx-color-picker';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { Console } from 'console';
 
 @Component({
   selector: 'app-get-categories',
   standalone: true,
-  imports: [SharedModule, NgbDropdownModule, ColorPickerModule],
+  imports: [SharedModule, NgbDropdownModule, MatTableModule, MatPaginatorModule],
   templateUrl: './get-categories.component.html',
   styleUrl: './get-categories.component.scss'
 })
 export class GetCategoriesComponent {
 
   @ViewChild('closeButton') closeButton!: ElementRef;
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
 
+  displayedColumns: string[] = ['position', 'name', 'description', 'actions'];
+  dataSource = new MatTableDataSource<any>();
 
   categories!: any;
   addCategoryForm!: FormGroup;
@@ -30,7 +36,8 @@ export class GetCategoriesComponent {
 
   constructor(
     private categoryService: CategoryService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private snackbar: MatSnackBar
   ) {}
 
   deleteCategoryStore(categoryDto: any) {
@@ -79,6 +86,9 @@ export class GetCategoriesComponent {
       this.categoryService.updateCategorie(this.updateCategoryForm.value).subscribe((res) => {
         if (res.id != null) {
           this.getCategories();
+          this.snackbar.open("Categorie Modifiee Avec Succes !", 'Close', {
+            duration: 5000
+          });
         }
       });
     }
@@ -88,6 +98,7 @@ export class GetCategoriesComponent {
     this.categoryService.getAllCategories().subscribe((res) => {
       this.categories = res;
       this.initUpdateCategoryForm(this.categories[0]);
+      this.dataSource.data = res;
     });
   }
 
@@ -95,6 +106,7 @@ export class GetCategoriesComponent {
     const name = this.searchForm.get('name')?.value;
     this.categoryService.getCategoriesByName(name).subscribe(res => {
       this.categories = res;
+      this.dataSource.data = res;
     })
   }
 
@@ -104,6 +116,9 @@ export class GetCategoriesComponent {
         if (res.id != null) {
           console.log('success');
           this.getCategories();
+          this.snackbar.open("Categorie Ajoutee Avec Succes !", 'Close', {
+            duration: 5000
+          });
         }
       });
     }
@@ -114,6 +129,9 @@ export class GetCategoriesComponent {
       if (res) {
         this.closeButton.nativeElement.click();
         this.getCategories();
+        this.snackbar.open("Categorie Supprimee Avec Succes !", 'Close', {
+          duration: 5000
+        })
       }
     });
   }

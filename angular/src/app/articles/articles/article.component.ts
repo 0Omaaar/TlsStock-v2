@@ -1,46 +1,70 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
 import { SharedModule } from 'src/app/theme/shared/shared.module';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { ArticleService } from 'src/app/services/articles/article.service';
-import { CategoryService } from 'src/app/services/category.service';
-import { Router, RouterLink, RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-article',
   standalone: true,
-  imports: [SharedModule, RouterModule],
+  imports: [SharedModule, RouterModule, MatTableModule, MatPaginatorModule],
   templateUrl: './article.component.html',
-  styleUrl: './article.component.scss'
+  styleUrls: ['./article.component.scss']
 })
-export class ArticleComponent {
+export class ArticleComponent implements AfterViewInit {
   @ViewChild('closeButton') closeButton!: ElementRef;
+  displayedColumns: string[] = ['position', 'code', 'name', 'description', 'quantity', 'photo', 'categoryName', 'actions'];
+  dataSource = new MatTableDataSource<any>();
 
   articles: any[] = [];
   article: any;
   searchForm!: FormGroup;
 
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+
   constructor(
     private articleService: ArticleService,
     private router: Router,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private snackbar: MatSnackBar
   ) {}
 
+  ngAfterViewInit() {
+    this.dataSource.paginator = this.paginator;
+  }
+
+  ngOnInit() {
+    this.getArticles();
+    this.searchForm = this.fb.group({
+      keyword: ['']
+    });
+  }
+
   getArticles() {
-    this.articles = [];
     this.articleService.getArticles().subscribe((res) => {
-      res.forEach((element: { image: any; processedImg: string; byteImage: string }) => {
+      this.articles = res.map((element: { image: any; processedImg: string; byteImage: string }) => {
         if (element.byteImage != null) {
           element.processedImg = 'data:image/jpeg;base64,' + element.byteImage;
         }
-        this.articles.push(element);
+        return element;
       });
+      this.dataSource.data = this.articles;
     });
   }
 
   searchArticles() {
     const keyword = this.searchForm.get('keyword')?.value;
     this.articleService.searchArticles(keyword).subscribe((res) => {
-      this.articles = res;
+      this.articles = res.map((element: { image: any; processedImg: string; byteImage: string }) => {
+        if (element.byteImage != null) {
+          element.processedImg = 'data:image/jpeg;base64,' + element.byteImage;
+        }
+        return element;
+      });
+      this.dataSource.data = this.articles;
     });
   }
 
@@ -53,15 +77,10 @@ export class ArticleComponent {
       if (res) {
         this.closeButton.nativeElement.click();
         this.getArticles();
+        this.snackbar.open('Article Supprime Avec Succes !', 'Close', {
+          duration: 5000
+        });
       }
-    });
-  }
-
-  ngOnInit() {
-    this.getArticles();
-
-    this.searchForm = this.fb.group({
-      keyword: ['']
     });
   }
 }

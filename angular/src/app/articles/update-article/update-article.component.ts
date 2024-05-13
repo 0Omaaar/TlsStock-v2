@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ArticleService } from 'src/app/services/articles/article.service';
 import { CategoryService } from 'src/app/services/category.service';
 import { SharedModule } from 'src/app/theme/shared/shared.module';
@@ -26,7 +26,8 @@ export class UpdateArticleComponent {
     private articleService: ArticleService,
     private categoryService: CategoryService,
     private fb: FormBuilder,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private router: Router
   ) {}
 
   ngOnInit() {
@@ -82,10 +83,10 @@ export class UpdateArticleComponent {
 
       this.articleService.updateArticle(formData).subscribe((res) => {
         if (res.id != null) {
-          console.log('success');
-          // this.snackBar.open("Article Modifie Avec Succes !", 'Close', {
-          //   panelClass: 'mt-0'
-          // });
+          this.router.navigateByUrl("articles");
+          this.snackBar.open("Article Modifie Avec Succes !", 'Close', {
+            duration: 5000
+          });
         }
       });
     } else {

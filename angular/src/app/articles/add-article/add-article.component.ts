@@ -6,6 +6,7 @@ import { CategoryService } from 'src/app/services/category.service';
 import { SharedModule } from 'src/app/theme/shared/shared.module';
 import { ColorPickerModule } from 'ngx-color-picker';
 import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 
 
@@ -26,7 +27,8 @@ export class AddArticleComponent {
     private articleService: ArticleService,
     private categoryService: CategoryService,
     private fb: FormBuilder,
-    private router: Router
+    private router: Router,
+    private snackbar: MatSnackBar
   ) {}
 
   ngOnInit() {
@@ -70,6 +72,9 @@ export class AddArticleComponent {
         if (res.id != null) {
           console.log('success');
           this.router.navigateByUrl("/articles");
+          this.snackbar.open("Article Ajoute Avec Succes !", 'Close', {
+            duration: 5000
+          })
         }
       });
     } else {
