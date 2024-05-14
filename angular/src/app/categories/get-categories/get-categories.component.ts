@@ -18,12 +18,12 @@ import { Router, RouterModule } from '@angular/router';
   styleUrl: './get-categories.component.scss'
 })
 export class GetCategoriesComponent {
-
   @ViewChild('closeButton') closeButton!: ElementRef;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  displayedColumns: string[] = ['position', 'name', 'description', 'actions'];
+  displayedColumns: string[] = ['position', 'name', 'description', 'nbArticles', 'actions'];
   dataSource = new MatTableDataSource<any>();
+  articlesCount: number = 0;
 
   categories!: any;
   addCategoryForm!: FormGroup;
@@ -88,7 +88,7 @@ export class GetCategoriesComponent {
       this.categoryService.updateCategorie(this.updateCategoryForm.value).subscribe((res) => {
         if (res.id != null) {
           this.getCategories();
-          this.snackbar.open("Categorie Modifiee Avec Succes !", 'Close', {
+          this.snackbar.open('Categorie Modifiee Avec Succes !', 'Close', {
             duration: 5000
           });
         }
@@ -106,10 +106,10 @@ export class GetCategoriesComponent {
 
   getCategoriesByName() {
     const name = this.searchForm.get('name')?.value;
-    this.categoryService.getCategoriesByName(name).subscribe(res => {
+    this.categoryService.getCategoriesByName(name).subscribe((res) => {
       this.categories = res;
       this.dataSource.data = res;
-    })
+    });
   }
 
   ajouterCategorie() {
@@ -118,7 +118,7 @@ export class GetCategoriesComponent {
         if (res.id != null) {
           console.log('success');
           this.getCategories();
-          this.snackbar.open("Categorie Ajoutee Avec Succes !", 'Close', {
+          this.snackbar.open('Categorie Ajoutee Avec Succes !', 'Close', {
             duration: 5000
           });
         }
@@ -131,17 +131,16 @@ export class GetCategoriesComponent {
       if (res) {
         this.closeButton.nativeElement.click();
         this.getCategories();
-        this.snackbar.open("Categorie Supprimee Avec Succes !", 'Close', {
+        this.snackbar.open('Categorie Supprimee Avec Succes !', 'Close', {
           duration: 5000
-        })
+        });
       }
     });
   }
 
   ngOnInit() {
-
     this.searchForm = this.fb.group({
-      name: [""]
+      name: ['']
     });
 
     this.initAddCategoryForm();

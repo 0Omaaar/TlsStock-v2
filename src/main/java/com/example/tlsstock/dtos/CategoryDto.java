@@ -15,4 +15,6 @@ public class CategoryDto {
     private String description;
 
     private List<Article> articles;
+
+    private Long nbArticles;
 }

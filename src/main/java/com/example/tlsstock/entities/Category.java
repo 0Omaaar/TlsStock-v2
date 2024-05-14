@@ -19,7 +19,6 @@ public class Category extends AbstractClass {
     private String description;
 
     @OneToMany(mappedBy = "category", cascade = CascadeType.REMOVE)
-//    @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
     private List<Article> articles;
 
@@ -29,6 +28,7 @@ public class Category extends AbstractClass {
         categoryDto.setName(name);
         categoryDto.setDescription(description);
         categoryDto.setArticles(articles);
+        categoryDto.setNbArticles(articles.stream().count());
 
         return categoryDto;
     }
