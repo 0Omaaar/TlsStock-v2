@@ -1,7 +1,9 @@
 package com.example.tlsstock.controllers;
 
+import com.example.tlsstock.dtos.ArticleDto;
 import com.example.tlsstock.dtos.CategoryDto;
 import com.example.tlsstock.services.category.CategoryService;
+import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -65,6 +67,15 @@ public class CategoryController {
         List<CategoryDto> categoryDtos = categoryService.getCategoriesByName(name);
         if(categoryDtos != null){
             return ResponseEntity.ok(categoryDtos);
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+    @GetMapping("/categorie/{id}")
+    public ResponseEntity<?> getArticlesByCategory(@PathVariable Long id){
+        List<ArticleDto> articleDtos = categoryService.getArticlesByCategoryId(id);
+        if(!articleDtos.isEmpty()){
+            return ResponseEntity.ok(articleDtos);
         }
         return ResponseEntity.notFound().build();
     }

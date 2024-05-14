@@ -1,5 +1,6 @@
 package com.example.tlsstock.services.category;
 
+import com.example.tlsstock.dtos.ArticleDto;
 import com.example.tlsstock.dtos.CategoryDto;
 import com.example.tlsstock.entities.Category;
 
@@ -16,4 +17,6 @@ public interface CategoryService {
     boolean deleteCategory(CategoryDto categoryDto);
 
     List<CategoryDto> getCategoriesByName(String name);
+
+    List<ArticleDto> getArticlesByCategoryId(Long id);
 }

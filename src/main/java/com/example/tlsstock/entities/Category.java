@@ -1,6 +1,7 @@
 package com.example.tlsstock.entities;
 
 import com.example.tlsstock.dtos.CategoryDto;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -17,8 +18,9 @@ public class Category extends AbstractClass {
 
     private String description;
 
-    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
-    @OnDelete(action = OnDeleteAction.CASCADE)
+    @OneToMany(mappedBy = "category", cascade = CascadeType.REMOVE)
+//    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JsonIgnore
     private List<Article> articles;
 
     public CategoryDto getDto(){

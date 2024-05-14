@@ -1,5 +1,6 @@
 package com.example.tlsstock.dtos;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -16,6 +17,7 @@ public class ArticleDto {
 
     private Long quantity;
 
+//    @JsonIgnore
     private byte[] byteImage;
 
     private MultipartFile image;

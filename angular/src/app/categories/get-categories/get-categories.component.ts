@@ -8,11 +8,12 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { Console } from 'console';
+import { Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-get-categories',
   standalone: true,
-  imports: [SharedModule, NgbDropdownModule, MatTableModule, MatPaginatorModule],
+  imports: [SharedModule, NgbDropdownModule, MatTableModule, MatPaginatorModule, RouterModule],
   templateUrl: './get-categories.component.html',
   styleUrl: './get-categories.component.scss'
 })
@@ -37,7 +38,8 @@ export class GetCategoriesComponent {
   constructor(
     private categoryService: CategoryService,
     private fb: FormBuilder,
-    private snackbar: MatSnackBar
+    private snackbar: MatSnackBar,
+    private routerLink: Router
   ) {}
 
   deleteCategoryStore(categoryDto: any) {
