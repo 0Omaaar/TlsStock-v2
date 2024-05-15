@@ -1,6 +1,7 @@
 package com.example.tlsstock.dtos;
 
 import com.example.tlsstock.entities.OrderClient;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,6 +19,7 @@ public class ClientDto {
 
     private String phone;
 
+    @JsonIgnore
     private List<OrderClient> orderClients;
 
     private Long nbOrders;

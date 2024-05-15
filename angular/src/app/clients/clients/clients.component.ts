@@ -49,7 +49,7 @@ export class ClientsComponent {
   }
 
   getClients() {
-    this.clientService.getClients().subscribe((res) => {
+    this.clientService.getClients().subscribe(res => {
       if (res != null) {
         this.clients = res;
         this.dataSource.data = res;

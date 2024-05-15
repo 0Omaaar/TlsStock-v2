@@ -1,0 +1,105 @@
+<div class="row">
+    <div class="col-md-6">
+        <app-card cardTitle="Ajouter Commande Client" [options]="true">
+            <div class="row">
+                <div class="col-md-6">
+                    <label>Code Commande</label>
+                    <input type="text" class="form-control" [value]="orderCode" disabled>
+
+                    <label>Date Commande</label>
+                    <input type="text" class="form-control" [value]="currentDate | date: 'dd-MM-yyyy'" disabled>
+
+                    <label>Client</label>
+                    <select class="form-control" [(ngModel)]="selectedClient" (change)="displayClient($event)">
+                        <option disabled selected>Choisir Client</option>
+                        <option *ngFor="let client of clients" [ngValue]="client">{{client.name}}</option>
+                    </select>
+                </div>
+                <div class="col-md-6 items">
+                    <div class="info-item">
+                        <p><mat-icon color="primary">person</mat-icon><span>{{selectedClient?.name}}</span></p>
+                    </div>
+                    <div class="info-item">
+                        <p><mat-icon color="primary">email</mat-icon><span>{{selectedClient?.email}}</span></p>
+                    </div>
+                    <div class="info-item">
+                        <p><mat-icon color="primary">phone</mat-icon><span>{{selectedClient?.phone}}</span></p>
+                    </div>
+                </div>
+
+
+            </div>
+        </app-card>
+    </div>
+
+    <div class="col-md-6">
+        <app-card>
+            <div class="row">
+                <div class="col-md-12 mb-2">
+                    <select class="form-control" (change)="getArticlesByCategory($event)">
+                        <option disabled selected>Choisir Categorie</option>
+                        <option *ngFor="let category of categories" [value]="category.id">{{category.name}}</option>
+                    </select>
+                </div>
+                <div class="col-md-12 mb-2 mt-2">
+                    <select class="form-control">
+                        <option disabled selected>Choisir Article</option>
+                        <option *ngFor="let article of articles">{{article.name}}</option>
+                    </select>
+                </div>
+                <div class="col-md-12 mt-2">
+                    <div class="row align-items-center">
+                        <div class="col-md-6 mb-2 mt-2">
+                            <input type="text" class="form-control" placeholder="Quantite">
+                        </div>
+                        <div class="col-md-6">
+                            <button class="btn btn-outline-primary btn-block"><mat-icon
+                                    class="add-icon">add</mat-icon></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </app-card>
+    </div>
+
+
+</div>
+
+
+
+<div class="col-xl-12">
+    <app-card cardTitle="Hover Table" [options]="false" blockClass="table-border-style">
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th>Username</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <th scope="row">1</th>
+                        <td>Mark</td>
+                        <td>Otto</td>
+                        <td>&#64;mdo</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">2</th>
+                        <td>Jacob</td>
+                        <td>Thornton</td>
+                        <td>&#64;fat</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">3</th>
+                        <td>Larry</td>
+                        <td>the Bird</td>
+                        <td>&#64;twitter</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </app-card>
+</div>

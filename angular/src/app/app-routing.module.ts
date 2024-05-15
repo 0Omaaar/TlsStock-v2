@@ -12,6 +12,7 @@ import { UpdateArticleComponent } from './articles/update-article/update-article
 import { TestMaterialComponent } from './test-material/test-material.component';
 import { CategoryArticlesComponent } from './categories/category-articles/category-articles.component';
 import { ClientsComponent } from './clients/clients/clients.component';
+import { AddOrderComponent } from './orders/clientOrders/add-order/add-order.component';
 
 const routes: Routes = [
   {
@@ -50,6 +51,10 @@ const routes: Routes = [
       {
         path: 'categorie/:id/articles',
         component: CategoryArticlesComponent
+      },
+      {
+        path: 'add-order',
+        component: AddOrderComponent
       },
       {
         path: 'analytics',

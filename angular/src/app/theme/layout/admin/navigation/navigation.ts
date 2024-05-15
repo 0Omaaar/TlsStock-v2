@@ -88,6 +88,28 @@ export const NavigationItems: NavigationItem[] = [
   },
 
   {
+    id: 'commandes',
+    title: 'Commandes',
+    type: 'group',
+    icon: 'icon-layers',
+    children: [
+      {
+        id: 'commandes',
+        title: 'Commande Client',
+        type: 'collapse',
+        icon: 'feather icon-box',
+        children: [
+          {
+            id: 'commandes',
+            title: 'Ajouter Commande',
+            type: 'item',
+            url: '/add-order'
+          },
+        ]
+      }
+    ]
+  },
+  {
     id: 'gestionStock',
     title: 'Gestion Stock',
     type: 'group',
