@@ -1,5 +1,6 @@
 package com.example.tlsstock.entities;
 
+import com.example.tlsstock.dtos.ClientOrderLineDto;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
 import lombok.Data;
@@ -15,4 +16,17 @@ public class ClientOrderLine extends AbstractClass {
 
     @ManyToOne
     private OrderClient orderClient;
+
+    public ClientOrderLineDto getDto(){
+        ClientOrderLineDto clientOrderLineDto = new ClientOrderLineDto();
+
+        clientOrderLineDto.setId(getId());
+        clientOrderLineDto.setOrderClientId(orderClient.getId());
+        clientOrderLineDto.setQuantity(quantity);
+        clientOrderLineDto.setArticleCode(article.getCode());
+        clientOrderLineDto.setArticleId(article.getId());
+        clientOrderLineDto.setArticleName(article.getName());
+
+        return clientOrderLineDto;
+    }
 }
