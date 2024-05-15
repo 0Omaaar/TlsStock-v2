@@ -27,8 +27,10 @@ public class Category extends AbstractClass {
         categoryDto.setId(getId());
         categoryDto.setName(name);
         categoryDto.setDescription(description);
-        categoryDto.setArticles(articles);
-        categoryDto.setNbArticles(articles.stream().count());
+        if(articles != null){
+            categoryDto.setArticles(articles);
+            categoryDto.setNbArticles(articles.stream().count());
+        }
 
         return categoryDto;
     }

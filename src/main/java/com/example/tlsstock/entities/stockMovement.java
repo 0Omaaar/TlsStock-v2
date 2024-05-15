@@ -6,7 +6,7 @@ import jakarta.persistence.ManyToOne;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-@Entity @Data @EqualsAndHashCode(callSuper = true)
+@Entity @Data
 public class stockMovement extends AbstractClass{
 
     @ManyToOne

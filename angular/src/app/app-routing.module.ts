@@ -11,6 +11,7 @@ import { AddArticleComponent } from './articles/add-article/add-article.componen
 import { UpdateArticleComponent } from './articles/update-article/update-article.component';
 import { TestMaterialComponent } from './test-material/test-material.component';
 import { CategoryArticlesComponent } from './categories/category-articles/category-articles.component';
+import { ClientsComponent } from './clients/clients/clients.component';
 
 const routes: Routes = [
   {
@@ -29,6 +30,10 @@ const routes: Routes = [
       {
         path: 'articles',
         component: ArticleComponent
+      },
+      {
+        path: 'clients',
+        component: ClientsComponent
       },
       {
         path: 'ajouterArticle',

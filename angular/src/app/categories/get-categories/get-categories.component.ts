@@ -146,4 +146,8 @@ export class GetCategoriesComponent {
     this.initAddCategoryForm();
     this.getCategories();
   }
+
+  ngAfterViewInit() {
+    this.dataSource.paginator = this.paginator;
+  }
 }

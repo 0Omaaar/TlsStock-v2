@@ -86,6 +86,7 @@ export const NavigationItems: NavigationItem[] = [
       }
     ]
   },
+
   {
     id: 'gestionStock',
     title: 'Gestion Stock',
@@ -115,6 +116,28 @@ export const NavigationItems: NavigationItem[] = [
             title: 'Ajouter Article',
             type: 'item',
             url: '/ajouterArticle'
+          }
+        ]
+      }
+    ]
+  },
+  {
+    id: 'clients',
+    title: 'Personnel',
+    type: 'group',
+    icon: 'icon-layers',
+    children: [
+      {
+        id: 'clients',
+        title: 'Clients',
+        type: 'collapse',
+        icon: 'feather icon-box',
+        children: [
+          {
+            id: 'clients',
+            title: 'Clients',
+            type: 'item',
+            url: '/clients'
           }
         ]
       }
