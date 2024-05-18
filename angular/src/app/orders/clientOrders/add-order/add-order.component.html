@@ -33,7 +33,7 @@
     </div>
 
     <div class="col-md-6">
-        <app-card>
+        <app-card cardTitle="Choisir Categorie et Article a ajouter">
             <div class="row">
                 <div class="col-md-12 mb-2">
                     <select class="form-control" (change)="getArticlesByCategory($event)">
@@ -42,19 +42,19 @@
                     </select>
                 </div>
                 <div class="col-md-12 mb-2 mt-2">
-                    <select class="form-control">
+                    <select class="form-control" (change)="storeSelectedArticle($event)">
                         <option disabled selected>Choisir Article</option>
-                        <option *ngFor="let article of articles">{{article.name}}</option>
+                        <option *ngFor="let article of articles" [value]="article.id">{{article.name}}</option>
                     </select>
                 </div>
                 <div class="col-md-12 mt-2">
                     <div class="row align-items-center">
                         <div class="col-md-6 mb-2 mt-2">
-                            <input type="text" class="form-control" placeholder="Quantite">
+                            <input type="text" class="form-control" placeholder="Quantite"
+                                [(ngModel)]="selectedQuantity">
                         </div>
                         <div class="col-md-6">
-                            <button class="btn btn-outline-primary btn-block"><mat-icon
-                                    class="add-icon">add</mat-icon></button>
+                            <button class="btn btn-outline-primary btn-block" (click)="addOrderLine()">Ajouter</button>
                         </div>
                     </div>
                 </div>
@@ -68,37 +68,37 @@
 
 
 <div class="col-xl-12">
-    <app-card cardTitle="Hover Table" [options]="false" blockClass="table-border-style">
+    <app-card cardTitle="Liste Des Commandes" [options]="false" blockClass="table-border-style">
         <div class="table-responsive">
             <table class="table table-hover">
                 <thead>
                     <tr>
                         <th>#</th>
-                        <th>First Name</th>
-                        <th>Last Name</th>
-                        <th>Username</th>
+                        <th>Article Code</th>
+                        <th>Article Name</th>
+                        <th>Quantity</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <th scope="row">1</th>
-                        <td>Mark</td>
-                        <td>Otto</td>
-                        <td>&#64;mdo</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">2</th>
-                        <td>Jacob</td>
-                        <td>Thornton</td>
-                        <td>&#64;fat</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">3</th>
-                        <td>Larry</td>
-                        <td>the Bird</td>
-                        <td>&#64;twitter</td>
+                    <tr *ngFor="let orderLine of orderLinesList; let i = index">
+                        <td>{{i+1}}</td>
+                        <td>{{orderLine.articleCode}}</td>
+                        <td>{{orderLine.articleName}}</td>
+                        <td>{{orderLine.quantity}}</td>
+                        <td>
+                            <a class="btn btn-danger">Supp</a>
+                        </td>
                     </tr>
                 </tbody>
+                <tfoot *ngIf="orderLinesList.length > 0">
+                    <tr>
+                        <td colspan="100%" style="text-align: right;">
+                            <button class="btn btn-danger">Annuler</button>
+                            <button class="btn btn-success" (click)="saveOrder()">Enregister</button>
+                        </td>
+                    </tr>
+                </tfoot>
             </table>
         </div>
     </app-card>

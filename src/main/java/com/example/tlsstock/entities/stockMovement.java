@@ -2,14 +2,18 @@ package com.example.tlsstock.entities;
 
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.ManyToOne;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 
-@Entity @Data
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode(callSuper = true)
+@Entity
 public class stockMovement extends AbstractClass{
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Article Article;
 
     private Long quantity;

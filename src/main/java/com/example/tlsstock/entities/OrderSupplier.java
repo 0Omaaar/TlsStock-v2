@@ -1,22 +1,26 @@
 package com.example.tlsstock.entities;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 
 import java.time.Instant;
 import java.util.List;
 
-@Entity @Data @EqualsAndHashCode(callSuper = true)
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode(callSuper = true)
+@Entity
 public class OrderSupplier extends AbstractClass{
 
     private String code;
 
     private Instant OrderDate;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Supplier supplier;
 
     @OneToMany

@@ -3,14 +3,17 @@ package com.example.tlsstock.entities;
 import com.example.tlsstock.dtos.ArticleDto;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import java.util.List;
 
-@Entity @Data
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode(callSuper = true)
+@Entity
 public class Article extends AbstractClass{
 
     private String code;
@@ -26,7 +29,6 @@ public class Article extends AbstractClass{
     private byte[] image;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
-//    @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonIgnore
     private Category category;
 

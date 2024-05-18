@@ -6,6 +6,7 @@ import com.example.tlsstock.entities.Article;
 import com.example.tlsstock.entities.Client;
 import com.example.tlsstock.entities.ClientOrderLine;
 import com.example.tlsstock.entities.OrderClient;
+import com.example.tlsstock.enums.OrderStatus;
 import com.example.tlsstock.repositories.ArticleRepository;
 import com.example.tlsstock.repositories.ClientOrderLineRepository;
 import com.example.tlsstock.repositories.ClientRepository;
@@ -34,6 +35,7 @@ public class OrderServiceImpl implements OrderService{
     @Override
     @Transactional
     public OrderClientDto saveOrder(OrderClientDto orderClientDto) {
+        System.out.println(orderClientDto);
         if (orderClientDto == null) {
             throw new IllegalArgumentException("OrderClientDto cannot be null");
         }else{
@@ -44,8 +46,7 @@ public class OrderServiceImpl implements OrderService{
             Client client = clientRepository.findById(orderClientDto.getClientId()).orElse(null);
             if(client != null){
                 orderClient.setClient(client);
-                orderClient.setOrderStatus(orderClientDto.getOrderStatus());
-                orderClient.setOrderDate(orderClientDto.getOrderDate());
+                orderClient.setOrderStatus(OrderStatus.EN_PREPARATION);
                 orderClient.setOrderDate(Instant.now());
                 OrderClient savedOrder = orderClientRepository.save(orderClient);
 
@@ -56,7 +57,7 @@ public class OrderServiceImpl implements OrderService{
 
                         ClientOrderLine clientOrderLine = new ClientOrderLine();
 
-                        // findind article to save in order line
+                        // finding article to save in order line
                         Article article = articleRepository.findById(orderLine.getArticleId()).orElse(null);
                         if(article != null){
                             clientOrderLine.setArticle(article);

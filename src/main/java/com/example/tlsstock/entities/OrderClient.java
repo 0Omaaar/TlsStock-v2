@@ -3,16 +3,17 @@ package com.example.tlsstock.entities;
 import com.example.tlsstock.dtos.OrderClientDto;
 import com.example.tlsstock.enums.OrderStatus;
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 
 import java.time.Instant;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Entity
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
+@Entity
 public class OrderClient extends AbstractClass{
 
     private String code;
@@ -22,7 +23,7 @@ public class OrderClient extends AbstractClass{
     @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Client client;
 
     @OneToMany(cascade = CascadeType.REMOVE)

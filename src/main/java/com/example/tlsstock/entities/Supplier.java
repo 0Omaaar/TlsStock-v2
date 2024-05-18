@@ -2,12 +2,15 @@ package com.example.tlsstock.entities;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 
 import java.util.List;
 
-@Entity @Data @EqualsAndHashCode(callSuper = true)
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode(callSuper = true)
+@Entity
 public class Supplier extends AbstractClass{
 
     private String name;

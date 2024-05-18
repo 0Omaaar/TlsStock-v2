@@ -2,19 +2,23 @@ package com.example.tlsstock.entities;
 
 import com.example.tlsstock.dtos.ClientOrderLineDto;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.ManyToOne;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 
-@Entity @Data @EqualsAndHashCode(callSuper = true)
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@EqualsAndHashCode(callSuper = true)
+@Entity
 public class ClientOrderLine extends AbstractClass {
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Article article;
 
     private Long quantity;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private OrderClient orderClient;
 
     public ClientOrderLineDto getDto(){
