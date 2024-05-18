@@ -10,12 +10,13 @@
                     <input type="text" class="form-control" [value]="currentDate | date: 'dd-MM-yyyy'" disabled>
 
                     <label>Client</label>
-                    <select class="form-control" [(ngModel)]="selectedClient" (change)="displayClient($event)">
+                    <select class="form-control" [disabled]="orderLinesList.length > 0" [(ngModel)]="selectedClient"
+                        (change)="displayClient($event)">
                         <option disabled selected>Choisir Client</option>
                         <option *ngFor="let client of clients" [ngValue]="client">{{client.name}}</option>
                     </select>
                 </div>
-                <div class="col-md-6 items">
+                <div class="col-md-6 client items">
                     <div class="info-item">
                         <p><mat-icon color="primary">person</mat-icon><span>{{selectedClient?.name}}</span></p>
                     </div>
@@ -74,9 +75,9 @@
                 <thead>
                     <tr>
                         <th>#</th>
-                        <th>Article Code</th>
-                        <th>Article Name</th>
-                        <th>Quantity</th>
+                        <th>Code Article</th>
+                        <th>Nom Article</th>
+                        <th>Quantite</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -87,15 +88,17 @@
                         <td>{{orderLine.articleName}}</td>
                         <td>{{orderLine.quantity}}</td>
                         <td>
-                            <a class="btn btn-danger">Supp</a>
+                            <a class="btn" title="Supprimer Ligne Commande"
+                                (click)="removeElementFromList(i)"><mat-icon>delete</mat-icon></a>
                         </td>
                     </tr>
                 </tbody>
                 <tfoot *ngIf="orderLinesList.length > 0">
                     <tr>
                         <td colspan="100%" style="text-align: right;">
-                            <button class="btn btn-danger">Annuler</button>
-                            <button class="btn btn-success" (click)="saveOrder()">Enregister</button>
+                            <button class="btn btn-danger m-2" (click)="clearOrderLinesList()">Annuler</button>
+                            <button (click)="saveOrder()" class="btn btn-success"> <i
+                                    class="feather icon-check-circle me-1"></i>Enregister</button>
                         </td>
                     </tr>
                 </tfoot>

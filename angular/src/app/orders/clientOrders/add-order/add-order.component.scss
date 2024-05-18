@@ -9,10 +9,26 @@ span {
   margin-left: 3%;
 }
 
-.items{
-    margin-top: 8%;
+.items {
+  // margin-top: 8%;
 }
 
-.add-icon{
-    margin-top: 5%;
+.add-icon {
+  margin-top: 5%;
+}
+
+button:disabled {
+  cursor: not-allowed;
+}
+.btn-outline-primary:disabled {
+  cursor: not-allowed;
+}
+
+.client {
+  border: 1px solid black;
+  border-radius: 10px;
+  box-shadow: 5px 5px 2px #888888;
+  padding-top: 5%;
+  margin-top: 5%;
+  // margin-right: 2px;
 }

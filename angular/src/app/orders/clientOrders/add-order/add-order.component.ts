@@ -85,7 +85,6 @@ export class AddOrderComponent {
   saveOrder(){
     const clientOrderDto = {
       code: this.orderCode,
-      // orderStatus: "EN_PREPARATION",
       clientId: Number(this.selectedClient.id),
       clientName: this.selectedClient.name,
       clientOrderLines: this.orderLinesList
@@ -96,6 +95,16 @@ export class AddOrderComponent {
         this.snackBar.open("Commande Ajoutee Avec Succes !", 'Close', {duration: 5000});
       }
     })
+  }
+
+  clearOrderLinesList(){
+    this.orderLinesList = [];
+  }
+
+  removeElementFromList(index: number){
+    if(index != null){
+      this.orderLinesList.splice(index, 1);
+    }
   }
 
   getArticlesByCategory(event: Event) {
