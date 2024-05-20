@@ -16,7 +16,7 @@ import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 })
 export class ArticleComponent implements AfterViewInit {
   @ViewChild('closeButton') closeButton!: ElementRef;
-  displayedColumns: string[] = ['position', 'code', 'name', 'description', 'quantity', 'photo', 'categoryName', 'actions'];
+  displayedColumns: string[] = ['position', 'code', 'name', 'description', 'quantity','dispoQuantity', 'photo', 'categoryName', 'actions'];
   dataSource = new MatTableDataSource<any>();
 
   articles: any[] = [];

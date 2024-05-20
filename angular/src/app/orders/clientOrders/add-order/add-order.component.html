@@ -50,12 +50,18 @@
                 </div>
                 <div class="col-md-12 mt-2">
                     <div class="row align-items-center">
-                        <div class="col-md-6 mb-2 mt-2">
+                        <div class="col-md-4 mb-2 mt-2">
                             <input type="text" class="form-control" placeholder="Quantite"
-                                [(ngModel)]="selectedQuantity">
+                                [(ngModel)]="selectedQuantity" (ngModelChange)="checkDispoQuantity()">
                         </div>
-                        <div class="col-md-6">
-                            <button class="btn btn-outline-primary btn-block" (click)="addOrderLine()">Ajouter</button>
+                        <div class="col-md-4 mb-2 mt-2">
+                            <input type="text" disabled class="form-control" placeholder="Quantite Disponible"
+                                value="{{selectedArticleDispoQuantity}}">
+                        </div>
+                        <div class="col-md-4">
+                            <button class="btn btn-outline-primary btn-block"
+                                [disabled]="selectedQuantity > selectedArticleDispoQuantity"
+                                (click)="addOrderLine()">Ajouter</button>
                         </div>
                     </div>
                 </div>

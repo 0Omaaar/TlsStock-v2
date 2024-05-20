@@ -17,7 +17,9 @@ public class ArticleDto {
 
     private Long quantity;
 
-//    @JsonIgnore
+    private Long dispoQuantity;
+
+    //    @JsonIgnore
     private byte[] byteImage;
 
     private MultipartFile image;

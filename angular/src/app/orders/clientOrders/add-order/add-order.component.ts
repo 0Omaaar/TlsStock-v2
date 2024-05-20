@@ -19,7 +19,7 @@ import { ClientOrderService } from 'src/app/services/orders/client-order.service
 export class AddOrderComponent {
   categories: any;
   clients: any;
-  category: any;
+  category: any = null;
   articles: any;
   client: any = {};
   selectedClient: any = null;
@@ -28,6 +28,7 @@ export class AddOrderComponent {
   clientId: any = null;
   selectedArticle: any = null;
   selectedQuantity: number = 0;
+  selectedArticleDispoQuantity: any = null;
 
   orderLinesList: Array<any> = [];
 
@@ -61,48 +62,68 @@ export class AddOrderComponent {
   storeSelectedArticle(event: Event) {
     const selectedArticle = event.target as HTMLSelectElement;
     this.selectedArticleId = selectedArticle.value;
-  }
 
-  addOrderLine() {
     this.articleService.getArticle(this.selectedArticleId).subscribe((res) => {
-      this.selectedArticle = res;
-
-      const newOrderLine = {
-        quantity: Number(this.selectedQuantity),
-        articleId: Number(this.selectedArticleId),
-        articleCode: this.selectedArticle.code,
-        articleName: this.selectedArticle.name,
-      };
-
-      if (this.selectedClient == null) {
-        this.snackBar.open('Veuillez Choisir Un Client !', 'Close', { duration: 5000 });
-      } else {
-        this.orderLinesList.push(newOrderLine);
+      if (res != null) {
+        this.selectedArticleDispoQuantity = res.dispoQuantity;
+        // console.log(this.selectedArticleDispoQuantity);
       }
     });
   }
 
-  saveOrder(){
+  checkDispoQuantity() {
+    if (this.selectedQuantity > this.selectedArticleDispoQuantity) {
+      this.snackBar.open('La quantité sélectionnée dépasse la quantité disponible.', 'Close', { duration: 5000 });
+    }
+  }
+
+  addOrderLine() {
+    if (this.selectedQuantity <= 0) {
+      this.snackBar.open('Veuillez Choisir Une Quantite Pour Cet Article !', 'Close', {
+        duration: 5000
+      });
+    } else {
+      this.articleService.getArticle(this.selectedArticleId).subscribe((res) => {
+        this.selectedArticle = res;
+
+        const newOrderLine = {
+          quantity: Number(this.selectedQuantity),
+          articleId: Number(this.selectedArticleId),
+          articleCode: this.selectedArticle.code,
+          articleName: this.selectedArticle.name
+        };
+
+        if (this.selectedClient == null) {
+          this.snackBar.open('Veuillez Choisir Un Client !', 'Close', { duration: 5000 });
+        } else {
+          this.orderLinesList.push(newOrderLine);
+          // this.selectedArticleDispoQuantity -= Number(this.selectedQuantity);
+        }
+      });
+    }
+  }
+
+  saveOrder() {
     const clientOrderDto = {
       code: this.orderCode,
       clientId: Number(this.selectedClient.id),
       clientName: this.selectedClient.name,
       clientOrderLines: this.orderLinesList
     };
-    console.log(clientOrderDto);
-    this.clientOrderService.addOrder(clientOrderDto).subscribe(res => {
-      if(res.id != null){
-        this.snackBar.open("Commande Ajoutee Avec Succes !", 'Close', {duration: 5000});
+    // console.log(clientOrderDto);
+    this.clientOrderService.addOrder(clientOrderDto).subscribe((res) => {
+      if (res.id != null) {
+        this.snackBar.open('Commande Ajoutee Avec Succes !', 'Close', { duration: 5000 });
       }
-    })
+    });
   }
 
-  clearOrderLinesList(){
+  clearOrderLinesList() {
     this.orderLinesList = [];
   }
 
-  removeElementFromList(index: number){
-    if(index != null){
+  removeElementFromList(index: number) {
+    if (index != null) {
       this.orderLinesList.splice(index, 1);
     }
   }

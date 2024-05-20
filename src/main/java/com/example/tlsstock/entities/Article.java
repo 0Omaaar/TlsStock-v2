@@ -24,6 +24,8 @@ public class Article extends AbstractClass{
 
     private Long quantity;
 
+    private Long dispoQuantity;
+
     @Lob
     @Column(columnDefinition = "longblob")
     private byte[] image;
@@ -39,6 +41,7 @@ public class Article extends AbstractClass{
         articleDto.setName(name);
         articleDto.setDescription(description);
         articleDto.setQuantity(quantity);
+        articleDto.setDispoQuantity(dispoQuantity);
         articleDto.setByteImage(image);
         articleDto.setCategoryId(category.getId());
         articleDto.setCategoryName(category.getName());
