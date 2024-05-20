@@ -1,0 +1,20 @@
+.example-headers-align .mat-expansion-panel-header-description {
+  justify-content: space-between;
+  align-items: center;
+}
+
+.example-headers-align .mat-mdc-form-field + .mat-mdc-form-field {
+  margin-left: 8px;
+}
+.icon-text {
+  display: flex;
+  align-items: center;
+}
+
+.icon-text span {
+  margin-left: 8px;
+}
+
+mat-icon{
+  color: rgb(21, 150, 236);
+}

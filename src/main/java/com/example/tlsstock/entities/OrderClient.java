@@ -26,7 +26,7 @@ public class OrderClient extends AbstractClass{
     @ManyToOne(fetch = FetchType.LAZY)
     private Client client;
 
-    @OneToMany(cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "orderClient")
     private List<ClientOrderLine> clientOrderLines;
 
     public OrderClientDto getDto(){
@@ -34,8 +34,11 @@ public class OrderClient extends AbstractClass{
         orderClientDto.setId(getId());
         orderClientDto.setCode(code);
         orderClientDto.setOrderDate(orderDate);
+        orderClientDto.setOrderStatus(orderStatus);
         orderClientDto.setClientId(client.getId());
         orderClientDto.setClientName(client.getName());
+        orderClientDto.setClientEmail(client.getEmail());
+        orderClientDto.setClientPhone(client.getPhone());
         if(clientOrderLines != null){
             orderClientDto.setClientOrderLines(clientOrderLines.stream()
                     .map(ClientOrderLine::getDto).collect(Collectors.toList()));

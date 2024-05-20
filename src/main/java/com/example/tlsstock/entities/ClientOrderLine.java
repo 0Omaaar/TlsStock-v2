@@ -18,7 +18,8 @@ public class ClientOrderLine extends AbstractClass {
 
     private Long quantity;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
+//    (fetch = FetchType.LAZY)
     private OrderClient orderClient;
 
     public ClientOrderLineDto getDto(){

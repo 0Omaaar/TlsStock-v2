@@ -12,6 +12,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class OrderServiceImpl implements OrderService{
@@ -78,6 +80,20 @@ public class OrderServiceImpl implements OrderService{
                     return savedOrder.getDto();
                 }
             }
+        }
+        return null;
+    }
+
+    @Override
+    @Transactional
+    public List<OrderClientDto> getOrders() {
+        List<OrderClientDto> orderClientDtos = orderClientRepository.findAll().stream()
+                .map(OrderClient::getDto).collect(Collectors.toList());
+//        for (OrderClientDto orderClient : orderClientDtos) {
+//            System.out.println("OrderClient ID: " + orderClient.getId() + " has " + orderClient.getClientOrderLines().size() + " clientOrderLines");
+//        }
+        if(orderClientDtos != null){
+            return orderClientDtos;
         }
         return null;
     }

@@ -14,4 +14,8 @@ export class ClientOrderService {
   addOrder(orderClientDto: any): Observable<any>{
     return this.http.post(API + 'order/save', orderClientDto);
   }
+
+  getOrders(): Observable<any>{
+    return this.http.get(API + 'orders');
+  }
 }

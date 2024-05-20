@@ -13,6 +13,7 @@ import { TestMaterialComponent } from './test-material/test-material.component';
 import { CategoryArticlesComponent } from './categories/category-articles/category-articles.component';
 import { ClientsComponent } from './clients/clients/clients.component';
 import { AddOrderComponent } from './orders/clientOrders/add-order/add-order.component';
+import { GetOrdersComponent } from './orders/clientOrders/get-orders/get-orders.component';
 
 const routes: Routes = [
   {
@@ -35,6 +36,10 @@ const routes: Routes = [
       {
         path: 'clients',
         component: ClientsComponent
+      },
+      {
+        path: 'get-orders',
+        component: GetOrdersComponent
       },
       {
         path: 'ajouterArticle',

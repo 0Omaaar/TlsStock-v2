@@ -22,6 +22,10 @@ public class OrderClientDto {
 
     private String clientName;
 
+    private String clientEmail;
+
+    private String clientPhone;
+
     private List<ClientOrderLineDto> clientOrderLines;
 
 }

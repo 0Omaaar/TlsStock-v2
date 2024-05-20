@@ -101,6 +101,12 @@ export const NavigationItems: NavigationItem[] = [
         children: [
           {
             id: 'commandes',
+            title: 'Liste des Commandes',
+            type: 'item',
+            url: '/get-orders'
+          },
+          {
+            id: 'commandes',
             title: 'Ajouter Commande',
             type: 'item',
             url: '/add-order'

@@ -1,0 +1,72 @@
+<app-breadcrumb></app-breadcrumb>
+<div class="row">
+    <div class="col-sm-12">
+        <app-card cardTitle="Liste Des Commandes Clients" [options]="true">
+            <mat-accordion class="example-headers-align">
+                <mat-expansion-panel *ngFor="let order of currentOrders" hideToggle>
+                    <mat-expansion-panel-header style="height: 30%;">
+                        <mat-panel-title>
+                            <div style="margin-left: 25%; text-align: center;">
+                                <mat-icon>shopping_basket</mat-icon>
+                                <br>
+                                <span><b>{{order.clientOrderLines.length}}</b> Articles Commandé(s)</span>
+                            </div>
+                        </mat-panel-title>
+
+                        <mat-panel-title>
+                            <div style="margin-top: 3%; margin-left: 15%">
+                                <p class="icon-text"><mat-icon>person</mat-icon><span>{{order.clientName}}</span></p>
+                                <p class="icon-text"><mat-icon>email</mat-icon><span>{{order.clientEmail}}</span></p>
+                                <p class="icon-text"><mat-icon>phone</mat-icon><span>{{order.clientPhone}}</span></p>
+                            </div>
+                        </mat-panel-title>
+                        <mat-panel-description>
+                            <div style="margin-top: 3%; margin-left: 20%;">
+                                <p class="icon-text"><mat-icon>gamepad</mat-icon><span>{{order.code}}</span></p>
+                                <p class="icon-text"><mat-icon>date_range</mat-icon><span>{{order.orderDate |
+                                        date}}</span></p>
+                                <p class="icon-text">
+                                    <mat-icon>shopping_cart</mat-icon><span>{{order.orderStatus}}</span>
+                                </p>
+                            </div>
+                            <mat-icon>add_shopping_cart</mat-icon>
+                        </mat-panel-description>
+                    </mat-expansion-panel-header>
+
+                    <div class="col-xl-12">
+                        <app-card cardTitle="Liste Des Lignes De Commandes" [options]="false"
+                            blockClass="table-border-style">
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Nom Article</th>
+                                            <th>Code Article</th>
+                                            <th>Quantite</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let orderLine of order.clientOrderLines; let i = index">
+                                            <th scope="row">{{i + 1}}</th>
+                                            <td>{{orderLine.articleName}}</td>
+                                            <td>{{orderLine.articleCode}}</td>
+                                            <td>{{orderLine.quantity}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </app-card>
+                    </div>
+
+                    <mat-action-row>
+                        <button mat-button color="primary">Next</button>
+                    </mat-action-row>
+                </mat-expansion-panel>
+
+            </mat-accordion>
+            <mat-paginator [length]="allOrders.length" [pageSize]="3" (page)="updateCurrentOrders($event)">
+            </mat-paginator>
+        </app-card>
+    </div>
+</div>

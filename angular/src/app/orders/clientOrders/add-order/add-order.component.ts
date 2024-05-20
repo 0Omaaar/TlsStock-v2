@@ -8,6 +8,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { DatePipe } from '@angular/common';
 import { ArticleService } from 'src/app/services/articles/article.service';
 import { ClientOrderService } from 'src/app/services/orders/client-order.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-add-order',
@@ -38,7 +39,8 @@ export class AddOrderComponent {
     private clientService: ClientService,
     private articleService: ArticleService,
     private clientOrderService: ClientOrderService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private router: Router
   ) {}
 
   getCategories() {
@@ -114,6 +116,7 @@ export class AddOrderComponent {
     this.clientOrderService.addOrder(clientOrderDto).subscribe((res) => {
       if (res.id != null) {
         this.snackBar.open('Commande Ajoutee Avec Succes !', 'Close', { duration: 5000 });
+        this.router.navigateByUrl("/get-orders");
       }
     });
   }
