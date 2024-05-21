@@ -30,6 +30,10 @@ export class AddOrderComponent {
   selectedArticle: any = null;
   selectedQuantity: number = 0;
   selectedArticleDispoQuantity: any = null;
+  articlesList: any = [];
+  filteredArticlesList: any[] = [];
+
+  searchkeyArticle!: string;
 
   orderLinesList: Array<any> = [];
 
@@ -69,6 +73,18 @@ export class AddOrderComponent {
       if (res != null) {
         this.selectedArticleDispoQuantity = res.dispoQuantity;
         // console.log(this.selectedArticleDispoQuantity);
+      }
+    });
+  }
+
+  storeSelectedArticleOption2(articleDto: any) {
+    const selectedArticle = articleDto;
+    this.selectedArticleId = selectedArticle.id;
+
+    console.log(selectedArticle);
+    this.articleService.getArticle(this.selectedArticleId).subscribe((res) => {
+      if (res != null) {
+        this.selectedArticleDispoQuantity = res.dispoQuantity;
       }
     });
   }
@@ -116,7 +132,7 @@ export class AddOrderComponent {
     this.clientOrderService.addOrder(clientOrderDto).subscribe((res) => {
       if (res.id != null) {
         this.snackBar.open('Commande Ajoutee Avec Succes !', 'Close', { duration: 5000 });
-        this.router.navigateByUrl("/get-orders");
+        this.router.navigateByUrl('/get-orders');
       }
     });
   }
@@ -150,8 +166,29 @@ export class AddOrderComponent {
     });
   }
 
+  getArticles() {
+    this.articleService.getArticles().subscribe((res) => {
+      if (res != null) {
+        this.articlesList = res;
+      }
+    });
+  }
+
+  searchArticles() {
+    if (this.searchkeyArticle.length === 0) {
+      this.filteredArticlesList = [];
+    } else {
+      this.filteredArticlesList = this.articlesList.filter(
+        (art: { code: string; name: string }) =>
+          art.code?.toLowerCase().startsWith(this.searchkeyArticle.toLowerCase()) ||
+          art.name?.toLowerCase().startsWith(this.searchkeyArticle.toLowerCase())
+      );
+    }
+  }
+
   ngOnInit() {
     this.getCategories();
     this.getClients();
+    this.getArticles();
   }
 }
