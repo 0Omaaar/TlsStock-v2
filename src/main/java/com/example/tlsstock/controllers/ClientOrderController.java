@@ -25,6 +25,15 @@ public class ClientOrderController {
         return ResponseEntity.notFound().build();
     }
 
+    @PutMapping("/order/update/status")
+    public ResponseEntity<?> updateOrderStatus(@RequestBody OrderClientDto orderClientDto){
+        OrderClientDto orderClientDto1 = orderService.updateStatus(orderClientDto);
+        if(orderClientDto1 != null){
+            return ResponseEntity.ok(orderClientDto1);
+        }
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+    }
+
     @PostMapping("order/save")
     public ResponseEntity<?> saveOrder(@RequestBody OrderClientDto orderClientDto){
         OrderClientDto savedOrder = orderService.saveOrder(orderClientDto);

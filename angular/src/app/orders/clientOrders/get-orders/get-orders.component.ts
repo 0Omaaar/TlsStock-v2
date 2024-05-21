@@ -13,6 +13,7 @@ import { MatPaginator, MatPaginatorModule, PageEvent } from '@angular/material/p
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { SharedModule } from 'src/app/theme/shared/shared.module';
 import { ClientService } from 'src/app/services/clients/client.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 
 // interface Order{
@@ -63,7 +64,8 @@ export class GetOrdersComponent {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   constructor(private clientOrderService: ClientOrderService, 
-    private clientService: ClientService
+    private clientService: ClientService,
+    private snackBar: MatSnackBar
   ) {}
 
   getOrders() {
@@ -77,6 +79,22 @@ export class GetOrdersComponent {
     const startIndex = pageEvent ? pageEvent.pageIndex * pageEvent.pageSize : 0;
     const endIndex = startIndex + (pageEvent ? pageEvent.pageSize : 3);
     this.currentOrders = this.allOrders.slice(startIndex, endIndex);
+  }
+
+  udpateOrderStatus(orderClientDto: any){
+
+    this.clientOrderService.updateOrderStatus(orderClientDto).subscribe( res => {
+      if(res != null){
+        this.snackBar.open("Commande Definie Livree !", 'Close', 
+          {
+            duration: 5000
+          }
+        );
+        this.getOrders();
+      }else{
+        this.snackBar.open("Erreur Survenue !", 'Close', {duration: 5000});
+      }
+    })
   }
 
   ngOnInit() {

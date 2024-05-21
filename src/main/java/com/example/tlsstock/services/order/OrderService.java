@@ -9,4 +9,6 @@ public interface OrderService {
     OrderClientDto saveOrder(OrderClientDto orderClientDto);
 
     List<OrderClientDto> getOrders();
+
+    OrderClientDto updateStatus(OrderClientDto orderClientDto);
 }

@@ -60,7 +60,10 @@
                     </div>
 
                     <mat-action-row>
-                        <button mat-button color="primary">Next</button>
+                        <button class="btn btn-success circle" style="margin-right: 2%;"
+                            *ngIf="order.orderStatus == 'EN_PREPARATION'"
+                            (click)="udpateOrderStatus(order)"><span>LIVREE</span><mat-icon
+                                class="check">check_circle</mat-icon></button>
                     </mat-action-row>
                 </mat-expansion-panel>
 

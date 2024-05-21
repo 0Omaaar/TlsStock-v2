@@ -67,14 +67,14 @@ public class OrderServiceImpl implements OrderService{
                             clientOrderLineRepository.save(clientOrderLine);
 
                             // implementing stock movement
-                            StockMovementDto stockMovementDto = new StockMovementDto();
-                            stockMovementDto.setMvtDate(Instant.now());
-                            stockMovementDto.setTypeMvt(TypeMvtStk.SORTIE);
-                            stockMovementDto.setArticleName(orderLine.getArticleName());
-                            stockMovementDto.setArticleId(orderLine.getArticleId());
-                            stockMovementDto.setQuantity(orderLine.getQuantity());
+//                            StockMovementDto stockMovementDto = new StockMovementDto();
+//                            stockMovementDto.setMvtDate(Instant.now());
+//                            stockMovementDto.setTypeMvt(TypeMvtStk.SORTIE);
+//                            stockMovementDto.setArticleName(orderLine.getArticleName());
+//                            stockMovementDto.setArticleId(orderLine.getArticleId());
+//                            stockMovementDto.setQuantity(orderLine.getQuantity());
 
-                            saveStockMovement(stockMovementDto);
+//                            saveStockMovement(stockMovementDto);
                         }
                     }
                     return savedOrder.getDto();
@@ -87,19 +87,37 @@ public class OrderServiceImpl implements OrderService{
     @Override
     @Transactional
     public List<OrderClientDto> getOrders() {
-        List<OrderClientDto> orderClientDtos = orderClientRepository.findAll().stream()
+        return orderClientRepository.findAllByOrderByLastModifiedDateDesc().stream()
                 .map(OrderClient::getDto).collect(Collectors.toList());
-//        for (OrderClientDto orderClient : orderClientDtos) {
-//            System.out.println("OrderClient ID: " + orderClient.getId() + " has " + orderClient.getClientOrderLines().size() + " clientOrderLines");
-//        }
-        if(orderClientDtos != null){
-            return orderClientDtos;
+    }
+
+    @Override
+    public OrderClientDto updateStatus(OrderClientDto orderClientDto) {
+        OrderClient orderClient = orderClientRepository.findById(orderClientDto.getId()).orElse(null);
+        if(orderClient != null){
+            orderClient.setOrderStatus(OrderStatus.LIVREE);
+            OrderClient savedOrder = orderClientRepository.save(orderClient);
+
+            //stock movement
+
+            for(ClientOrderLineDto orderLine : orderClientDto.getClientOrderLines()){
+                StockMovementDto stockMovementDto = new StockMovementDto();
+                stockMovementDto.setMvtDate(Instant.now());
+                stockMovementDto.setTypeMvt(TypeMvtStk.SORTIE);
+                stockMovementDto.setArticleName(orderLine.getArticleName());
+                stockMovementDto.setArticleId(orderLine.getArticleId());
+                stockMovementDto.setQuantity(orderLine.getQuantity());
+
+                saveStockMovement(stockMovementDto);
+            }
+
+            return savedOrder.getDto();
         }
         return null;
     }
 
 
-    public StockMovementDto saveStockMovement(StockMovementDto stockMovementDto){
+    public void saveStockMovement(StockMovementDto stockMovementDto){
         StockMovement stockMovement = new StockMovement();
         stockMovement.setQuantity(stockMovementDto.getQuantity());
         Article article = articleRepository.findById(stockMovementDto.getArticleId()).orElse(null);
@@ -111,6 +129,6 @@ public class OrderServiceImpl implements OrderService{
         stockMovement.setTypeMvt(stockMovementDto.getTypeMvt());
         stockMovement.setMvtDate(stockMovementDto.getMvtDate());
 
-        return stockMovementRepository.save(stockMovement).getDto();
+        stockMovementRepository.save(stockMovement).getDto();
     }
 }
