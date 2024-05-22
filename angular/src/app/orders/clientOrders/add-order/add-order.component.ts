@@ -33,6 +33,9 @@ export class AddOrderComponent {
   articlesList: any = [];
   filteredArticlesList: any[] = [];
 
+  isArticleSelected: boolean = false;
+  selectedArticleName: string = '';
+
   searchkeyArticle!: string;
 
   orderLinesList: Array<any> = [];
@@ -72,7 +75,8 @@ export class AddOrderComponent {
     this.articleService.getArticle(this.selectedArticleId).subscribe((res) => {
       if (res != null) {
         this.selectedArticleDispoQuantity = res.dispoQuantity;
-        // console.log(this.selectedArticleDispoQuantity);
+        this.isArticleSelected = true;
+        this.selectedArticleName = res.name;
       }
     });
   }
@@ -85,6 +89,8 @@ export class AddOrderComponent {
     this.articleService.getArticle(this.selectedArticleId).subscribe((res) => {
       if (res != null) {
         this.selectedArticleDispoQuantity = res.dispoQuantity;
+        this.isArticleSelected = true;
+        this.selectedArticleName = res.name;
       }
     });
   }
@@ -115,10 +121,19 @@ export class AddOrderComponent {
           this.snackBar.open('Veuillez Choisir Un Client !', 'Close', { duration: 5000 });
         } else {
           this.orderLinesList.push(newOrderLine);
-          // this.selectedArticleDispoQuantity -= Number(this.selectedQuantity);
+          this.resetArticleSelection();
         }
       });
     }
+  }
+
+  resetArticleSelection(){
+    this.selectedArticleId = null;
+    this.selectedArticle = null;
+    this.selectedQuantity = 0;
+    this.selectedArticleDispoQuantity = null;
+    this.isArticleSelected = false;
+    this.selectedArticleName = '';
   }
 
   saveOrder() {
@@ -128,7 +143,6 @@ export class AddOrderComponent {
       clientName: this.selectedClient.name,
       clientOrderLines: this.orderLinesList
     };
-    // console.log(clientOrderDto);
     this.clientOrderService.addOrder(clientOrderDto).subscribe((res) => {
       if (res.id != null) {
         this.snackBar.open('Commande Ajoutee Avec Succes !', 'Close', { duration: 5000 });

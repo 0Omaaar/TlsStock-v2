@@ -16,15 +16,15 @@
                         <option *ngFor="let client of clients" [ngValue]="client">{{client.name}}</option>
                     </select>
                 </div>
-                <div class="col-md-6 client items">
-                    <div class="info-item">
-                        <p><mat-icon color="primary">person</mat-icon><span>{{selectedClient?.name}}</span></p>
+                <div class="col-md-6 client-items">
+                    <div class="info-item" *ngIf="selectedClient?.name">
+                        <p><mat-icon color="primary">person</mat-icon><span>{{selectedClient.name}}</span></p>
                     </div>
-                    <div class="info-item">
-                        <p><mat-icon color="primary">email</mat-icon><span>{{selectedClient?.email}}</span></p>
+                    <div class="info-item" *ngIf="selectedClient?.email">
+                        <p><mat-icon color="primary">email</mat-icon><span>{{selectedClient.email}}</span></p>
                     </div>
-                    <div class="info-item">
-                        <p><mat-icon color="primary">phone</mat-icon><span>{{selectedClient?.phone}}</span></p>
+                    <div class="info-item" *ngIf="selectedClient?.phone">
+                        <p><mat-icon color="primary">phone</mat-icon><span>{{selectedClient.phone}}</span></p>
                     </div>
                 </div>
             </div>
@@ -54,7 +54,7 @@
                                         </option>
                                     </select>
                                 </div>
-                                <div class="col-md-12 mt-2">
+                                <div class="col-md-12 mt-2" *ngIf="isArticleSelected">
                                     <div class="row align-items-center">
                                         <div class="col-md-4 mb-2 mt-2">
                                             <input type="number" class="form-control" placeholder="Quantite"
@@ -63,11 +63,11 @@
                                         <div class="col-md-4 mb-2 mt-2">
                                             <input type="number" disabled class="form-control"
                                                 placeholder="Quantite Disponible"
-                                                value="{{selectedArticleDispoQuantity}}">
+                                                [value]="selectedArticleDispoQuantity">
                                         </div>
                                         <div class="col-md-4">
                                             <button class="btn btn-outline-primary btn-block"
-                                                [disabled]="selectedQuantity > selectedArticleDispoQuantity"
+                                                [disabled]="selectedQuantity > selectedArticleDispoQuantity || selectedQuantity <= 0"
                                                 (click)="addOrderLine()">Ajouter</button>
                                         </div>
                                     </div>
@@ -79,17 +79,20 @@
                         <a class="nav-link" ngbNavLink aria-controls="pills-home" aria-selected="true">Avec Nom
                             Article</a>
                         <ng-template ngbNavContent>
-                            <input class="form-control" [(ngModel)]="searchkeyArticle" (input)="searchArticles()"
+                            <input class="form-control"  [(ngModel)]="searchkeyArticle" (input)="searchArticles()"
                                 type="text" placeholder="Code / Nom Article">
-                            <input type="number" class="form-control mt-3" placeholder="Quantite"
-                                [(ngModel)]="selectedQuantity">
-                            <div *ngIf="selectedArticleId == null">
+                            <div *ngIf="isArticleSelected" class="mt-3">
+                                <input type="number" class="form-control mt-3" placeholder="Quantite"
+                                    [(ngModel)]="selectedQuantity">
+                                    <input disabled class="form-control mt-2" [(ngModel)]="selectedArticleName">
+                                <button class="btn btn-outline-primary btn-block mt-3"
+                                    (click)="addOrderLine()">Ajouter</button>
+                            </div>
+                            <div *ngIf="filteredArticlesList.length > 0">
                                 <p style="cursor: pointer;" class="auto-scroll"
                                     *ngFor="let article of filteredArticlesList"
                                     (click)="storeSelectedArticleOption2(article)">{{article.name}}</p>
-                            </div> <button class="btn btn-outline-primary btn-block mt-3"
-                                (click)="addOrderLine()">Ajouter</button>
-
+                            </div>
                         </ng-template>
                     </li>
                 </ul>
@@ -128,8 +131,9 @@
                     <tr>
                         <td colspan="100%" style="text-align: right;">
                             <button class="btn btn-danger m-2" (click)="clearOrderLinesList()">Annuler</button>
-                            <button (click)="saveOrder()" class="btn btn-success"> <i
-                                    class="feather icon-check-circle me-1"></i>Enregister</button>
+                            <button (click)="saveOrder()" class="btn btn-success">
+                                <i class="feather icon-check-circle me-1"></i>Enregister
+                            </button>
                         </td>
                     </tr>
                 </tfoot>
