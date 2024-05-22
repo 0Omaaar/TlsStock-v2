@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, ElementRef, ViewChild, AfterViewInit, OnInit } from '@angular/core';
 import { SharedModule } from 'src/app/theme/shared/shared.module';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ArticleService } from 'src/app/services/articles/article.service';
@@ -14,9 +14,9 @@ import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
   templateUrl: './article.component.html',
   styleUrls: ['./article.component.scss']
 })
-export class ArticleComponent implements AfterViewInit {
+export class ArticleComponent implements AfterViewInit, OnInit {
   @ViewChild('closeButton') closeButton!: ElementRef;
-  displayedColumns: string[] = ['position', 'code', 'name', 'description', 'quantity','dispoQuantity', 'photo', 'categoryName', 'actions'];
+  displayedColumns: string[] = ['position', 'code', 'name', 'description', 'quantity', 'dispoQuantity', 'photo', 'categoryName', 'actions'];
   dataSource = new MatTableDataSource<any>();
 
   articles: any[] = [];
@@ -32,10 +32,6 @@ export class ArticleComponent implements AfterViewInit {
     private snackbar: MatSnackBar
   ) {}
 
-  ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
-  }
-
   ngOnInit() {
     this.getArticles();
     this.searchForm = this.fb.group({
@@ -43,15 +39,24 @@ export class ArticleComponent implements AfterViewInit {
     });
   }
 
+  ngAfterViewInit() {
+    this.dataSource.paginator = this.paginator;
+  }
+
   getArticles() {
-    this.articleService.getArticles().subscribe((res) => {
-      this.articles = res.map((element: { image: any; processedImg: string; byteImage: string }) => {
-        if (element.byteImage != null) {
-          element.processedImg = 'data:image/jpeg;base64,' + element.byteImage;
-        }
-        return element;
-      });
-      this.dataSource.data = this.articles;
+    this.articleService.getArticles().subscribe({
+      next: (data) => {
+        this.articles = data.map((element: { image: any; processedImg: string; byteImage: string }) => {
+          if (element.byteImage != null) {
+            element.processedImg = 'data:image/jpeg;base64,' + element.byteImage;
+          }
+          return element;
+        });
+        this.dataSource.data = this.articles;
+      },
+      error: (error) => {
+        console.error(error);
+      }
     });
   }
 

@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
+import { tap } from 'rxjs/operators';
 
 const API = 'http://localhost:8080/api/';
 
@@ -8,22 +9,32 @@ const API = 'http://localhost:8080/api/';
   providedIn: 'root'
 })
 export class ClientService {
+  private clientsCache: any[] | null = null;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
-  addClient(clientDto: any): Observable<any>{
+  addClient(clientDto: any): Observable<any> {
+    this.clientsCache = null;
     return this.http.post(API + 'client/save', clientDto);
   }
 
-  getClients(): Observable<any>{
-    return this.http.get(API + 'clients');
+  getClients(): Observable<any> {
+    if (this.clientsCache) {
+      return of(this.clientsCache);
+    } else {
+      return this.http.get<any[]>(API + 'clients').pipe(
+        tap(clients => this.clientsCache = clients)
+      );
+    }
   }
 
-  updateClient(clientDto: any): Observable<any>{
+  updateClient(clientDto: any): Observable<any> {
+    this.clientsCache = null;
     return this.http.put(API + 'client/update', clientDto);
   }
 
-  deleteClient(clientDto: any): Observable<any>{
+  deleteClient(clientDto: any): Observable<any> {
+    this.clientsCache = null;
     return this.http.delete(API + 'client/delete', {
       body: clientDto
     });

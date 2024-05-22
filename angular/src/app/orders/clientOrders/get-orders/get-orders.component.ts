@@ -14,6 +14,7 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { SharedModule } from 'src/app/theme/shared/shared.module';
 import { ClientService } from 'src/app/services/clients/client.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { RouterModule } from '@angular/router';
 
 
 // interface Order{
@@ -43,6 +44,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   imports: [
     FormsModule,
     CommonModule,
+    RouterModule,
     MatExpansionModule,
     MatPaginatorModule,
     MatTableModule,
@@ -65,7 +67,7 @@ export class GetOrdersComponent {
 
   constructor(private clientOrderService: ClientOrderService, 
     private clientService: ClientService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
   ) {}
 
   getOrders() {

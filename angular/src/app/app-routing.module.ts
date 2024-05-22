@@ -14,6 +14,7 @@ import { CategoryArticlesComponent } from './categories/category-articles/catego
 import { ClientsComponent } from './clients/clients/clients.component';
 import { AddOrderComponent } from './orders/clientOrders/add-order/add-order.component';
 import { GetOrdersComponent } from './orders/clientOrders/get-orders/get-orders.component';
+import { EditOrderComponent } from './orders/clientOrders/edit-order/edit-order.component';
 
 const routes: Routes = [
   {
@@ -52,6 +53,10 @@ const routes: Routes = [
       {
         path: 'modifierArticle/:id',
         component: UpdateArticleComponent
+      },
+      {
+        path: 'modifierCommande/:id',
+        component: EditOrderComponent
       },
       {
         path: 'categorie/:id/articles',

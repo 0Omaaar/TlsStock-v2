@@ -1,0 +1,48 @@
+p {
+  // margin: 0;
+  display: flex;
+  align-items: center;
+}
+
+span {
+  display: inline-block;
+  margin-left: 3%;
+}
+
+.items {
+  // margin-top: 8%;
+}
+
+.add-icon {
+  margin-top: 5%;
+}
+
+button:disabled {
+  cursor: not-allowed;
+}
+.btn-outline-primary:disabled {
+  cursor: not-allowed;
+}
+
+.client {
+  border: 1px solid black;
+  border-radius: 10px;
+  box-shadow: 5px 5px 2px #888888;
+  padding-top: 5%;
+  margin-top: 5%;
+}
+
+.client-items {
+  margin-top: 10%;
+}
+
+.auto-scroll {
+  border: 1px solid rgb(21, 150, 236);
+  border-radius: 7px;
+  margin-top: 4%;
+  padding: 5px;
+}
+
+.auto-scroll:hover {
+  background-color: #cdc6c6cf;
+}

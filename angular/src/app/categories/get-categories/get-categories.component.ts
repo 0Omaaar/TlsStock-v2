@@ -42,6 +42,19 @@ export class GetCategoriesComponent {
     private routerLink: Router
   ) {}
 
+  ngOnInit() {
+    this.searchForm = this.fb.group({
+      name: ['']
+    });
+
+    this.initAddCategoryForm();
+    this.getCategories();
+  }
+
+  ngAfterViewInit() {
+    this.dataSource.paginator = this.paginator;
+  }
+
   deleteCategoryStore(categoryDto: any) {
     this.deletedCategory = categoryDto;
   }
@@ -97,10 +110,15 @@ export class GetCategoriesComponent {
   }
 
   getCategories() {
-    this.categoryService.getAllCategories().subscribe((res) => {
-      this.categories = res;
-      this.initUpdateCategoryForm(this.categories[0]);
-      this.dataSource.data = res;
+    this.categoryService.getAllCategories().subscribe({
+      next: (data) => {
+        this.categories = data;
+        this.initUpdateCategoryForm(this.categories[0]);
+        this.dataSource.data = data;
+      },
+      error: (errorr) => {
+        console.log(errorr);
+      }
     });
   }
 
@@ -136,18 +154,5 @@ export class GetCategoriesComponent {
         });
       }
     });
-  }
-
-  ngOnInit() {
-    this.searchForm = this.fb.group({
-      name: ['']
-    });
-
-    this.initAddCategoryForm();
-    this.getCategories();
-  }
-
-  ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
   }
 }

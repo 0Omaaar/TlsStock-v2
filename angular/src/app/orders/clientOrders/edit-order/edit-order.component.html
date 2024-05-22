@@ -1,0 +1,143 @@
+<div class="row">
+    <div class="col-md-6">
+        <app-card cardTitle="Ajouter Commande Client" [options]="true">
+            <div class="row">
+                <div class="col-md-6">
+                    <label>Code Commande</label>
+                    <input type="text" class="form-control" [value]="order?.code" disabled>
+
+                    <label>Date Commande</label>
+                    <input type="text" class="form-control" [value]="order?.orderDate | date: 'dd-MM-yyyy'" disabled>
+
+                    <label>Client</label>
+                    <select class="form-control" disabled>
+                        <option *ngIf="order?.clientName" selected disabled>{{ order?.clientName }}</option>
+                    </select>
+                </div>
+                <div class="col-md-6 client-items">
+                    <div class="info-item" *ngIf="order?.clientName">
+                        <p><mat-icon color="primary">person</mat-icon><span>{{ order?.clientName }}</span></p>
+                    </div>
+                    <div class="info-item" *ngIf="order?.clientEmail">
+                        <p><mat-icon color="primary">email</mat-icon><span>{{ order?.clientEmail }}</span></p>
+                    </div>
+                    <div class="info-item" *ngIf="order?.clientPhone">
+                        <p><mat-icon color="primary">phone</mat-icon><span>{{ order?.clientPhone }}</span></p>
+                    </div>
+                </div>
+            </div>
+        </app-card>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="mb-3">Choisir Articles A Commander</h5>
+                <ul class="nav nav-pills mb-3" ngbNav #nav1="ngbNav">
+                    <li class="nav-item" [ngbNavItem]="1">
+                        <a class="nav-link" ngbNavLink aria-controls="pills-home" aria-selected="true">Avec Select</a>
+                        <ng-template ngbNavContent>
+                            <div class="row">
+                                <div class="col-md-12 mb-2">
+                                    <select class="form-control" (change)="getArticlesByCategory($event)">
+                                        <option disabled selected>Choisir Categorie</option>
+                                        <option *ngFor="let category of categories" [value]="category.id">
+                                            {{ category.name }}
+                                        </option>
+                                    </select>
+                                </div>
+                                <div class="col-md-12 mb-2 mt-2">
+                                    <select class="form-control" (change)="storeSelectedArticle($event)">
+                                        <option disabled selected>Choisir Article</option>
+                                        <option *ngFor="let article of articles" [value]="article.id">{{ article.name }}
+                                        </option>
+                                    </select>
+                                </div>
+                                <div class="col-md-12 mt-2" *ngIf="isArticleSelected">
+                                    <div class="row align-items-center">
+                                        <div class="col-md-4 mb-2 mt-2">
+                                            <input type="number" class="form-control" placeholder="Quantite"
+                                                [(ngModel)]="selectedQuantity" (ngModelChange)="checkDispoQuantity()">
+                                        </div>
+                                        <div class="col-md-4 mb-2 mt-2">
+                                            <input type="number" disabled class="form-control"
+                                                placeholder="Quantite Disponible"
+                                                [value]="selectedArticleDispoQuantity">
+                                        </div>
+                                        <div class="col-md-4">
+                                            <button class="btn btn-outline-primary btn-block"
+                                                [disabled]="selectedQuantity > selectedArticleDispoQuantity || selectedQuantity <= 0"
+                                                (click)="addOrderLine()">Ajouter</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </ng-template>
+                    </li>
+                    <li class="nav-item" [ngbNavItem]="2">
+                        <a class="nav-link" ngbNavLink aria-controls="pills-home" aria-selected="true">Avec Nom
+                            Article</a>
+                        <ng-template ngbNavContent>
+                            <input class="form-control" [(ngModel)]="searchkeyArticle" (input)="searchArticles()"
+                                type="text" placeholder="Code / Nom Article">
+                            <div *ngIf="isArticleSelected" class="mt-3">
+                                <input type="number" class="form-control mt-3" placeholder="Quantite"
+                                    [(ngModel)]="selectedQuantity">
+                                <input disabled class="form-control mt-2" [(ngModel)]="selectedArticleName">
+                                <button class="btn btn-outline-primary btn-block mt-3"
+                                    (click)="addOrderLine()">Ajouter</button>
+                            </div>
+                            <div *ngIf="filteredArticlesList.length > 0">
+                                <p style="cursor: pointer;" class="auto-scroll"
+                                    *ngFor="let article of filteredArticlesList"
+                                    (click)="storeSelectedArticleOption2(article)">{{ article.name }}</p>
+                            </div>
+                        </ng-template>
+                    </li>
+                </ul>
+                <div [ngbNavOutlet]="nav1" class="mt-2"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="col-xl-12">
+    <app-card cardTitle="Liste Des Commandes" [options]="false" blockClass="table-border-style">
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Code Article</th>
+                        <th>Nom Article</th>
+                        <th>Quantite</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let orderLine of orderLinesList; let i = index">
+                        <td>{{ i + 1 }}</td>
+                        <td>{{ orderLine.articleCode }}</td>
+                        <td>{{ orderLine.articleName }}</td>
+                        <td>{{ orderLine.quantity }}</td>
+                        <td>
+                            <a class="btn" title="Supprimer Ligne Commande" (click)="removeElementFromList(i)">
+                                <mat-icon>delete</mat-icon>
+                            </a>
+                        </td>
+                    </tr>
+                </tbody>
+                <tfoot *ngIf="orderLinesList.length > 0">
+                    <tr>
+                        <td colspan="100%" style="text-align: right;">
+                            <button class="btn btn-danger m-2" (click)="clearOrderLinesList()">Annuler</button>
+                            <button (click)="saveOrder()" class="btn btn-success">
+                                <i class="feather icon-check-circle me-1"></i>Enregister
+                            </button>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </app-card>
+</div>

@@ -31,10 +31,6 @@ export class CategoryArticlesComponent {
     private fb: FormBuilder
   ) {}
 
-  ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
-  }
-
   ngOnInit() {
     const id = this.activatedRoute.snapshot.params['id'];
     this.getCategoryArticles(id);
@@ -43,15 +39,24 @@ export class CategoryArticlesComponent {
     });
   }
 
+  ngAfterViewInit() {
+    this.dataSource.paginator = this.paginator;
+  }
+
   getCategoryArticles(id: number) {
-    this.categoryService.getArticlesByCategoryId(id).subscribe((res) => {
-      this.articles = res.map((element: { image: any; processedImg: string; byteImage: string }) => {
-        if (element.byteImage != null) {
-          element.processedImg = 'data:image/jpeg;base64,' + element.byteImage;
-        }
-        return element;
-      });
-      this.dataSource.data = this.articles;
+    this.categoryService.getArticlesByCategoryId(id).subscribe( {
+      next: data => {
+        this.articles = data.map((element: { image: any; processedImg: string; byteImage: string }) => {
+          if (element.byteImage != null) {
+            element.processedImg = 'data:image/jpeg;base64,' + element.byteImage;
+          }
+          return element;
+        });
+        this.dataSource.data = this.articles;
+      },
+      error: error => {
+        console.log(error);
+      }
     });
   }
 
