@@ -3,6 +3,7 @@ package com.example.tlsstock.entities;
 
 import com.example.tlsstock.dtos.StockMovementDto;
 import com.example.tlsstock.enums.TypeMvtStk;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -21,6 +22,7 @@ public class StockMovement extends AbstractClass{
     private TypeMvtStk typeMvt;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnore
     private Article article;
 
     private Long quantity;
@@ -32,7 +34,7 @@ public class StockMovement extends AbstractClass{
         stockMovementDto.setArticleId(article.getId());
         stockMovementDto.setArticleName(article.getName());
         stockMovementDto.setTypeMvt(typeMvt);
-//        stockMovementDto.setMvtDate(Instant.now());
+        stockMovementDto.setMvtDate(mvtDate);
 
         return stockMovementDto;
     }

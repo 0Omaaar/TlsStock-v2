@@ -15,6 +15,7 @@ import { ClientsComponent } from './clients/clients/clients.component';
 import { AddOrderComponent } from './orders/clientOrders/add-order/add-order.component';
 import { GetOrdersComponent } from './orders/clientOrders/get-orders/get-orders.component';
 import { EditOrderComponent } from './orders/clientOrders/edit-order/edit-order.component';
+import { GetStockMovementsComponent } from './stockMovements/get-stock-movements/get-stock-movements.component';
 
 const routes: Routes = [
   {
@@ -33,6 +34,10 @@ const routes: Routes = [
       {
         path: 'articles',
         component: ArticleComponent
+      },
+      {
+        path: 'stock-movements',
+        component: GetStockMovementsComponent
       },
       {
         path: 'clients',

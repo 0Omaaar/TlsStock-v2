@@ -1,6 +1,7 @@
 package com.example.tlsstock.entities;
 
 import com.example.tlsstock.dtos.ArticleDto;
+import com.example.tlsstock.dtos.StockMovementDto;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
@@ -8,6 +9,7 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Data
 @NoArgsConstructor
@@ -34,6 +36,10 @@ public class Article extends AbstractClass{
     @JsonIgnore
     private Category category;
 
+    @OneToMany(mappedBy = "article", cascade = CascadeType.REMOVE)
+    @JsonIgnore
+    private List<StockMovement> stockMovements;
+
     public ArticleDto getDto(){
         ArticleDto articleDto = new ArticleDto();
         articleDto.setId(getId());
@@ -45,6 +51,13 @@ public class Article extends AbstractClass{
         articleDto.setByteImage(image);
         articleDto.setCategoryId(category.getId());
         articleDto.setCategoryName(category.getName());
+
+        if (stockMovements != null) {
+            List<StockMovementDto> stockMovementDtos = stockMovements.stream()
+                    .map(StockMovement::getDto)
+                    .collect(Collectors.toList());
+            articleDto.setStockMovements(stockMovementDtos);
+        }
 
         return articleDto;
     }

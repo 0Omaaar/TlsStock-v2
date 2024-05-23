@@ -26,7 +26,7 @@ public class OrderClient extends AbstractClass{
     @ManyToOne(fetch = FetchType.LAZY)
     private Client client;
 
-    @OneToMany(mappedBy = "orderClient")
+    @OneToMany(mappedBy = "orderClient", cascade = CascadeType.REMOVE)
     private List<ClientOrderLine> clientOrderLines;
 
     public OrderClientDto getDto(){

@@ -17,27 +17,6 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { RouterModule } from '@angular/router';
 
 
-// interface Order{
-//   id: number;
-//   orderDate: Date;
-//   orderStatus: string;
-//   clientName: string;
-//   clientId: number;
-//   code: string;
-//   clientEmail: string;
-//   clientPhone: string;
-//   clientOrderLines: OrderLine[];
-// }
-
-// interface OrderLine{
-//   id: number;
-//   quantity: number;
-//   articleId: number;
-//   articleCode: string;
-//   articleName: string;
-//   orderClientId: number;
-// }
-
 @Component({
   selector: 'app-get-orders',
   standalone: true,

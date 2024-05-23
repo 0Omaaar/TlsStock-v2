@@ -116,6 +116,28 @@ export const NavigationItems: NavigationItem[] = [
     ]
   },
   {
+    id: 'stockMovements',
+    title: 'Mouvement Stock',
+    type: 'group',
+    icon: 'icon-layers',
+    children: [
+      {
+        id: 'stockMovements',
+        title: 'Mouvement Stock',
+        type: 'collapse',
+        icon: 'feather icon-box',
+        children: [
+          {
+            id: 'stockMovements',
+            title: 'Liste des Mouvements De Stock',
+            type: 'item',
+            url: '/stock-movements'
+          },
+        ]
+      }
+    ]
+  },
+  {
     id: 'gestionStock',
     title: 'Gestion Stock',
     type: 'group',
