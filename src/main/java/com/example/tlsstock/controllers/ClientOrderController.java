@@ -2,6 +2,7 @@ package com.example.tlsstock.controllers;
 
 import com.example.tlsstock.dtos.OrderClientDto;
 import com.example.tlsstock.services.order.OrderService;
+import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +26,15 @@ public class ClientOrderController {
         return ResponseEntity.notFound().build();
     }
 
+    @GetMapping("/order/{id}")
+    public ResponseEntity<?> getOrderById(@PathVariable Long id){
+        OrderClientDto orderClientDto = orderService.getOrderById(id);
+        if(orderClientDto != null){
+            return ResponseEntity.ok(orderClientDto);
+        }
+        return ResponseEntity.notFound().build();
+    }
+
     @PutMapping("/order/update/status")
     public ResponseEntity<?> updateOrderStatus(@RequestBody OrderClientDto orderClientDto){
         OrderClientDto orderClientDto1 = orderService.updateStatus(orderClientDto);
@@ -39,6 +49,15 @@ public class ClientOrderController {
         OrderClientDto savedOrder = orderService.saveOrder(orderClientDto);
         if(savedOrder != null){
             return ResponseEntity.ok(savedOrder);
+        }
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+    }
+
+    @PutMapping("order/update")
+    public ResponseEntity<?> updateOrder(@RequestBody OrderClientDto orderClientDto){
+        OrderClientDto updatedOrder = orderService.updateOrder(orderClientDto);
+        if(updatedOrder != null){
+            return ResponseEntity.ok(updatedOrder);
         }
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }

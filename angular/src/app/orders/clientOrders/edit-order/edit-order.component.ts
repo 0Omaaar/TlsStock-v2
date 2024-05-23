@@ -2,8 +2,7 @@ import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { ActivatedRoute, Router } from '@angular/router';
-import { Console } from 'console';
+import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { ArticleService } from 'src/app/services/articles/article.service';
 import { CategoryService } from 'src/app/services/category.service';
 import { ClientService } from 'src/app/services/clients/client.service';
@@ -13,7 +12,7 @@ import { SharedModule } from 'src/app/theme/shared/shared.module';
 @Component({
   selector: 'app-edit-order',
   standalone: true,
-  imports: [SharedModule, FormsModule, MatIconModule],
+  imports: [SharedModule, FormsModule, MatIconModule, RouterModule],
   templateUrl: './edit-order.component.html',
   styleUrl: './edit-order.component.scss'
 })
@@ -60,6 +59,7 @@ export class EditOrderComponent {
     this.clientOrderService.getOrder(this.orderId).subscribe((res) => {
       if (res != null) {
         this.order = res;
+        this.orderLinesList = res.clientOrderLines;
       }
     });
   }
@@ -180,18 +180,19 @@ export class EditOrderComponent {
   }
 
   saveOrder() {
-    // const clientOrderDto = {
-    //   code: this.order.orderCode,
-    //   clientId: Number(this.order.clientId),
-    //   clientName: this.order.clientName,
-    //   clientOrderLines: this.orderLinesList
-    // };
-    // this.clientOrderService.addOrder(clientOrderDto).subscribe((res) => {
-    //   if (res.id != null) {
-    //     this.snackBar.open('Commande Ajoutee Avec Succes !', 'Close', { duration: 5000 });
-    //     this.router.navigateByUrl('/get-orders');
-    //   }
-    // });
+    const clientOrderDto = {
+      id: this.order.id,
+      code: this.order.orderCode,
+      clientId: Number(this.order.clientId),
+      clientName: this.order.clientName,
+      clientOrderLines: this.orderLinesList
+    };
+    this.clientOrderService.updateOrder(clientOrderDto).subscribe((res) => {
+      if (res.id != null) {
+        this.snackBar.open('Commande Modifiee Avec Succes !', 'Close', { duration: 5000 });
+        this.router.navigateByUrl('/get-orders');
+      }
+    });
   }
 
   clearOrderLinesList() {

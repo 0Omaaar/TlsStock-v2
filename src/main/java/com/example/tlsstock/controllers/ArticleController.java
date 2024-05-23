@@ -22,10 +22,10 @@ public class ArticleController {
     public ResponseEntity<?> getArticles(){
         List<ArticleDto> articleDtos = articleService.getArticles();
         if(articleDtos != null){
-            System.out.println(articleDtos);
+//            System.out.println(articleDtos);
             return ResponseEntity.ok(articleDtos);
         }
-        System.out.println("second");
+//        System.out.println("second");
         return ResponseEntity.notFound().build();
     }
 

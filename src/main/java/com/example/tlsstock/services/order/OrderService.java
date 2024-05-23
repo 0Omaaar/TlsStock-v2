@@ -8,7 +8,11 @@ public interface OrderService {
 
     OrderClientDto saveOrder(OrderClientDto orderClientDto);
 
+    OrderClientDto updateOrder(OrderClientDto orderClientDto);
+
     List<OrderClientDto> getOrders();
+
+    OrderClientDto getOrderById(Long id);
 
     OrderClientDto updateStatus(OrderClientDto orderClientDto);
 }

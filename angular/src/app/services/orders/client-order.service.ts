@@ -19,6 +19,12 @@ export class ClientOrderService {
     );
   }
 
+  updateOrder(orderClientDto: any): Observable<any> {
+    return this.http.put(API + 'order/update', orderClientDto).pipe(
+      tap(() => this.ordersCache = null)
+    );
+  }
+
   updateOrderStatus(orderClientDto: any): Observable<any> {
     return this.http.put(API + 'order/update/status', orderClientDto).pipe(
       tap(() => this.ordersCache = null)

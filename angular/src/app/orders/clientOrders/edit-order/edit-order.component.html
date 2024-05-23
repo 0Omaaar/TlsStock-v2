@@ -115,7 +115,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let orderLine of orderLinesList; let i = index">
+                    <tr *ngFor="let orderLine of order.clientOrderLines; let i = index">
                         <td>{{ i + 1 }}</td>
                         <td>{{ orderLine.articleCode }}</td>
                         <td>{{ orderLine.articleName }}</td>
@@ -127,10 +127,10 @@
                         </td>
                     </tr>
                 </tbody>
-                <tfoot *ngIf="orderLinesList.length > 0">
+                <tfoot *ngIf="order.clientOrderLines?.length > 0">
                     <tr>
                         <td colspan="100%" style="text-align: right;">
-                            <button class="btn btn-danger m-2" (click)="clearOrderLinesList()">Annuler</button>
+                            <button class="btn btn-danger m-2" routerLink="/get-orders">Annuler</button>
                             <button (click)="saveOrder()" class="btn btn-success">
                                 <i class="feather icon-check-circle me-1"></i>Enregister
                             </button>

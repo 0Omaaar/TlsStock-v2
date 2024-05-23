@@ -8,6 +8,7 @@ import com.example.tlsstock.enums.OrderStatus;
 import com.example.tlsstock.enums.TypeMvtStk;
 import com.example.tlsstock.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,7 +37,6 @@ public class OrderServiceImpl implements OrderService{
     @Override
     @Transactional
     public OrderClientDto saveOrder(OrderClientDto orderClientDto) {
-        System.out.println(orderClientDto);
         if (orderClientDto == null) {
             throw new IllegalArgumentException("OrderClientDto cannot be null");
         }else{
@@ -65,16 +65,6 @@ public class OrderServiceImpl implements OrderService{
                             clientOrderLine.setQuantity(orderLine.getQuantity());
                             clientOrderLine.setOrderClient(savedOrder);
                             clientOrderLineRepository.save(clientOrderLine);
-
-                            // implementing stock movement
-//                            StockMovementDto stockMovementDto = new StockMovementDto();
-//                            stockMovementDto.setMvtDate(Instant.now());
-//                            stockMovementDto.setTypeMvt(TypeMvtStk.SORTIE);
-//                            stockMovementDto.setArticleName(orderLine.getArticleName());
-//                            stockMovementDto.setArticleId(orderLine.getArticleId());
-//                            stockMovementDto.setQuantity(orderLine.getQuantity());
-
-//                            saveStockMovement(stockMovementDto);
                         }
                     }
                     return savedOrder.getDto();
@@ -86,9 +76,63 @@ public class OrderServiceImpl implements OrderService{
 
     @Override
     @Transactional
+    public OrderClientDto updateOrder(OrderClientDto orderClientDto) {
+        if (orderClientDto == null) {
+            throw new IllegalArgumentException("OrderClientDto cannot be null");
+        }else{
+            // saving the order first
+            OrderClient orderClient = orderClientRepository.findById(orderClientDto.getId()).orElse(null);
+            if(orderClient != null){
+                orderClient.setCode(orderClientDto.getCode());
+
+                Client client = clientRepository.findById(orderClientDto.getClientId()).orElse(null);
+                if(client != null){
+                    orderClient.setClient(client);
+                    orderClient.setOrderStatus(OrderStatus.EN_PREPARATION);
+                    orderClient.setOrderDate(Instant.now());
+                    OrderClient savedOrder = orderClientRepository.save(orderClient);
+
+                    // clear order lines before adding new ones
+                    clientOrderLineRepository.deleteAll(orderClient.getClientOrderLines());
+
+                    // client order lines impl
+                    if(orderClientDto.getClientOrderLines() != null){
+                        for(ClientOrderLineDto orderLine : orderClientDto.getClientOrderLines()){
+                            orderLine.setOrderClientId(savedOrder.getId());
+
+                            ClientOrderLine clientOrderLine = new ClientOrderLine();
+
+                            // finding article to save in order line
+                            Article article = articleRepository.findById(orderLine.getArticleId()).orElse(null);
+                            if(article != null){
+                                clientOrderLine.setArticle(article);
+                                clientOrderLine.setQuantity(orderLine.getQuantity());
+                                clientOrderLine.setOrderClient(savedOrder);
+                                clientOrderLineRepository.save(clientOrderLine);
+                            }
+                        }
+                        return savedOrder.getDto();
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+    @Override
+    @Transactional
     public List<OrderClientDto> getOrders() {
         return orderClientRepository.findAllByOrderByLastModifiedDateDesc().stream()
                 .map(OrderClient::getDto).collect(Collectors.toList());
+    }
+
+    @Override
+    public OrderClientDto getOrderById(Long id) {
+        OrderClient orderClient = orderClientRepository.findById(id).orElse(null);
+        if(orderClient != null){
+            return orderClient.getDto();
+        }
+        return null;
     }
 
     @Override
