@@ -9,11 +9,11 @@
                         Ajouter Client
                     </button>
                 </div>
-                <div class="col-md-6" style="margin-top: -1%;" *ngIf="searchForm">
-                    <form [formGroup]="searchForm" class="d-flex">
-                        <input type="text" formControlName="name" class="form-control me-2"
-                            placeholder="Chercher Client" aria-label="Search">
-                    </form>
+                <div class="col-md-6" style="margin-top: -1%;">
+                    <!-- <form [formGroup]="searchForm" class="d-flex"> -->
+                        <input type="text" class="form-control me-2"
+                            placeholder="Chercher Client" aria-label="Search" (keyup)="applyFilter($event)">
+                    <!-- </form> -->
                 </div>
             </div>
 

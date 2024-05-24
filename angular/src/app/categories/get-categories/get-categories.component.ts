@@ -130,6 +130,11 @@ export class GetCategoriesComponent {
     });
   }
 
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
+
   ajouterCategorie() {
     if (this.addCategoryForm.valid) {
       this.categoryService.addCategorie(this.addCategoryForm.value).subscribe((res) => {

@@ -57,6 +57,11 @@ export class ClientsComponent {
     });
   }
 
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
+
   addClient() {
     const client = this.addForm.value;
     if (this.addForm.valid) {

@@ -60,6 +60,11 @@ export class CategoryArticlesComponent {
     });
   }
 
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
+
   searchArticles() {
     const keyword = this.searchForm.get('keyword')?.value;
     this.articleService.searchArticles(keyword).subscribe((res) => {

@@ -34,13 +34,14 @@ import { CorrectionStockComponent } from '../correction-stock/correction-stock.c
     MatDialogClose,
     MatDialogTitle,
     MatDialogContent,
-    SharedModule,
+    SharedModule
   ],
   templateUrl: './get-stock-movements.component.html',
   styleUrl: './get-stock-movements.component.scss'
 })
 export class GetStockMovementsComponent {
-  constructor(private stockMovementService: StockMovementService, 
+  constructor(
+    private stockMovementService: StockMovementService,
     private dialog: MatDialog
   ) {}
   articlesList: any[] = [];
@@ -51,7 +52,7 @@ export class GetStockMovementsComponent {
     this.getArticlesWithStock();
   }
 
-  openDialog(articleDto: any){
+  openDialog(articleDto: any) {
     const dialogRef = this.dialog.open(CorrectionStockComponent, {
       width: '30%',
       height: '35%',
@@ -60,10 +61,8 @@ export class GetStockMovementsComponent {
       }
     });
 
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.getArticlesWithStock();
-      }
+    dialogRef.afterClosed().subscribe((result) => {
+      this.getArticlesWithStock();
     });
   }
 

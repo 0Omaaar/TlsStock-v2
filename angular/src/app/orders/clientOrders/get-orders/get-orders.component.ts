@@ -56,6 +56,11 @@ export class GetOrdersComponent {
     });
   }
 
+  // applyFilter(event: Event) {
+  //   const filterValue = (event.target as HTMLInputElement).value;
+  //   this.currentOrders.filter = filterValue.trim().toLowerCase();
+  // }
+
   updateCurrentOrders(pageEvent?: PageEvent) {
     const startIndex = pageEvent ? pageEvent.pageIndex * pageEvent.pageSize : 0;
     const endIndex = startIndex + (pageEvent ? pageEvent.pageSize : 3);
