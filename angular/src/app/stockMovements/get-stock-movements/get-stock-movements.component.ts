@@ -3,6 +3,7 @@ import { Component, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatDialog, MatDialogActions, MatDialogClose, MatDialogContent, MatDialogRef, MatDialogTitle } from '@angular/material/dialog';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
@@ -12,11 +13,13 @@ import { MatTableModule } from '@angular/material/table';
 import { RouterModule } from '@angular/router';
 import { StockMovementService } from 'src/app/services/stockMovements/stock-movement.service';
 import { SharedModule } from 'src/app/theme/shared/shared.module';
+import { CorrectionStockComponent } from '../correction-stock/correction-stock.component';
 
 @Component({
   selector: 'app-get-stock-movements',
   standalone: true,
-  imports: [FormsModule,
+  imports: [
+    FormsModule,
     CommonModule,
     RouterModule,
     MatExpansionModule,
@@ -27,18 +30,41 @@ import { SharedModule } from 'src/app/theme/shared/shared.module';
     MatInputModule,
     MatButtonModule,
     MatDatepickerModule,
-    SharedModule],
+    MatDialogActions,
+    MatDialogClose,
+    MatDialogTitle,
+    MatDialogContent,
+    SharedModule,
+  ],
   templateUrl: './get-stock-movements.component.html',
   styleUrl: './get-stock-movements.component.scss'
 })
 export class GetStockMovementsComponent {
-  constructor(private stockMovementService: StockMovementService) {}
+  constructor(private stockMovementService: StockMovementService, 
+    private dialog: MatDialog
+  ) {}
   articlesList: any[] = [];
   currentArticles: any[] = [];
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   ngOnInit() {
     this.getArticlesWithStock();
+  }
+
+  openDialog(articleDto: any){
+    const dialogRef = this.dialog.open(CorrectionStockComponent, {
+      width: '30%',
+      height: '35%',
+      data: {
+        article: articleDto
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.getArticlesWithStock();
+      }
+    });
   }
 
   getArticlesWithStock() {

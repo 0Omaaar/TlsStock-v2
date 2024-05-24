@@ -12,7 +12,6 @@ export class StockMovementService {
 
   private stocksCache: any[] | null = null;
 
-
   constructor(private http: HttpClient) { }
   
   getArticlesStock(): Observable<any[]> {
@@ -21,5 +20,10 @@ export class StockMovementService {
     } else {
       return this.http.get<any[]>(API + 'articles').pipe(tap((articles) => (this.stocksCache = articles)));
     }
+  }
+
+  correctionStock(stockMovementDto: any): Observable<any>{
+    this.stocksCache = null;
+    return this.http.post(API + 'correct-stock', stockMovementDto); 
   }
 }

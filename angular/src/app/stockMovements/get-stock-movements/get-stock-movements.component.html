@@ -30,11 +30,13 @@
                                 Stock Actuel <br> <b>{{article.dispoQuantity}}</b>
                             </div>
                             <mat-icon style="vertical-align: middle; margin-left: 5px;">inventory</mat-icon>
+                            <br>
+                            <button (click)="openDialog(article)" class="btn btn-light">Correction Stock</button>
                         </mat-panel-description>
 
                     </mat-expansion-panel-header>
 
-                    <div class="col-xl-12">
+                    <div class="col-xl-12 mt-3">
                         <app-card cardTitle="Liste des Mouvements De Stock" [options]="true"
                             blockClass="table-border-style">
                             <div class="table-responsive">
@@ -52,10 +54,12 @@
                                         <tr *ngFor="let mouvement of article.stockMovements; let i = index">
                                             <th scope="row">{{i + 1}}</th>
                                             <td>{{mouvement.articleName}}</td>
-                                            <td *ngIf="mouvement.typeMvt == 'SORTIE'"
-                                                style="color: rgb(200, 88, 88); font-weight: bolder; font-size: 110%; text-align: center;">{{mouvement.typeMvt}}</td>
-                                            <td *ngIf="mouvement.typeMvt == 'ENTREE'"
-                                                class="badge m-r-5 badge-light-success">{{mouvement.typeMvt}}</td>
+                                            <td *ngIf="mouvement.typeMvt == 'SORTIE' || mouvement.typeMvt == 'CORRECTION_NEG'"
+                                                style="color: rgb(200, 88, 88); font-weight: bolder; font-size: 110%; text-align: center;">
+                                                {{mouvement.typeMvt}}</td>
+                                            <td *ngIf="mouvement.typeMvt == 'CORRECTION_POS' || mouvement.typeMvt == 'ENTREE'"
+                                                style="color: rgb(97, 202, 85); font-weight: bolder; font-size: 110%; text-align: center;">
+                                                {{mouvement.typeMvt}}</td>
                                             <td style="text-align: center;">{{mouvement.quantity}}</td>
                                             <td>{{mouvement.mvtDate | date}}</td>
                                         </tr>

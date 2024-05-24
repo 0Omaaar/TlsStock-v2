@@ -1,0 +1,21 @@
+<h2 mat-dialog-title>Correction Stock</h2>
+<mat-dialog-content>
+    <div class="item">
+        <select [(ngModel)]="typeMvt" class="form-select">
+            <option [ngValue]="null" disabled>Choisir Type Mouvement</option>
+            <option value="CORRECTION_POS">Correction Positive</option>
+            <option value="CORRECTION_NEG">Correction Negative</option>
+        </select>
+    </div>
+
+    <div class="item">
+        <input type="number" [(ngModel)]="quantity" name="quantity" class="form-control">
+    </div>
+</mat-dialog-content>
+<mat-dialog-actions>
+    <div>
+        <button mat-button mat-dialog-close>Annuler</button>
+        <button mat-button mat-dialog-close [disabled]="quantity <= 0 || typeMvt == '' "
+            (click)="saveStockMovement()">Enregistrer</button>
+    </div>
+</mat-dialog-actions>
