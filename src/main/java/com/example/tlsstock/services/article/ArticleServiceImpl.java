@@ -30,6 +30,7 @@ public class ArticleServiceImpl implements ArticleService{
             article.setDescription(articleDto.getDescription());
             article.setQuantity(articleDto.getQuantity());
             article.setDispoQuantity(articleDto.getQuantity());
+            article.setMinQuantity(articleDto.getMinQuantity());
             if(articleDto.getImage() != null){
                 article.setImage(articleDto.getImage().getBytes());
             }

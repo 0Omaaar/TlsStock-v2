@@ -37,6 +37,7 @@ export class AddArticleComponent {
       name: [null, [Validators.required]],
       description: [null, [Validators.required]],
       quantity: [null, [Validators.required]],
+      minQuantity: [null, [Validators.required]],
       categoryId: [null, [Validators.required]]
     });
 
@@ -66,6 +67,7 @@ export class AddArticleComponent {
       formData.append('name', this.addArticleForm.get('name')?.value);
       formData.append('description', this.addArticleForm.get('description')?.value);
       formData.append('quantity', this.addArticleForm.get('quantity')?.value);
+      formData.append('minQuantity', this.addArticleForm.get('minQuantity')?.value);
       formData.append('categoryId', this.addArticleForm.get('categoryId')?.value);
 
       this.articleService.addArticle(formData).subscribe((res) => {

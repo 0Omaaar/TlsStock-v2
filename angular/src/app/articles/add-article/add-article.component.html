@@ -54,6 +54,12 @@
                         <div class="invalid-feedback" *ngIf="addArticleForm.get('quantity')?.invalid">
                             Veuillez Entrer Une Quantite !</div>
                     </div>
+                    <div class="form-group col-md-2">
+                        <label for="inputZip">Quantité Min</label>
+                        <input type="number" formControlName="minQuantity" class="form-control is-invalid" id="inputZip" />
+                        <div class="invalid-feedback" *ngIf="addArticleForm.get('minQuantity')?.invalid">
+                            Veuillez Entrer Une Quantite Minimale !</div>
+                    </div>
                 </div>
                 <button type="submit" class="btn btn-primary">Ajouter Article</button>
             </form>

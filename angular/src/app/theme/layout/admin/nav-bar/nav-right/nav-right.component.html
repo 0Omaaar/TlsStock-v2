@@ -1,59 +1,31 @@
 <ul class="navbar-nav ms-auto">
   <li>
     <div class="dropdown" ngbDropdown placement="auto">
-      <a ngbDropdownToggle href="javascript:"
-        ><i class="icon feather icon-bell" title="Notification"></i><span class="badge bg-danger"><span class="sr-only"></span></span
-      ></a>
+      <a ngbDropdownToggle href="javascript:"><i class="icon feather icon-bell" title="Notification"></i><span
+          class="badge bg-danger"><span class="sr-only"></span></span></a>
       <div ngbDropdownMenu class="dropdown-menu dropdown-menu-end notification">
         <div class="noti-head">
           <h6 class="d-inline-block m-b-0">Notifications</h6>
           <div class="float-end">
-            <a href="javascript:" class="m-r-10">mark as read</a>
-            <a href="javascript:">clear all</a>
+            <a href="javascript:" (click)="clearNotifications()">Effacer les Notifs</a>
           </div>
         </div>
         <ul class="noti-body">
           <li class="n-title">
-            <p class="m-b-0">NEW</p>
           </li>
-          <li class="notification">
+          <li *ngFor="let notification of notificationService.notifications$ | async" class="notification">
             <div class="media">
-              <img class="img-radius" src="assets/images/user/avatar-1.jpg" alt="Generic placeholder image" />
+              <!-- <img class="img-radius" src="assets/images/user/avatar-1.jpg" alt="Generic placeholder image" /> -->
               <div class="media-body">
-                <p
-                  ><strong>John Doe</strong><span class="n-time text-muted"><i class="icon feather icon-clock m-r-10"></i>30 min</span></p
-                >
-                <p>New ticket Added</p>
+                <p><strong>{{ notification.title }}</strong><span class="n-time text-muted"><i
+                      class="icon feather icon-clock m-r-10"></i>{{ notification.timestamp | date:'shortTime' }}</span>
+                </p>
+                <p>{{ notification.message }}</p>
               </div>
             </div>
+
           </li>
-          <li class="n-title">
-            <p class="m-b-0">EARLIER</p>
-          </li>
-          <li class="notification">
-            <div class="media">
-              <img class="img-radius" src="assets/images/user/avatar-2.jpg" alt="Generic placeholder image" />
-              <div class="media-body">
-                <p
-                  ><strong>Joseph William</strong
-                  ><span class="n-time text-muted"><i class="icon feather icon-clock m-r-10"></i>30 min</span></p
-                >
-                <p>Purchase New Theme and make payment</p>
-              </div>
-            </div>
-          </li>
-          <li class="notification">
-            <div class="media">
-              <img class="img-radius" src="assets/images/user/avatar-3.jpg" alt="Generic placeholder image" />
-              <div class="media-body">
-                <p
-                  ><strong>Sara Soudein</strong
-                  ><span class="n-time text-muted"><i class="icon feather icon-clock m-r-10"></i>30 min</span></p
-                >
-                <p>currently login</p>
-              </div>
-            </div>
-          </li>
+          
         </ul>
         <div class="noti-footer">
           <a href="javascript:">show all</a>
@@ -64,7 +36,8 @@
   <li (click)="this.visibleUserList = !this.visibleUserList">
     <div class="dropdown">
       <a href="javascript:" class="displayChatbox dropdown-toggle">
-        <i class="icon feather icon-mail" title="Mail InBox"></i><span class="badge bg-success"><span class="sr-only"></span></span>
+        <i class="icon feather icon-mail" title="Mail InBox"></i><span class="badge bg-success"><span
+            class="sr-only"></span></span>
       </a>
     </div>
   </li>
@@ -82,15 +55,9 @@
           </a>
         </div>
         <ul class="pro-body">
-          <li
-            ><a href="javascript:" class="dropdown-item"><i class="feather icon-user"></i> Profile</a></li
-          >
-          <li
-            ><a href="javascript:" class="dropdown-item"><i class="feather icon-mail"></i> My Messages</a></li
-          >
-          <li
-            ><a href="javascript:" class="dropdown-item"><i class="feather icon-lock"></i> Lock Screen</a></li
-          >
+          <li><a href="javascript:" class="dropdown-item"><i class="feather icon-user"></i> Profile</a></li>
+          <li><a href="javascript:" class="dropdown-item"><i class="feather icon-mail"></i> My Messages</a></li>
+          <li><a href="javascript:" class="dropdown-item"><i class="feather icon-lock"></i> Lock Screen</a></li>
         </ul>
       </div>
     </div>
@@ -98,31 +65,27 @@
 </ul>
 
 @if (visibleUserList) {
-  <section class="header-user-list" [ngClass]="{ open: visibleUserList }" [@slideInOutLeft]>
-    <app-chat-user-list
-      (ChatToggle)="onChatToggle($event)"
-      (ChatCollapse)="this.visibleUserList = !this.visibleUserList; this.chatMessage = false"
-    ></app-chat-user-list>
-  </section>
+<section class="header-user-list" [ngClass]="{ open: visibleUserList }" [@slideInOutLeft]>
+  <app-chat-user-list (ChatToggle)="onChatToggle($event)"
+    (ChatCollapse)="this.visibleUserList = !this.visibleUserList; this.chatMessage = false"></app-chat-user-list>
+</section>
 }
 
 @if (chatMessage) {
-  <section class="header-chat" [ngClass]="{ open: chatMessage }" [@slideInOutLeft]>
-    <app-chat-msg (ChatToggle)="this.chatMessage = !this.chatMessage" [friendId]="friendId"></app-chat-msg>
-  </section>
+<section class="header-chat" [ngClass]="{ open: chatMessage }" [@slideInOutLeft]>
+  <app-chat-msg (ChatToggle)="this.chatMessage = !this.chatMessage" [friendId]="friendId"></app-chat-msg>
+</section>
 }
 
 @if (visibleUserList) {
-  <section class="header-user-list" [ngClass]="{ open: visibleUserList }" [@slideInOutRight]>
-    <app-chat-user-list
-      (ChatToggle)="onChatToggle($event)"
-      (ChatCollapse)="this.visibleUserList = !this.visibleUserList; this.chatMessage = false"
-    ></app-chat-user-list>
-  </section>
+<section class="header-user-list" [ngClass]="{ open: visibleUserList }" [@slideInOutRight]>
+  <app-chat-user-list (ChatToggle)="onChatToggle($event)"
+    (ChatCollapse)="this.visibleUserList = !this.visibleUserList; this.chatMessage = false"></app-chat-user-list>
+</section>
 }
 
 @if (chatMessage) {
-  <section class="header-chat" [ngClass]="{ open: chatMessage }" [@slideInOutRight]>
-    <app-chat-msg (ChatToggle)="this.chatMessage = !this.chatMessage" [friendId]="friendId"></app-chat-msg>
-  </section>
+<section class="header-chat" [ngClass]="{ open: chatMessage }" [@slideInOutRight]>
+  <app-chat-msg (ChatToggle)="this.chatMessage = !this.chatMessage" [friendId]="friendId"></app-chat-msg>
+</section>
 }

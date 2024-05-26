@@ -9,6 +9,7 @@ import { DatePipe } from '@angular/common';
 import { ArticleService } from 'src/app/services/articles/article.service';
 import { ClientOrderService } from 'src/app/services/orders/client-order.service';
 import { Router } from '@angular/router';
+import { NotificationService, Notification } from 'src/app/services/notifications/notification.service';
 
 @Component({
   selector: 'app-add-order',
@@ -40,6 +41,8 @@ export class AddOrderComponent {
 
   orderLinesList: Array<any> = [];
 
+  sendNotif: boolean = false;
+
   currentDate = new Date();
   constructor(
     private categorieService: CategoryService,
@@ -47,7 +50,8 @@ export class AddOrderComponent {
     private articleService: ArticleService,
     private clientOrderService: ClientOrderService,
     private snackBar: MatSnackBar,
-    private router: Router
+    private router: Router,
+    private notificationService: NotificationService
   ) {}
 
   getCategories() {
@@ -117,6 +121,11 @@ export class AddOrderComponent {
           articleName: this.selectedArticle.name
         };
 
+        const dispoQuantity = res.dispoQuantity - this.selectedQuantity;
+        if (dispoQuantity <= res.minQuantity) {
+          this.sendNotif = true;
+        }
+
         if (this.selectedClient == null) {
           this.snackBar.open('Veuillez Choisir Un Client !', 'Close', { duration: 5000 });
         } else {
@@ -127,13 +136,23 @@ export class AddOrderComponent {
     }
   }
 
-  resetArticleSelection(){
+  resetArticleSelection() {
     this.selectedArticleId = null;
     this.selectedArticle = null;
     this.selectedQuantity = 0;
     this.selectedArticleDispoQuantity = null;
     this.isArticleSelected = false;
     this.selectedArticleName = '';
+  }
+
+  addNotification() {
+    const newNotification: Notification = {
+      id: Date.now(),
+      title: 'Nouvelle Notification',
+      message: 'Un Article récemment demandé par une commande client approche de son seuil de quantité minimale.',
+      timestamp: new Date()
+    };
+    this.notificationService.addNotification(newNotification);
   }
 
   saveOrder() {
@@ -143,10 +162,16 @@ export class AddOrderComponent {
       clientName: this.selectedClient.name,
       clientOrderLines: this.orderLinesList
     };
+
+    if (this.sendNotif == true) {
+      this.addNotification();
+    }
+
     this.clientOrderService.addOrder(clientOrderDto).subscribe((res) => {
       if (res.id != null) {
         this.snackBar.open('Commande Ajoutee Avec Succes !', 'Close', { duration: 5000 });
         this.router.navigateByUrl('/get-orders');
+        this.sendNotif = false;
       }
     });
   }

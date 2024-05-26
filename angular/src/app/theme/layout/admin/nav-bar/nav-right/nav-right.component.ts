@@ -4,6 +4,7 @@ import { animate, style, transition, trigger } from '@angular/animations';
 
 // bootstrap
 import { NgbDropdownConfig } from '@ng-bootstrap/ng-bootstrap';
+import { NotificationService, Notification } from 'src/app/services/notifications/notification.service';
 
 @Component({
   selector: 'app-nav-right',
@@ -28,7 +29,7 @@ export class NavRightComponent {
   friendId!: number;
 
   // constructor
-  constructor() {
+  constructor(public notificationService: NotificationService) {
     this.visibleUserList = false;
     this.chatMessage = false;
   }
@@ -37,5 +38,9 @@ export class NavRightComponent {
   onChatToggle(friendID: number) {
     this.friendId = friendID;
     this.chatMessage = !this.chatMessage;
+  }
+
+  clearNotifications() {
+    this.notificationService.clearAllNotifications();
   }
 }
