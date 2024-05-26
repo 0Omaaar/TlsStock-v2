@@ -5,6 +5,8 @@ import { animate, style, transition, trigger } from '@angular/animations';
 // bootstrap
 import { NgbDropdownConfig } from '@ng-bootstrap/ng-bootstrap';
 import { NotificationService, Notification } from 'src/app/services/notifications/notification.service';
+import { UserStorageService } from 'src/app/services/storage/user-storage.service';
+import { Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-nav-right',
@@ -29,7 +31,9 @@ export class NavRightComponent {
   friendId!: number;
 
   // constructor
-  constructor(public notificationService: NotificationService) {
+  constructor(public notificationService: NotificationService, 
+    private router: Router
+  ) {
     this.visibleUserList = false;
     this.chatMessage = false;
   }
@@ -42,5 +46,11 @@ export class NavRightComponent {
 
   clearNotifications() {
     this.notificationService.clearAllNotifications();
+  }
+
+  logout() {
+    console.log("here")
+    UserStorageService.signOut();
+    this.router.navigateByUrl('login');
   }
 }

@@ -16,12 +16,22 @@ import { AddOrderComponent } from './orders/clientOrders/add-order/add-order.com
 import { GetOrdersComponent } from './orders/clientOrders/get-orders/get-orders.component';
 import { EditOrderComponent } from './orders/clientOrders/edit-order/edit-order.component';
 import { GetStockMovementsComponent } from './stockMovements/get-stock-movements/get-stock-movements.component';
+import { LoginComponent } from './login/login.component';
+import { SignupComponent } from './signup/signup.component';
 
 const routes: Routes = [
   {
     path: '',
     component: AdminComponent,
     children: [
+      {
+        path: 'login',
+        component: LoginComponent,
+      },
+      // {
+      //   path: 'signup',
+      //   component: SignupComponent,
+      // },
       {
         path: '',
         redirectTo: '/analytics',

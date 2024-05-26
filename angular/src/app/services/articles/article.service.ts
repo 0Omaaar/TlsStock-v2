@@ -1,7 +1,8 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { tap } from 'rxjs/operators';
+import { UserStorageService } from '../storage/user-storage.service';
 
 const API = 'http://localhost:8080/api/';
 
@@ -14,19 +15,32 @@ export class ArticleService {
 
   constructor(private http: HttpClient) {}
 
+  private createAuthorizationHeader(): HttpHeaders {
+    return new HttpHeaders().set(
+      'Authorization',
+      'Bearer ' + UserStorageService.getToken()
+    );
+  }
+
   addArticle(articleDto: any): Observable<any> {
-    return this.http.post(API + 'article/save', articleDto).pipe(tap(() => (this.articlesCache = null)));
+    return this.http.post(API + 'article/save', articleDto, {
+      headers: this.createAuthorizationHeader()
+    }).pipe(tap(() => (this.articlesCache = null)));
   }
 
   updateArticle(articleDto: any): Observable<any> {
-    return this.http.put(API + 'article/update', articleDto).pipe(tap(() => (this.articlesCache = null)));
+    return this.http.put(API + 'article/update', articleDto, {
+      headers: this.createAuthorizationHeader()
+    }).pipe(tap(() => (this.articlesCache = null)));
   }
 
   getArticles(): Observable<any[]> {
     if (this.articlesCache) {
       return of(this.articlesCache);
     } else {
-      return this.http.get<any[]>(API + 'articles').pipe(tap((articles) => (this.articlesCache = articles)));
+      return this.http.get<any[]>(API + 'articles', {
+        headers: this.createAuthorizationHeader()
+      }).pipe(tap((articles) => (this.articlesCache = articles)));
     }
   }
 
@@ -35,13 +49,16 @@ export class ArticleService {
   }
 
   getArticle(articleId: number): Observable<any> {
-    return this.http.get(API + 'article/' + articleId);
+    return this.http.get(API + 'article/' + articleId, {
+      headers: this.createAuthorizationHeader()
+    });
   }
 
   deleteArticle(articleDto: any): Observable<any> {
     return this.http
       .delete(API + 'article/delete', {
-        body: articleDto
+        body: articleDto,
+        headers: this.createAuthorizationHeader()
       })
       .pipe(
         tap(() => {
