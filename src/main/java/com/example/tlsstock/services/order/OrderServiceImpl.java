@@ -7,6 +7,7 @@ import com.example.tlsstock.entities.*;
 import com.example.tlsstock.enums.OrderStatus;
 import com.example.tlsstock.enums.TypeMvtStk;
 import com.example.tlsstock.repositories.*;
+import com.example.tlsstock.services.checker.ArticleChecker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
@@ -33,6 +34,9 @@ public class OrderServiceImpl implements OrderService{
 
     @Autowired
     private StockMovementRepository stockMovementRepository;
+
+    @Autowired
+    private ArticleChecker articleChecker;
 
     @Override
     @Transactional
@@ -64,6 +68,10 @@ public class OrderServiceImpl implements OrderService{
                             clientOrderLine.setArticle(article);
                             clientOrderLine.setQuantity(orderLine.getQuantity());
                             clientOrderLine.setOrderClient(savedOrder);
+
+                            Long dispoQuantity = article.getDispoQuantity() - orderLine.getQuantity();
+
+                            articleChecker.minArticleQuantityChecker(dispoQuantity, article.getDto());
                             clientOrderLineRepository.save(clientOrderLine);
                         }
                     }

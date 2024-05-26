@@ -66,7 +66,7 @@ public class ArticleServiceImpl implements ArticleService{
     @Override
     public List<ArticleDto> getArticles() {
         List<ArticleDto> articleDtos = articleRepository.findAll().stream().map(Article::getDto).collect(Collectors.toList());
-        System.out.println(articleDtos);
+//        System.out.println(articleDtos);
         if(articleDtos != null){
             return articleDtos;
         }

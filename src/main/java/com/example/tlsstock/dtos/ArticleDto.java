@@ -22,6 +22,8 @@ public class ArticleDto {
 
     private Long dispoQuantity;
 
+    private Long minQuantity;
+
     //    @JsonIgnore
     private byte[] byteImage;
 
