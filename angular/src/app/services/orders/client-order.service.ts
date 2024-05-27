@@ -58,4 +58,8 @@ export class ClientOrderService {
       headers: this.createAuthorizationHeader()
     });
   }
+
+  clearCache(){
+    this.ordersCache = null;
+  }
 }

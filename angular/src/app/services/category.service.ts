@@ -81,7 +81,7 @@ export class CategoryService {
     });
   }
 
-  private invalidateCache() {
+  invalidateCache() {
     this.categoriesCache = null;
     this.categoriesByNameCache = {};
     this.articlesByCategoryIdCache = {};

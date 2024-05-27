@@ -66,4 +66,8 @@ export class ArticleService {
         })
       );
   }
+
+  clearCache(){
+    this.articlesCache = null;
+  }
 }

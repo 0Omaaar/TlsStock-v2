@@ -38,4 +38,8 @@ export class StockMovementService {
       headers: this.createAuthorizationHeader()
     }); 
   }
+
+  clearCache(){
+    this.stocksCache = null;
+  }
 }

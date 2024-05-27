@@ -9,6 +9,7 @@ const BASIC_URL = 'http://localhost:8080/';
   providedIn: 'root'
 })
 export class AuthService {
+  isAuth: boolean = false;
   constructor(
     private http: HttpClient,
     private userStorageService: UserStorageService
@@ -31,6 +32,7 @@ export class AuthService {
           if (token && user) {
             this.userStorageService.saveToken(token);
             this.userStorageService.saveUser(user);
+            this.isAuth = true;
             return true;
           }
         }

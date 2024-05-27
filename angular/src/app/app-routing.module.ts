@@ -18,6 +18,7 @@ import { EditOrderComponent } from './orders/clientOrders/edit-order/edit-order.
 import { GetStockMovementsComponent } from './stockMovements/get-stock-movements/get-stock-movements.component';
 import { LoginComponent } from './login/login.component';
 import { SignupComponent } from './signup/signup.component';
+import { authGuard } from './auth.guard';
 
 const routes: Routes = [
   {
@@ -39,27 +40,33 @@ const routes: Routes = [
       },
       {
         path: 'categories',
-        component: GetCategoriesComponent
+        component: GetCategoriesComponent,
+        canActivate: [authGuard],
       },
       {
         path: 'articles',
-        component: ArticleComponent
+        component: ArticleComponent,
+        canActivate: [authGuard],
       },
       {
         path: 'stock-movements',
-        component: GetStockMovementsComponent
+        component: GetStockMovementsComponent,
+        canActivate: [authGuard],
       },
       {
         path: 'clients',
-        component: ClientsComponent
+        component: ClientsComponent,
+        canActivate: [authGuard],
       },
       {
         path: 'get-orders',
-        component: GetOrdersComponent
+        component: GetOrdersComponent,
+        canActivate: [authGuard],
       },
       {
         path: 'ajouterArticle',
-        component: AddArticleComponent
+        component: AddArticleComponent,
+        canActivate: [authGuard],
       },
       {
         path: 'test',
@@ -67,19 +74,23 @@ const routes: Routes = [
       },
       {
         path: 'modifierArticle/:id',
-        component: UpdateArticleComponent
+        component: UpdateArticleComponent,
+        canActivate: [authGuard],
       },
       {
         path: 'modifierCommande/:id',
-        component: EditOrderComponent
+        component: EditOrderComponent,
+        canActivate: [authGuard],
       },
       {
         path: 'categorie/:id/articles',
-        component: CategoryArticlesComponent
+        component: CategoryArticlesComponent,
+        canActivate: [authGuard],
       },
       {
         path: 'add-order',
-        component: AddOrderComponent
+        component: AddOrderComponent,
+        canActivate: [authGuard],
       },
       {
         path: 'analytics',

@@ -12,7 +12,8 @@ const API = 'http://localhost:8080/api/';
 export class ClientService {
   private clientsCache: any[] | null = null;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient
+  ) {}
 
   private createAuthorizationHeader(): HttpHeaders {
     return new HttpHeaders().set(
@@ -53,5 +54,9 @@ export class ClientService {
       body: clientDto,
       headers: this.createAuthorizationHeader()
     });
+  }
+
+  clearCache(){
+    this.clientsCache = null;
   }
 }
