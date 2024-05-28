@@ -4,6 +4,8 @@ import { Component, Input } from '@angular/core';
 // project import
 import { NavigationItem } from '../../navigation';
 
+import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
+
 @Component({
   selector: 'app-nav-item',
   templateUrl: './nav-item.component.html',
@@ -12,6 +14,17 @@ import { NavigationItem } from '../../navigation';
 export class NavItemComponent {
   // public props
   @Input() item!: NavigationItem;
+
+  constructor(private sanitizer: DomSanitizer){}
+
+  getSafeUrl(url: string): SafeUrl {
+    return this.sanitizer.bypassSecurityTrustUrl(url);
+  }
+
+  isSafeUrl(url: string): boolean {
+    const safePattern = /^https?:\/\/.+$/;
+    return safePattern.test(url);
+  }
 
   // public method
   closeOtherMenu(event: MouseEvent) {

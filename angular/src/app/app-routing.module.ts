@@ -94,7 +94,8 @@ const routes: Routes = [
       },
       {
         path: 'analytics',
-        loadComponent: () => import('./demo/dashboard/dash-analytics.component')
+        loadComponent: () => import('./demo/dashboard/dash-analytics.component'),
+        canActivate: [authGuard],
       },
       {
         path: 'component',

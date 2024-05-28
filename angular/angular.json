@@ -17,7 +17,19 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "allowedCommonJsDependencies": ["bezier-easing", "mousetrap", "apexcharts"],
+            "allowedCommonJsDependencies": [
+              "bezier-easing",
+              "mousetrap",
+              "apexcharts",
+              "core-js/modules/es.array.index-of.js",
+              "core-js/modules/es.array.iterator.js",
+              "canvg",
+              "core-js",
+              "raf",
+              "rgbcolor",
+              "file-saver",
+              "jspdf-autotable"
+            ],
             "outputPath": "dist",
             "index": "src/index.html",
             "main": "src/main.ts",
@@ -31,10 +43,7 @@
               "node_modules/bootstrap-icons/font/bootstrap-icons.css",
               "src/styles.scss"
             ],
-            "scripts": [
-              "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js",
-              "node_modules/apexcharts/dist/apexcharts.min.js"
-            ]
+            "scripts": ["node_modules/bootstrap/dist/js/bootstrap.bundle.min.js", "node_modules/apexcharts/dist/apexcharts.min.js"]
           },
           "configurations": {
             "production": {
