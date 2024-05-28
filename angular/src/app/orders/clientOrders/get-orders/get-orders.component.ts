@@ -16,6 +16,8 @@ import { ClientService } from 'src/app/services/clients/client.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { RouterModule } from '@angular/router';
 
+import { jsPDF } from 'jspdf';
+import autoTable from 'jspdf-autotable';
 
 @Component({
   selector: 'app-get-orders',
@@ -56,11 +58,6 @@ export class GetOrdersComponent {
     });
   }
 
-  // applyFilter(event: Event) {
-  //   const filterValue = (event.target as HTMLInputElement).value;
-  //   this.currentOrders.filter = filterValue.trim().toLowerCase();
-  // }
-
   updateCurrentOrders(pageEvent?: PageEvent) {
     const startIndex = pageEvent ? pageEvent.pageIndex * pageEvent.pageSize : 0;
     const endIndex = startIndex + (pageEvent ? pageEvent.pageSize : 3);
@@ -85,5 +82,44 @@ export class GetOrdersComponent {
 
   ngOnInit() {
     this.getOrders();
+  }
+
+  generateInvoice(order: any): void {
+    const doc = new jsPDF();
+
+    doc.setFontSize(16);
+
+    doc.addImage('/assets/images/tls.png', 'PNG', 14, 10, 50, 50);
+
+    doc.text('COMMANDE CLIENT', 140, 40);
+
+    doc.text('Facture N° ' + order.id, 150, 50).setFontSize(25);
+
+    doc.setFontSize(10);
+    doc.text('Créé le : ' + new Date(order.orderDate).toLocaleDateString(), 14, 95);
+    doc.text('Status : ' + order.orderStatus, 14, 100);
+
+    doc.text('Client N° ' + order.clientId, 150, 95);
+    doc.text('Nom Client : ' + order.clientName, 150, 100);
+    doc.text('Email : '+order.clientEmail, 150, 105);
+
+    const orderLines = order.clientOrderLines.map((line: any) => [
+      line.articleCode,
+      line.articleName,
+      line.quantity
+    ]);
+
+    const startY = 55;
+    autoTable(doc, {
+      startY,
+      head: [['Code Article', 'Nom Article', 'Quantite']],
+      body: orderLines,
+      styles: { cellPadding: 2, fontSize: 10 },
+      headStyles: { fillColor: [220, 220, 220], textColor: [0, 0, 0] },
+      footStyles: { fillColor: [220, 220, 220], textColor: [0, 0, 0] },
+    });
+
+  
+    doc.save(`facture_client_${order.clientName}_${order.id}.pdf`);
   }
 }
