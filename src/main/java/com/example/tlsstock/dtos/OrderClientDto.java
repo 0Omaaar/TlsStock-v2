@@ -1,10 +1,10 @@
 package com.example.tlsstock.dtos;
 
-import com.example.tlsstock.entities.ClientOrderLine;
 import com.example.tlsstock.enums.OrderStatus;
 import lombok.Data;
 
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.List;
 
 @Data
@@ -14,7 +14,9 @@ public class OrderClientDto {
 
     private String code;
 
-    private Instant orderDate;
+    private LocalDate orderDate;
+
+    private LocalDate returnDate;
 
     private OrderStatus orderStatus;
 

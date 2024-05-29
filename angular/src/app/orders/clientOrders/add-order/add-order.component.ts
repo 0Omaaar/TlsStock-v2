@@ -44,6 +44,7 @@ export class AddOrderComponent {
   sendNotif: boolean = false;
 
   currentDate = new Date();
+  returnDate: any | null = null;
   constructor(
     private categorieService: CategoryService,
     private clientService: ClientService,
@@ -106,7 +107,11 @@ export class AddOrderComponent {
   }
 
   addOrderLine() {
-    if (this.selectedQuantity <= 0) {
+    if (this.returnDate == null) {
+      this.snackBar.open('Veuillez Choisir Une Date de Retour !', 'Close', {
+        duration: 5000
+      });
+    } else if (this.selectedQuantity <= 0) {
       this.snackBar.open('Veuillez Choisir Une Quantite Pour Cet Article !', 'Close', {
         duration: 5000
       });
@@ -160,7 +165,8 @@ export class AddOrderComponent {
       code: this.orderCode,
       clientId: Number(this.selectedClient.id),
       clientName: this.selectedClient.name,
-      clientOrderLines: this.orderLinesList
+      clientOrderLines: this.orderLinesList,
+      returnDate: this.returnDate
     };
 
     if (this.sendNotif == true) {

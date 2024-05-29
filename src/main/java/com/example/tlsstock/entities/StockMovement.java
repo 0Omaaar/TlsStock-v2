@@ -8,6 +8,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.Instant;
+import java.time.LocalDate;
 
 @Data
 @NoArgsConstructor
@@ -16,7 +17,7 @@ import java.time.Instant;
 @Entity
 public class StockMovement extends AbstractClass{
 
-    private Instant mvtDate;
+    private LocalDate mvtDate;
 
     @Enumerated(EnumType.STRING)
     private TypeMvtStk typeMvt;

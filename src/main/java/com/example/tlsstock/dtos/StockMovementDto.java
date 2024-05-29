@@ -5,13 +5,14 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.Instant;
+import java.time.LocalDate;
 
 @Getter @Setter
 public class StockMovementDto {
 
     private Long id;
 
-    private Instant mvtDate;
+    private LocalDate mvtDate;
 
     private Long articleId;
 

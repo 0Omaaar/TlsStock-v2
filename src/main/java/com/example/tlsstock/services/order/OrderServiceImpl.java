@@ -8,13 +8,15 @@ import com.example.tlsstock.enums.OrderStatus;
 import com.example.tlsstock.enums.TypeMvtStk;
 import com.example.tlsstock.repositories.*;
 import com.example.tlsstock.services.checker.ArticleChecker;
+import com.example.tlsstock.services.stock_movement.StockMovementService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.time.Instant;
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -36,6 +38,9 @@ public class OrderServiceImpl implements OrderService{
     private StockMovementRepository stockMovementRepository;
 
     @Autowired
+    private StockMovementService stockMovementService;
+
+    @Autowired
     private ArticleChecker articleChecker;
 
     @Override
@@ -52,7 +57,8 @@ public class OrderServiceImpl implements OrderService{
             if(client != null){
                 orderClient.setClient(client);
                 orderClient.setOrderStatus(OrderStatus.EN_PREPARATION);
-                orderClient.setOrderDate(Instant.now());
+                orderClient.setOrderDate(LocalDate.now());
+                orderClient.setReturnDate(orderClientDto.getReturnDate());
                 OrderClient savedOrder = orderClientRepository.save(orderClient);
 
                 // client order lines impl
@@ -97,7 +103,7 @@ public class OrderServiceImpl implements OrderService{
                 if(client != null){
                     orderClient.setClient(client);
                     orderClient.setOrderStatus(OrderStatus.EN_PREPARATION);
-                    orderClient.setOrderDate(Instant.now());
+                    orderClient.setOrderDate(LocalDate.now());
                     OrderClient savedOrder = orderClientRepository.save(orderClient);
 
                     // clear order lines before adding new ones
@@ -154,7 +160,7 @@ public class OrderServiceImpl implements OrderService{
 
             for(ClientOrderLineDto orderLine : orderClientDto.getClientOrderLines()){
                 StockMovementDto stockMovementDto = new StockMovementDto();
-                stockMovementDto.setMvtDate(Instant.now());
+                stockMovementDto.setMvtDate(LocalDate.now());
                 stockMovementDto.setTypeMvt(TypeMvtStk.SORTIE);
                 stockMovementDto.setArticleName(orderLine.getArticleName());
                 stockMovementDto.setArticleId(orderLine.getArticleId());
@@ -182,5 +188,41 @@ public class OrderServiceImpl implements OrderService{
         stockMovement.setMvtDate(stockMovementDto.getMvtDate());
 
         stockMovementRepository.save(stockMovement).getDto();
+    }
+
+
+    @Scheduled(cron = "0 0 0 * * *")
+    @Transactional
+    public void checkReturnDate(){
+        List<OrderClient> orderClients = orderClientRepository.findAll();
+        for(OrderClient orderClient : orderClients){
+            if(Objects.equals(orderClient.getReturnDate(), LocalDate.now())){
+               if(orderClient.getOrderStatus() != OrderStatus.RETURNED){
+                   orderClient.setOrderStatus(OrderStatus.RETURNED);
+                   makeStockMovementEnter(orderClient);
+                   try {
+                       orderClientRepository.save(orderClient);
+                       System.out.println("Order status updated successfully for order: " + orderClient.getId());
+                   } catch (Exception e) {
+                       System.err.println("Error updating order status for order: " + orderClient.getId());
+                       e.printStackTrace();
+                   }
+               }
+            }
+        }
+    }
+
+    @Transactional
+    public void makeStockMovementEnter(OrderClient orderClient){
+        for(ClientOrderLine clientOrderLine : orderClient.getClientOrderLines()){
+            StockMovementDto stockMovementDto = new StockMovementDto();
+            stockMovementDto.setQuantity(clientOrderLine.getQuantity());
+            stockMovementDto.setArticleName(clientOrderLine.getArticle().getName());
+            stockMovementDto.setTypeMvt(TypeMvtStk.ENTREE);
+            stockMovementDto.setMvtDate(LocalDate.now());
+            stockMovementDto.setArticleId(clientOrderLine.getArticle().getId());
+
+            stockMovementService.correctionStock(stockMovementDto);
+        }
     }
 }

@@ -9,6 +9,9 @@
                     <label>Date Commande</label>
                     <input type="text" class="form-control" [value]="currentDate | date: 'dd-MM-yyyy'" disabled>
 
+                    <label>Date Retour</label>
+                    <input type="date" class="form-control" [(ngModel)]="returnDate">
+
                     <label>Client</label>
                     <select class="form-control" [disabled]="orderLinesList.length > 0" [(ngModel)]="selectedClient"
                         (change)="displayClient($event)">

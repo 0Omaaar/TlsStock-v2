@@ -7,6 +7,7 @@ import jakarta.persistence.OneToMany;
 import lombok.*;
 
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.List;
 
 @Data
@@ -18,7 +19,7 @@ public class OrderSupplier extends AbstractClass{
 
     private String code;
 
-    private Instant OrderDate;
+    private LocalDate OrderDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Supplier supplier;

@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -18,7 +19,9 @@ public class OrderClient extends AbstractClass{
 
     private String code;
 
-    private Instant orderDate;
+    private LocalDate orderDate;
+
+    private LocalDate returnDate;
 
     @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus;
@@ -34,6 +37,7 @@ public class OrderClient extends AbstractClass{
         orderClientDto.setId(getId());
         orderClientDto.setCode(code);
         orderClientDto.setOrderDate(orderDate);
+        orderClientDto.setReturnDate(returnDate);
         orderClientDto.setOrderStatus(orderStatus);
         orderClientDto.setClientId(client.getId());
         orderClientDto.setClientName(client.getName());
