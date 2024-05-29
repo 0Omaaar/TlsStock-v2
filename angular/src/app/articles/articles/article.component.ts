@@ -8,19 +8,31 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-// import jsPDF from 'jspdf';
-// import * as jsPDF from 'jspdf';
+
+import { MatDialog, MatDialogRef, MatDialogActions, MatDialogClose, MatDialogTitle, MatDialogContent } from '@angular/material/dialog';
 
 import { jsPDF } from 'jspdf';
 import * as XLSX from 'xlsx';
 import FileSaver from 'file-saver';
 
 import autoTable from 'jspdf-autotable';
+import { ArticleDetailsComponent } from '../article-details/article-details.component';
 
 @Component({
   selector: 'app-article',
   standalone: true,
-  imports: [SharedModule, RouterModule, MatTableModule, MatPaginatorModule, MatIconModule, MatButtonModule],
+  imports: [
+    SharedModule,
+    MatDialogActions,
+    MatDialogClose,
+    MatDialogTitle,
+    MatDialogContent,
+    RouterModule,
+    MatTableModule,
+    MatPaginatorModule,
+    MatIconModule,
+    MatButtonModule
+  ],
   templateUrl: './article.component.html',
   styleUrls: ['./article.component.scss']
 })
@@ -41,7 +53,8 @@ export class ArticleComponent implements AfterViewInit, OnInit {
     private articleService: ArticleService,
     private router: Router,
     private fb: FormBuilder,
-    private snackbar: MatSnackBar
+    private snackbar: MatSnackBar,
+    private dialog: MatDialog
   ) {}
 
   ngOnInit() {
@@ -55,6 +68,19 @@ export class ArticleComponent implements AfterViewInit, OnInit {
     this.dataSource.paginator = this.paginator;
   }
 
+  openDialog(article: any){
+    this.dialog.open(ArticleDetailsComponent, {
+      width: '70%',
+      height: '60%',
+      data: {
+        article: article
+      },
+      position: {
+        left: '20%'
+      },
+      panelClass: 'custom-dialog-container'
+    })
+  }
 
   saveExcel() {
     const tableBody = this.articles.map((article) => [
@@ -65,28 +91,24 @@ export class ArticleComponent implements AfterViewInit, OnInit {
       article.quantity,
       article.dispoQuantity
     ]);
-  
-    const ws_data = [
-      ['Image', 'Code', 'Nom', 'Description', 'Quantite', 'Quantite Dispo'],
-      ...tableBody
-    ];
-  
+
+    const ws_data = [['Image', 'Code', 'Nom', 'Description', 'Quantite', 'Quantite Dispo'], ...tableBody];
+
     const ws = XLSX.utils.aoa_to_sheet(ws_data);
-  
+
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, 'Articles');
-  
+
     const wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'binary' });
     const buf = new ArrayBuffer(wbout.length);
     const view = new Uint8Array(buf);
-  
+
     for (let i = 0; i < wbout.length; i++) {
-      view[i] = wbout.charCodeAt(i) & 0xFF;
+      view[i] = wbout.charCodeAt(i) & 0xff;
     }
-  
+
     FileSaver.saveAs(new Blob([buf], { type: 'application/octet-stream' }), 'articles.xlsx');
   }
-  
 
   savePdf(): void {
     const doc = new jsPDF();

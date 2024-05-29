@@ -1,0 +1,74 @@
+<div class="row">
+    <div class="col-sm-12">
+        <div class="card">
+            <div class="card-body">
+                <div style="display: flex; align-items: center; justify-content: space-between;">
+                    <h5 class="mb-3">Details Article</h5>
+                    <button type="button" class="btn btn-light-secondary" (click)="closeDialog()">Fermer</button>
+                </div>
+                <ul class="nav nav-tabs mb-3" ngbNav #nav="ngbNav">
+                    <li class="nav-item" [ngbNavItem]="1">
+                        <a class="nav-link text-uppercase" aria-controls="home" aria-selected="true"
+                            ngbNavLink>Mouvements Stock</a>
+                        <ng-template ngbNavContent>
+                            <p class="mb-0">
+                                <app-card cardTitle="Liste des Mouvements De Stock" [options]="true"
+                                    blockClass="table-border-style">
+                                    <div class="table-responsive">
+                                        <table class="table table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>#</th>
+                                                    <th>Nom Article</th>
+                                                    <th style="text-align: center;">Type Mouvement</th>
+                                                    <th>Quantite</th>
+                                                    <th>Date Mouvement</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr
+                                                    *ngFor="let mouvement of article.article.stockMovements; let i = index">
+                                                    <th scope="row">{{i + 1}}</th>
+                                                    <td>{{mouvement.articleName}}</td>
+                                                    <td *ngIf="mouvement.typeMvt == 'SORTIE' || mouvement.typeMvt == 'CORRECTION_NEG'"
+                                                        style="color: rgb(200, 88, 88); font-weight: bolder; font-size: 110%; text-align: center;">
+                                                        {{mouvement.typeMvt}}</td>
+                                                    <td *ngIf="mouvement.typeMvt == 'CORRECTION_POS' || mouvement.typeMvt == 'ENTREE'"
+                                                        style="color: rgb(97, 202, 85); font-weight: bolder; font-size: 110%; text-align: center;">
+                                                        {{mouvement.typeMvt}}</td>
+                                                    <td style="text-align: center;">{{mouvement.quantity}}</td>
+                                                    <td>{{mouvement.mvtDate | date}}</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </app-card>
+                            </p>
+                        </ng-template>
+                    </li>
+                    <li class="nav-item" [ngbNavItem]="2">
+                        <a class="nav-link text-uppercase" aria-controls="home" aria-selected="true"
+                            ngbNavLink>Profile</a>
+                        <ng-template ngbNavContent>
+                            <p class="mb-0">
+                                Food truck fixie locavore, accusamus mcsweeney's marfa nulla single-origin coffee squid.
+                                Exercitation +1 labore velit, blog
+                                sartorial PBR leggings next level wes anderson artisan four loko farm-to-table craft
+                                beer twee. Qui photo booth letterpress,
+                                commodo enim craft beer mlkshk aliquip jean shorts ullamco ad vinyl cillum PBR. Homo
+                                nostrud organic, assumenda labore
+                                aesthetic magna delectus mollit. Keytar helvetica VHS salvia yr, vero magna velit
+                                sapiente labore stumptown. Vegan fanny
+                                pack odio cillum wes anderson 8-bit, sustainable jean shorts beard ut DIY ethical culpa
+                                terry richardson biodiesel. Art
+                                party scenester stumptown, tumblr butcher vero sint qui sapiente accusamus tattooed echo
+                                park.
+                            </p>
+                        </ng-template>
+                    </li>
+                </ul>
+                <div [ngbNavOutlet]="nav" class="mt-2"></div>
+            </div>
+        </div>
+    </div>
+</div>
