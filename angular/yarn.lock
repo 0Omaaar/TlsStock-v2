@@ -273,7 +273,7 @@
     symbol-observable "4.0.0"
     yargs "17.7.2"
 
-"@angular/common@^17.0.0", "@angular/common@^17.0.2", "@angular/common@^18.0.0-0 || ^18.1.0-0 || ^18.2.0-0 || ^18.3.0-0 || ^19.0.0-0", "@angular/common@^18.0.0-next.3", "@angular/common@>=13.0.0", "@angular/common@>=16.0.0", "@angular/common@>=9.0.0", "@angular/common@18.0.0-next.6":
+"@angular/common@^17.0.0", "@angular/common@^17.0.2", "@angular/common@^18.0.0-0 || ^18.1.0-0 || ^18.2.0-0 || ^18.3.0-0 || ^19.0.0-0", "@angular/common@^18.0.0-next.3", "@angular/common@>=13.0.0", "@angular/common@>=16.0.0", "@angular/common@>=17.0.0", "@angular/common@>=9.0.0", "@angular/common@18.0.0-next.6":
   version "18.0.0-next.6"
   resolved "https://registry.npmjs.org/@angular/common/-/common-18.0.0-next.6.tgz"
   integrity sha512-ysjOrCoLZZnirNwzSinXBGx2Px5QtrwDYP2+KggQ2U87OaNwIE28sNT/EYm/v2FQ/lmh7y/2F+UMJZA4tnMmVw==
@@ -301,7 +301,7 @@
   dependencies:
     tslib "^2.3.0"
 
-"@angular/core@^17.0.0", "@angular/core@^17.0.2", "@angular/core@^18.0.0-0 || ^18.1.0-0 || ^18.2.0-0 || ^18.3.0-0 || ^19.0.0-0", "@angular/core@^18.0.0-next.3", "@angular/core@>=13.0.0", "@angular/core@>=16.0.0", "@angular/core@>=9.0.0", "@angular/core@18.0.0-next.6":
+"@angular/core@^17.0.0", "@angular/core@^17.0.2", "@angular/core@^18.0.0-0 || ^18.1.0-0 || ^18.2.0-0 || ^18.3.0-0 || ^19.0.0-0", "@angular/core@^18.0.0-next.3", "@angular/core@>=13.0.0", "@angular/core@>=16.0.0", "@angular/core@>=17.0.0", "@angular/core@>=9.0.0", "@angular/core@18.0.0-next.6":
   version "18.0.0-next.6"
   resolved "https://registry.npmjs.org/@angular/core/-/core-18.0.0-next.6.tgz"
   integrity sha512-dDHwXs3vWSEFSOqi0UW6C3HDyZe74u88LO0DetFY350TAOxlwzdbn21+HGV4sHrIZFQ3nRRsZ8zA89VPUz1s0g==
@@ -3141,6 +3141,13 @@ ajv@^8.0.0, ajv@^8.8.2, ajv@^8.9.0, ajv@8.12.0:
     require-from-string "^2.0.2"
     uri-js "^4.2.2"
 
+angular-highcharts@^17.0.1:
+  version "17.0.1"
+  resolved "https://registry.npmjs.org/angular-highcharts/-/angular-highcharts-17.0.1.tgz"
+  integrity sha512-mm1WCHnPaP7lsdJ24FqW1RKucCSYHjW2I1/7qAgKFHgHFOJuSFTBF/dqJpqU1DORqwnpAj/kgkrfedP+B2W+NA==
+  dependencies:
+    tslib "^2.6.0"
+
 ansi-colors@^4.1.1, ansi-colors@4.1.3:
   version "4.1.3"
   resolved "https://registry.npmjs.org/ansi-colors/-/ansi-colors-4.1.3.tgz"
@@ -5202,6 +5209,11 @@ hasown@^2.0.0:
   integrity sha512-0hJU9SCPvmMzIBdZFqNPXWa6dqh7WdH0cII9y+CyS8rG3nL48Bclra9HmKhVVUHyPWNH5Y7xDwAB7bfgSjkUMQ==
   dependencies:
     function-bind "^1.1.2"
+
+highcharts@^11.4.3:
+  version "11.4.3"
+  resolved "https://registry.npmjs.org/highcharts/-/highcharts-11.4.3.tgz"
+  integrity sha512-rMmvYvcdwyUVfnRPfiZ0PnW6TgVhoS0FTBI8fc4Fp8l8ocoC9dMecvxS6E6tm7h7LrnSGoEo3b/0IRHuLatD2w==
 
 hmac-drbg@^1.0.1:
   version "1.0.1"
@@ -8396,7 +8408,7 @@ tsconfig-paths@^4.1.2:
     minimist "^1.2.6"
     strip-bom "^3.0.0"
 
-tslib@^2, tslib@^2.0.0, tslib@^2.1.0, tslib@^2.3.0, tslib@^2.3.1, tslib@^2.4.0, tslib@^2.6.2, tslib@2, tslib@2.6.2:
+tslib@^2, tslib@^2.0.0, tslib@^2.1.0, tslib@^2.3.0, tslib@^2.3.1, tslib@^2.4.0, tslib@^2.6.0, tslib@^2.6.2, tslib@2, tslib@2.6.2:
   version "2.6.2"
   resolved "https://registry.npmjs.org/tslib/-/tslib-2.6.2.tgz"
   integrity sha512-AEYxH93jGFPn/a2iVAwW87VuUIkR1FVUKB77NwMF7nBTDkDrrT/Hpt/IrCJ0QXhW27jTBDcf5ZY7w6RiqTMw2Q==

@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { UserStorageService } from '../storage/user-storage.service';
+import { ArticleService } from '../articles/article.service';
 
 const API = 'http://localhost:8080/api/';
 
@@ -12,7 +13,7 @@ const API = 'http://localhost:8080/api/';
 export class ClientOrderService {
   private ordersCache: any[] | null = null;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private articleService: ArticleService) {}
 
   private createAuthorizationHeader(): HttpHeaders {
     return new HttpHeaders().set('Authorization', 'Bearer ' + UserStorageService.getToken());
@@ -23,7 +24,7 @@ export class ClientOrderService {
       .post(API + 'order/save', orderClientDto, {
         headers: this.createAuthorizationHeader()
       })
-      .pipe(tap(() => (this.ordersCache = null)));
+      .pipe(tap(() => (this.ordersCache = null, this.articleService.clearCache())));
   }
 
   updateOrder(orderClientDto: any): Observable<any> {
@@ -49,8 +50,7 @@ export class ClientOrderService {
     return this.http
       .get<any[]>(API + 'orders', {
         headers: this.createAuthorizationHeader()
-      })
-      .pipe(tap((data) => (this.ordersCache = data)));
+      });
   }
 
   getOrder(id: number): Observable<any> {

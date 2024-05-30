@@ -40,7 +40,7 @@ export class ArticleService {
     } else {
       return this.http.get<any[]>(API + 'articles', {
         headers: this.createAuthorizationHeader()
-      }).pipe(tap((articles) => (this.articlesCache = articles)));
+      });
     }
   }
 
