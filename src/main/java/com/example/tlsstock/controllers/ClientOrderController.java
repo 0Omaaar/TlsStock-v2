@@ -1,5 +1,6 @@
 package com.example.tlsstock.controllers;
 
+import com.example.tlsstock.dtos.ClientOrderLineDto;
 import com.example.tlsstock.dtos.OrderClientDto;
 import com.example.tlsstock.services.order.OrderService;
 import org.apache.coyote.Response;
@@ -31,6 +32,15 @@ public class ClientOrderController {
         OrderClientDto orderClientDto = orderService.getOrderById(id);
         if(orderClientDto != null){
             return ResponseEntity.ok(orderClientDto);
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+    @GetMapping("/orderLines/{id}")
+    public ResponseEntity<?> getOrderLinesById(@PathVariable Long id){
+        List<ClientOrderLineDto> clientOrderLineDtos = orderService.getOrderLinesByArticleId(id);
+        if(clientOrderLineDtos != null){
+            return ResponseEntity.ok(clientOrderLineDtos);
         }
         return ResponseEntity.notFound().build();
     }

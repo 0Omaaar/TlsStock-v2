@@ -1,5 +1,6 @@
 package com.example.tlsstock.services.order;
 
+import com.example.tlsstock.dtos.ClientOrderLineDto;
 import com.example.tlsstock.dtos.OrderClientDto;
 
 import java.util.List;
@@ -15,4 +16,6 @@ public interface OrderService {
     OrderClientDto getOrderById(Long id);
 
     OrderClientDto updateStatus(OrderClientDto orderClientDto);
+
+    List<ClientOrderLineDto> getOrderLinesByArticleId(Long id);
 }

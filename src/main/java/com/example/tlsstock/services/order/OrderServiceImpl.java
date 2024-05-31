@@ -174,6 +174,15 @@ public class OrderServiceImpl implements OrderService{
         return null;
     }
 
+    @Override
+    public List<ClientOrderLineDto> getOrderLinesByArticleId(Long id) {
+        List<ClientOrderLine> orderLines = clientOrderLineRepository.findAllByArticleId(id);
+        if(orderLines != null){
+            return orderLines.stream().map(ClientOrderLine::getDto).collect(Collectors.toList());
+        }
+        return null;
+    }
+
 
     public void saveStockMovement(StockMovementDto stockMovementDto){
         StockMovement stockMovement = new StockMovement();
