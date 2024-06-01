@@ -1,92 +1,91 @@
 <div class="row">
-
+  <!-- Orders Card -->
   <div class="col-md-6 col-xl-3">
     <app-card [hidHeader]="true" cardClass="bg-c-blue order-card">
       <h6 class="text-white">Commandes</h6>
-      <h2 class="text-end text-white"><i
-          class="feather icon-shopping-cart float-start"></i><span>{{dashboardDto?.totalOrders}}</span>
+      <h2 class="text-end text-white">
+        <i class="feather icon-shopping-cart float-start"></i><span>{{dashboardDto?.totalOrders}}</span>
       </h2>
       <p class="m-b-0">Commandes Livrées<span class="float-end">{{ dashboardDto?.totalShippedOrders }}</span></p>
-      <p class="m-b-0">Commandes En Prépatation<span class="float-end">{{ dashboardDto?.totalPreparationOrders }}</span>
-      </p>
+      <p class="m-b-0">Commandes En Préparation<span class="float-end">{{ dashboardDto?.totalPreparationOrders }}</span></p>
       <p class="m-b-0">Commandes Retournées<span class="float-end">{{ dashboardDto?.totalReturnedOrders }}</span></p>
     </app-card>
   </div>
+
+  <!-- Clients Card -->
   <div class="col-md-6 col-xl-3">
     <app-card [hidHeader]="true" cardClass="bg-c-green order-card">
       <h6 class="text-white">Clients</h6>
-      <h2 class="text-end text-white"><i
-          class="feather icon-tag float-start"></i><span>{{dashboardDto?.totalClients}}</span>
+      <h2 class="text-end text-white">
+        <i class="feather icon-tag float-start"></i><span>{{dashboardDto?.totalClients}}</span>
       </h2>
     </app-card>
   </div>
+
+  <!-- Articles Card -->
   <div class="col-md-6 col-xl-3">
     <app-card [hidHeader]="true" cardClass="bg-c-yellow order-card">
       <h6 class="text-white">Articles</h6>
-      <h2 class="text-end text-white"><i
-          class="feather icon-shopping-cart float-start"></i><span>{{dashboardDto?.totalArticles}}</span>
+      <h2 class="text-end text-white">
+        <i class="feather icon-shopping-cart float-start"></i><span>{{dashboardDto?.totalArticles}}</span>
       </h2>
       <p class="m-b-0">Articles Livrées<span class="float-end">{{ dashboardDto?.totalShippedArticles }}</span></p>
-      <p class="m-b-0">Articles En Prépatation<span class="float-end">{{ dashboardDto?.totalPreparationArticles
-          }}</span></p>
+      <p class="m-b-0">Articles En Préparation<span class="float-end">{{ dashboardDto?.totalPreparationArticles }}</span></p>
     </app-card>
   </div>
+
   <div class="col-md-6 col-xl-3">
     <app-card [hidHeader]="true" cardClass="bg-c-blue order-card">
       <h6 class="text-white">Commandes</h6>
-      <h2 class="text-end text-white"><i
-          class="feather icon-shopping-cart float-start"></i><span>{{dashboardDto?.totalOrders}}</span>
+      <h2 class="text-end text-white">
+        <i class="feather icon-shopping-cart float-start"></i><span>{{dashboardDto?.totalOrders}}</span>
       </h2>
       <p class="m-b-0">Commandes Livrées<span class="float-end">{{ dashboardDto?.totalShippedOrders }}</span></p>
-      <p class="m-b-0">Commandes En Prépatation<span class="float-end">{{ dashboardDto?.totalPreparationOrders }}</span>
-      </p>
+      <p class="m-b-0">Commandes En Préparation<span class="float-end">{{ dashboardDto?.totalPreparationOrders }}</span></p>
       <p class="m-b-0">Commandes Retournées<span class="float-end">{{ dashboardDto?.totalReturnedOrders }}</span></p>
     </app-card>
   </div>
 
-  <app-card cardTitle="Commandes Par Mois" [options]="true">
-    <div class="col-md-6 col-md-12">
+  <!-- Charts Card -->
+  <div class="col-md-12">
+    <app-card cardTitle="Commandes Par Mois" [options]="true">
       <div class="charts">
-
-        <div class="line" [chart]="lineChart">
-
-        </div>
+        <div class="line" [chart]="lineChart"></div>
+        <div class="pie" [chart]="pieChart"></div>
       </div>
-    </div>
-  </app-card>
+    </app-card>
+  </div>
 
-
+  <!-- Upcoming Orders Table -->
   <div class="col-md-12 mt-4">
     <app-card cardTitle="Liste des commandes A Venir" cardClass="tab-card tab-content" [options]="true">
       <div class="table-responsive">
-        <div class="col-xl-12">
-          <app-card cardTitle="Tableau des Commandes" [options]="true" blockClass="table-border-style">
-            <div class="table-responsive">
-              <table class="table table-hover">
-                <thead>
-                  <tr>
-                    <th>#</th>
-                    <th>Code Commande</th>
-                    <th>Date Commande</th>
-                    <th>Statut</th>
-                    <th>Client</th>
-                    <th>Date Retour</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr *ngFor="let order of dashboardDto?.orders; let i = index">
-                    <th scope="row">{{i+1}}</th>
-                    <td>{{order.code}}</td>
-                    <td>{{order.orderDate | date}}</td>
-                    <td>{{order.orderStatus}}</td>
-                    <td>{{order.clientName}}</td>
-                    <td style="color: rgb(222, 97, 97); font-weight: bolder;">{{order.returnDate | date}}</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </app-card>
-        </div>
+        <app-card cardTitle="Tableau des Commandes" [options]="true" blockClass="table-border-style">
+          <div class="table-responsive">
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Code Commande</th>
+                  <th>Date Commande</th>
+                  <th>Statut</th>
+                  <th>Client</th>
+                  <th>Date Retour</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let order of dashboardDto?.orders; let i = index">
+                  <th scope="row">{{i + 1}}</th>
+                  <td>{{order.code}}</td>
+                  <td>{{order.orderDate | date}}</td>
+                  <td>{{order.orderStatus}}</td>
+                  <td>{{order.clientName}}</td>
+                  <td style="color: rgb(222, 97, 97); font-weight: bolder;">{{order.returnDate | date}}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </app-card>
       </div>
     </app-card>
   </div>

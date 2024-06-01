@@ -1,34 +1,118 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Chart, ChartModule } from 'angular-highcharts';
 import { ClientOrderService } from '../services/orders/client-order.service';
 import { DashboardService } from '../services/dashboard/dashboard.service';
 import { SharedModule } from '../theme/shared/shared.module';
+
+// Define the OrderStatusKey type
+type OrderStatusKey = 'LIVREE' | 'EN_PREPARATION' | 'RETURNED';
+
 @Component({
   selector: 'app-dashboard',
   standalone: true,
   imports: [ChartModule, SharedModule],
   templateUrl: './dashboard.component.html',
-  styleUrl: './dashboard.component.scss'
+  styleUrls: ['./dashboard.component.scss']
 })
-export class DashboardComponent {
+export class DashboardComponent implements OnInit {
   lineChart!: Chart;
   dashboardDto: any;
+  orderStatusPieData: any[] = [];
+  pieChart!: Chart;
 
-  constructor(private ordersService: ClientOrderService, 
+  constructor(
+    private ordersService: ClientOrderService,
     private dashboardService: DashboardService
   ) {}
 
-
-
   ngOnInit() {
-
     this.getData();
-
-
-
     this.ordersService.getOrders().subscribe((orders) => {
       const ordersByMonth = this.processOrdersData(orders);
       this.initLineChart(ordersByMonth);
+    });
+  }
+
+  getData() {
+    this.dashboardService.getData().subscribe((data) => {
+      this.dashboardDto = data;
+      this.setupOrderStatusPieData();
+      this.initPieChart();
+    });
+  }
+
+  setupOrderStatusPieData(): void {
+    const statusCounts: { [key in OrderStatusKey]: number } = {
+      LIVREE: this.dashboardDto.totalShippedOrders,
+      EN_PREPARATION: this.dashboardDto.totalPreparationOrders,
+      RETURNED: this.dashboardDto.totalReturnedOrders
+    };
+
+    this.orderStatusPieData = (Object.keys(statusCounts) as OrderStatusKey[]).map((status) => {
+      return {
+        name: status,
+        y: statusCounts[status],
+        color: this.getStatusColor(status)
+      };
+    });
+    console.log(this.orderStatusPieData);
+  }
+
+  getStatusColor(status: OrderStatusKey): string {
+    switch (status) {
+      case 'LIVREE':
+        return '#00adb5';
+      case 'EN_PREPARATION':
+        return '#506ef9';
+      case 'RETURNED':
+        return '#393e46';
+      default:
+        return '#eeeeee';
+    }
+  }
+
+  initPieChart() {
+    this.pieChart = new Chart({
+      chart: {
+        type: 'pie',
+        plotShadow: false
+      },
+      credits: {
+        enabled: false
+      },
+      plotOptions: {
+        pie: {
+          innerSize: '99%',
+          borderWidth: 10,
+          borderColor: '',
+          slicedOffset: 10,
+          dataLabels: {
+            connectorWidth: 0
+          }
+        }
+      },
+      title: {
+        verticalAlign: 'middle',
+        floating: true,
+        text: 'Distribution De </br> Commandes Par Statut',
+        align: 'center',
+        style: {
+          color: '#333333',
+          fontSize: '14px',
+          whiteSpace: 'normal',
+          textAlign: 'center',
+          margin: 'auto'
+        }
+      },
+      legend: {
+        enabled: false
+      },
+      series: [
+        {
+          type: 'pie',
+          data: this.orderStatusPieData
+        }
+      ]
     });
   }
 
@@ -67,13 +151,6 @@ export class DashboardComponent {
     }
   ];
 
-  getData(){
-    this.dashboardService.getData().subscribe(data => {
-      console.log(data);
-      this.dashboardDto = data;
-    })
-  }
-
   processOrdersData(orders: any[]): number[] {
     const currentMonth = new Date().getMonth() + 1;
     const ordersCountByMonth = new Array(currentMonth).fill(0);
@@ -107,70 +184,4 @@ export class DashboardComponent {
       ]
     });
   }
-
-  // lineChart = new Chart({
-  //   chart: {
-  //     type: 'line'
-  //   },
-  //   title: {
-  //     text: 'Patients'
-  //   },
-  //   credits: {
-  //     enabled: false
-  //   },
-  //   series: [
-  //     {
-  //       name: 'Patients admitted',
-  //       data: [10, 2, 3, 6, 9, 17, 20, 10, 5, 2, 16]
-  //     } as any
-  //   ]
-  // });
-
-  // pieChart = new Chart({
-  //   chart: {
-  //     type: 'pie',
-  //     plotShadow: false
-  //   },
-
-  //   credits: {
-  //     enabled: false
-  //   },
-
-  //   plotOptions: {
-  //     pie: {
-  //       innerSize: '99%',
-  //       borderWidth: 10,
-  //       borderColor: '',
-  //       slicedOffset: 10,
-  //       dataLabels: {
-  //         connectorWidth: 0
-  //       }
-  //     }
-  //   },
-
-  //   title: {
-  //     verticalAlign: 'middle',
-  //     floating: true,
-  //     text: 'Diseases'
-  //   },
-
-  //   legend: {
-  //     enabled: false
-  //   },
-
-  //   series: [
-  //     {
-  //       type: 'pie',
-  //       data: [
-  //         { name: 'COVID 19', y: 1, color: '#eeeeee' },
-
-  //         { name: 'HIV/AIDS', y: 2, color: '#393e46' },
-
-  //         { name: 'EBOLA', y: 3, color: '#00adb5' },
-  //         { name: 'DISPORA', y: 4, color: '#eeeeee' },
-  //         { name: 'DIABETES', y: 5, color: '#506ef9' }
-  //       ]
-  //     }
-  //   ]
-  // });
 }
