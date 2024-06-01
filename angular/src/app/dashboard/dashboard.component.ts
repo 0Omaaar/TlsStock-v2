@@ -1,29 +1,81 @@
 import { Component } from '@angular/core';
 import { Chart, ChartModule } from 'angular-highcharts';
 import { ClientOrderService } from '../services/orders/client-order.service';
+import { DashboardService } from '../services/dashboard/dashboard.service';
+import { SharedModule } from '../theme/shared/shared.module';
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [ChartModule],
+  imports: [ChartModule, SharedModule],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss'
 })
 export class DashboardComponent {
   lineChart!: Chart;
+  dashboardDto: any;
 
-  constructor(private ordersService: ClientOrderService) {}
+  constructor(private ordersService: ClientOrderService, 
+    private dashboardService: DashboardService
+  ) {}
+
+
 
   ngOnInit() {
+
+    this.getData();
+
+
+
     this.ordersService.getOrders().subscribe((orders) => {
-      // console.log(orders);
       const ordersByMonth = this.processOrdersData(orders);
       this.initLineChart(ordersByMonth);
     });
   }
 
+  cards = [
+    {
+      background: 'bg-c-blue',
+      title: 'Commandes',
+      icon: 'icon-shopping-cart',
+      text: 'Commandes Livrées',
+      number: '486',
+      no: '351'
+    },
+    {
+      background: 'bg-c-green',
+      title: 'Total Sales',
+      icon: 'icon-tag',
+      text: 'This Month',
+      number: '1641',
+      no: '213'
+    },
+    {
+      background: 'bg-c-yellow',
+      title: 'Revenue',
+      icon: 'icon-repeat',
+      text: 'This Month',
+      number: '$42,56',
+      no: '$5,032'
+    },
+    {
+      background: 'bg-c-red',
+      title: 'Total Profit',
+      icon: 'icon-shopping-cart',
+      text: 'This Month',
+      number: '$9,562',
+      no: '$542'
+    }
+  ];
+
+  getData(){
+    this.dashboardService.getData().subscribe(data => {
+      console.log(data);
+      this.dashboardDto = data;
+    })
+  }
+
   processOrdersData(orders: any[]): number[] {
     const currentMonth = new Date().getMonth() + 1;
-    console.log(currentMonth);
     const ordersCountByMonth = new Array(currentMonth).fill(0);
     orders.forEach((order) => {
       const month = new Date(order.orderDate).getMonth();

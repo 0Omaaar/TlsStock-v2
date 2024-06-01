@@ -28,7 +28,8 @@
               "raf",
               "rgbcolor",
               "file-saver",
-              "jspdf-autotable"
+              "jspdf-autotable",
+              "lodash"
             ],
             "outputPath": "dist",
             "index": "src/index.html",

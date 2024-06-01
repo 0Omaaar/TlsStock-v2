@@ -5210,6 +5210,11 @@ hasown@^2.0.0:
   dependencies:
     function-bind "^1.1.2"
 
+highcharts-accessibility@^0.1.7:
+  version "0.1.7"
+  resolved "https://registry.npmjs.org/highcharts-accessibility/-/highcharts-accessibility-0.1.7.tgz"
+  integrity sha512-2hfAuQN8NtGCiq4+F4fG45LT6cwr9YJWAviMZdIlFUEMqn15MRzhuLtJthQU0UM5rfkjBe01/z6zfb7p1b9N4w==
+
 highcharts@^11.4.3:
   version "11.4.3"
   resolved "https://registry.npmjs.org/highcharts/-/highcharts-11.4.3.tgz"
