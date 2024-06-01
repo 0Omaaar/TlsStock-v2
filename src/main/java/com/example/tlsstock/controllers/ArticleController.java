@@ -1,7 +1,11 @@
 package com.example.tlsstock.controllers;
 
 import com.example.tlsstock.dtos.ArticleDto;
+import com.example.tlsstock.dtos.OrderClientDto;
 import com.example.tlsstock.entities.Article;
+import com.example.tlsstock.entities.ClientOrderLine;
+import com.example.tlsstock.entities.OrderClient;
+import com.example.tlsstock.repositories.OrderClientRepository;
 import com.example.tlsstock.services.article.ArticleService;
 import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,13 +14,19 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 @RestController @RequestMapping("/api")
 public class ArticleController {
 
     @Autowired
     private ArticleService articleService;
+
+    @Autowired
+    private OrderClientRepository orderClientRepository;
 
     @GetMapping("/articles")
     public ResponseEntity<?> getArticles(){
@@ -27,6 +37,23 @@ public class ArticleController {
         }
 //        System.out.println("second");
         return ResponseEntity.notFound().build();
+    }
+
+    @GetMapping("/article/{id}/orders")
+    public ResponseEntity<?> findOrdersByArticle(@PathVariable Long id){
+        List<OrderClient> orderClients = orderClientRepository.findAll();
+        ArticleDto article = articleService.getArticle(id);
+        List<OrderClientDto> orderClientDtos = new ArrayList<>();
+
+        for(OrderClient orderClient : orderClients){
+            for(ClientOrderLine clientOrderLine : orderClient.getClientOrderLines()){
+                if(Objects.equals(clientOrderLine.getArticle().getId(), article.getId()) &&
+                        !orderClientDtos.contains(orderClient.getDto())){
+                    orderClientDtos.add(orderClient.getDto());
+                }
+            }
+        }
+        return ResponseEntity.ok(orderClientDtos);
     }
 
     @GetMapping("/articles/search")

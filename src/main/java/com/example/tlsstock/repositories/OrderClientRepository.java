@@ -10,4 +10,6 @@ import java.util.List;
 public interface OrderClientRepository extends JpaRepository<OrderClient, Long> {
 
     List<OrderClient> findAllByOrderByLastModifiedDateDesc();
+
+//    List<OrderClient> findAllById(Long clientId);
 }

@@ -53,6 +53,12 @@ export class ClientOrderService {
       });
   }
 
+  getOrdersByArticle(id: number): Observable<any>{
+    return this.http.get(API + `article/${id}/orders`, {
+      headers: this.createAuthorizationHeader()
+    })
+  }
+
   getOrder(id: number): Observable<any> {
     return this.http.get(API + 'order/' + id, {
       headers: this.createAuthorizationHeader()

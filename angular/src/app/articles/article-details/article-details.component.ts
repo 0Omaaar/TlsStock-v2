@@ -10,6 +10,7 @@ import {
 } from '@angular/material/dialog';
 import { ArticleComponent } from '../articles/article.component';
 import { SharedModule } from 'src/app/theme/shared/shared.module';
+import { ClientOrderService } from 'src/app/services/orders/client-order.service';
 
 @Component({
   selector: 'app-article-details',
@@ -19,13 +20,17 @@ import { SharedModule } from 'src/app/theme/shared/shared.module';
   styleUrl: './article-details.component.scss'
 })
 export class ArticleDetailsComponent {
+  orders: any[] = [];
   constructor(
+    private clientOrderService: ClientOrderService,
     public dialogRef: MatDialogRef<ArticleComponent>,
     @Inject(MAT_DIALOG_DATA) public article: any
   ) {}
 
   ngOnInit() {
-    console.log(this.article);
+    this.clientOrderService.getOrdersByArticle(this.article.article.id).subscribe( res => {
+      this.orders = res;
+    })
   }
 
   closeDialog(){

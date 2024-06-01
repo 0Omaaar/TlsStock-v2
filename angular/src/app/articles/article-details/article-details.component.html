@@ -48,21 +48,41 @@
                     </li>
                     <li class="nav-item" [ngbNavItem]="2">
                         <a class="nav-link text-uppercase" aria-controls="home" aria-selected="true"
-                            ngbNavLink>Profile</a>
+                            ngbNavLink>Commandes Passées Avec Cet Article</a>
                         <ng-template ngbNavContent>
                             <p class="mb-0">
-                                Food truck fixie locavore, accusamus mcsweeney's marfa nulla single-origin coffee squid.
-                                Exercitation +1 labore velit, blog
-                                sartorial PBR leggings next level wes anderson artisan four loko farm-to-table craft
-                                beer twee. Qui photo booth letterpress,
-                                commodo enim craft beer mlkshk aliquip jean shorts ullamco ad vinyl cillum PBR. Homo
-                                nostrud organic, assumenda labore
-                                aesthetic magna delectus mollit. Keytar helvetica VHS salvia yr, vero magna velit
-                                sapiente labore stumptown. Vegan fanny
-                                pack odio cillum wes anderson 8-bit, sustainable jean shorts beard ut DIY ethical culpa
-                                terry richardson biodiesel. Art
-                                party scenester stumptown, tumblr butcher vero sint qui sapiente accusamus tattooed echo
-                                park.
+                                <app-card cardTitle="Liste des Mouvements De Stock" [options]="true"
+                                    blockClass="table-border-style">
+                                    <div class="table-responsive">
+                                        <table class="table table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th>#</th>
+                                                    <th>Code</th>
+                                                    <th style="text-align: center;">Statut</th>
+                                                    <th>Client</th>
+                                                    <th>Date</th>
+                                                    <th>Retour</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr *ngFor="let order of orders; let i = index">
+                                                    <th scope="row">{{i + 1}}</th>
+                                                    <td>{{order.code}}</td>
+                                                    <td *ngIf="order.orderStatus == 'EN_PREPARATION' || order.orderStatus == 'VALIDEE'"
+                                                        style="color: rgb(216, 144, 81); font-weight: bolder; font-size: 110%; text-align: center;">
+                                                        {{order.orderStatus}}</td>
+                                                    <td *ngIf="order.orderStatus == 'LIVREE' || order.orderStatus=='RETURNED'"
+                                                        style="color: rgb(97, 202, 85); font-weight: bolder; font-size: 110%; text-align: center;">
+                                                        {{order.orderStatus}}</td>
+                                                    <td style="text-align: center;">{{order.clientName}}</td>
+                                                    <td>{{order.orderDate | date}}</td>
+                                                    <td>{{order.returnDate | date}}</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </app-card>
                             </p>
                         </ng-template>
                     </li>
