@@ -7,7 +7,8 @@
         <i class="feather icon-shopping-cart float-start"></i><span>{{dashboardDto?.totalOrders}}</span>
       </h2>
       <p class="m-b-0">Commandes Livrées<span class="float-end">{{ dashboardDto?.totalShippedOrders }}</span></p>
-      <p class="m-b-0">Commandes En Préparation<span class="float-end">{{ dashboardDto?.totalPreparationOrders }}</span></p>
+      <p class="m-b-0">Commandes En Préparation<span class="float-end">{{ dashboardDto?.totalPreparationOrders }}</span>
+      </p>
       <p class="m-b-0">Commandes Retournées<span class="float-end">{{ dashboardDto?.totalReturnedOrders }}</span></p>
     </app-card>
   </div>
@@ -30,19 +31,21 @@
         <i class="feather icon-shopping-cart float-start"></i><span>{{dashboardDto?.totalArticles}}</span>
       </h2>
       <p class="m-b-0">Articles Livrées<span class="float-end">{{ dashboardDto?.totalShippedArticles }}</span></p>
-      <p class="m-b-0">Articles En Préparation<span class="float-end">{{ dashboardDto?.totalPreparationArticles }}</span></p>
+      <p class="m-b-0">Articles En Préparation<span class="float-end">{{ dashboardDto?.totalPreparationArticles
+          }}</span></p>
     </app-card>
   </div>
 
+  <!-- Low Stock Alerts Card -->
   <div class="col-md-6 col-xl-3">
     <app-card [hidHeader]="true" cardClass="bg-c-blue order-card">
-      <h6 class="text-white">Commandes</h6>
+      <h6 class="text-white">Low Stock Alerts</h6>
       <h2 class="text-end text-white">
-        <i class="feather icon-shopping-cart float-start"></i><span>{{dashboardDto?.totalOrders}}</span>
+        <i class="feather icon-shopping-cart float-start"></i><span>{{lowStockArticlesCount}}</span>
       </h2>
-      <p class="m-b-0">Commandes Livrées<span class="float-end">{{ dashboardDto?.totalShippedOrders }}</span></p>
-      <p class="m-b-0">Commandes En Préparation<span class="float-end">{{ dashboardDto?.totalPreparationOrders }}</span></p>
-      <p class="m-b-0">Commandes Retournées<span class="float-end">{{ dashboardDto?.totalReturnedOrders }}</span></p>
+      <p class="m-b-0"></p>
+      <p class="m-b-0"></p>
+      <p class="m-b-0"><a class="scroll" (click)="scrollToLowStock()">Pour Plus de Details</a></p>
     </app-card>
   </div>
 
@@ -81,6 +84,36 @@
                   <td>{{order.orderStatus}}</td>
                   <td>{{order.clientName}}</td>
                   <td style="color: rgb(222, 97, 97); font-weight: bolder;">{{order.returnDate | date}}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </app-card>
+      </div>
+    </app-card>
+  </div>
+
+  <!-- Low Stock Orders Table -->
+  <div class="col-md-12 mt-4" id="lowStockArticlesList" #lowStockArticlesListElement>
+    <app-card cardTitle="Liste des Articles Avec Stock Faible" cardClass="tab-card tab-content" [options]="true">
+      <div class="table-responsive">
+        <app-card cardTitle="Tableau des articles" [options]="true" blockClass="table-border-style">
+          <div class="table-responsive">
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Nom Article</th>
+                  <th style="text-align: center;">Quantité en Stock</th>
+                  <th style="text-align: center;">Seuil de Stock</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let article of lowStockArticlesList; let i = index">
+                  <th scope="row">{{i + 1}}</th>
+                  <td>{{article.name}}</td>
+                  <td style="color: rgb(225, 65, 65); font-weight: bolder;text-align: center;">{{article.dispoQuantity}}</td>
+                  <td style="color: rgb(225, 65, 65); font-weight: bolder;text-align: center;">{{article.minQuantity}}</td>
                 </tr>
               </tbody>
             </table>

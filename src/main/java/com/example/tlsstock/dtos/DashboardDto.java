@@ -16,6 +16,7 @@ public class DashboardDto {
     private Long totalPreparationArticles;
     private Long totalClients;
     private List<OrderClientDto> orders;
+    private List<ArticleDto> articles;
 
 
 }

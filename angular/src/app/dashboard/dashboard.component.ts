@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Chart, ChartModule } from 'angular-highcharts';
 import { ClientOrderService } from '../services/orders/client-order.service';
 import { DashboardService } from '../services/dashboard/dashboard.service';
@@ -19,6 +19,10 @@ export class DashboardComponent implements OnInit {
   dashboardDto: any;
   orderStatusPieData: any[] = [];
   pieChart!: Chart;
+  lowStockArticlesCount: number = 0;
+  lowStockArticlesList : any[] = [];
+  @ViewChild('lowStockArticlesListElement') lowStockArticlesListElement!: ElementRef;
+
 
   constructor(
     private ordersService: ClientOrderService,
@@ -31,6 +35,15 @@ export class DashboardComponent implements OnInit {
       const ordersByMonth = this.processOrdersData(orders);
       this.initLineChart(ordersByMonth);
     });
+
+  }
+
+  scrollToLowStock() {
+    if (this.lowStockArticlesListElement) {
+      this.lowStockArticlesListElement.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    } else {
+      console.error('Element not found!');
+    }
   }
 
   getData() {
@@ -38,6 +51,15 @@ export class DashboardComponent implements OnInit {
       this.dashboardDto = data;
       this.setupOrderStatusPieData();
       this.initPieChart();
+
+
+      data.articles.forEach((article: { dispoQuantity: number; minQuantity: number; }) => {
+        if(article.dispoQuantity <= article.minQuantity){
+          this.lowStockArticlesList.push(article);
+          this.lowStockArticlesCount ++;
+        }
+      });
+
     });
   }
 
@@ -55,7 +77,6 @@ export class DashboardComponent implements OnInit {
         color: this.getStatusColor(status)
       };
     });
-    console.log(this.orderStatusPieData);
   }
 
   getStatusColor(status: OrderStatusKey): string {
