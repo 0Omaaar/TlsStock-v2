@@ -3,14 +3,13 @@ import { Chart, ChartModule } from 'angular-highcharts';
 import { ClientOrderService } from '../services/orders/client-order.service';
 import { DashboardService } from '../services/dashboard/dashboard.service';
 import { SharedModule } from '../theme/shared/shared.module';
-
 // Define the OrderStatusKey type
 type OrderStatusKey = 'LIVREE' | 'EN_PREPARATION' | 'RETURNED';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [ChartModule, SharedModule],
+  imports: [ChartModule, SharedModule, ChartModule],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss']
 })

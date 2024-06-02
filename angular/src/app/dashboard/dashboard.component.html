@@ -38,8 +38,8 @@
 
   <!-- Low Stock Alerts Card -->
   <div class="col-md-6 col-xl-3">
-    <app-card [hidHeader]="true" cardClass="bg-c-blue order-card">
-      <h6 class="text-white">Low Stock Alerts</h6>
+    <app-card [hidHeader]="true" cardClass="bg-c-red order-card">
+      <h6 class="text-white">Articles Avec Stock Fabile</h6>
       <h2 class="text-end text-white">
         <i class="feather icon-shopping-cart float-start"></i><span>{{lowStockArticlesCount}}</span>
       </h2>
@@ -51,7 +51,7 @@
 
   <!-- Charts Card -->
   <div class="col-md-12">
-    <app-card cardTitle="Commandes Par Mois" [options]="true">
+    <app-card cardTitle="Commandes Par Mois" [options]="true" cardClass="tab-card tab-content">
       <div class="charts">
         <div class="line" [chart]="lineChart"></div>
         <div class="pie" [chart]="pieChart"></div>
@@ -112,8 +112,10 @@
                 <tr *ngFor="let article of lowStockArticlesList; let i = index">
                   <th scope="row">{{i + 1}}</th>
                   <td>{{article.name}}</td>
-                  <td style="color: rgb(225, 65, 65); font-weight: bolder;text-align: center;">{{article.dispoQuantity}}</td>
-                  <td style="color: rgb(225, 65, 65); font-weight: bolder;text-align: center;">{{article.minQuantity}}</td>
+                  <td style="color: rgb(225, 65, 65); font-weight: bolder;text-align: center;">{{article.dispoQuantity}}
+                  </td>
+                  <td style="color: rgb(225, 65, 65); font-weight: bolder;text-align: center;">{{article.minQuantity}}
+                  </td>
                 </tr>
               </tbody>
             </table>

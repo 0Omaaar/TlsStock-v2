@@ -15,7 +15,6 @@
           </li>
           <li *ngFor="let notification of notificationService.notifications$ | async" class="notification">
             <div class="media">
-              <!-- <img class="img-radius" src="assets/images/user/avatar-1.jpg" alt="Generic placeholder image" /> -->
               <div class="media-body">
                 <p><strong>{{ notification.title }}</strong><span class="n-time text-muted"><i
                       class="icon feather icon-clock m-r-10"></i>{{ notification.timestamp | date:'shortTime' }}</span>
@@ -33,14 +32,6 @@
       </div>
     </div>
   </li>
-  <li (click)="this.visibleUserList = !this.visibleUserList">
-    <div class="dropdown">
-      <a href="javascript:" class="displayChatbox dropdown-toggle">
-        <i class="icon feather icon-mail" title="Mail InBox"></i><span class="badge bg-success"><span
-            class="sr-only"></span></span>
-      </a>
-    </div>
-  </li>
   <li>
     <div class="dropdown drp-user" ngbDropdown placement="auto">
       <a href="javascript:" ngbDropdownToggle>
@@ -50,7 +41,7 @@
         <div class="pro-head">
           <img src="assets/images/user/avatar-1.jpg" class="img-radius" alt="User-Profile-Image" />
           <span>John Doe</span>
-          <a href="javascript:" class="dud-logout" title="Logout">
+          <a href="javascript:" class="dud-logout" title="Logout" (click)="logout()">
             <i class="feather icon-log-out"></i>
           </a>
         </div>
@@ -65,12 +56,6 @@
   </li>
 </ul>
 
-@if (visibleUserList) {
-<section class="header-user-list" [ngClass]="{ open: visibleUserList }" [@slideInOutLeft]>
-  <app-chat-user-list (ChatToggle)="onChatToggle($event)"
-    (ChatCollapse)="this.visibleUserList = !this.visibleUserList; this.chatMessage = false"></app-chat-user-list>
-</section>
-}
 
 @if (chatMessage) {
 <section class="header-chat" [ngClass]="{ open: chatMessage }" [@slideInOutLeft]>
@@ -78,12 +63,7 @@
 </section>
 }
 
-@if (visibleUserList) {
-<section class="header-user-list" [ngClass]="{ open: visibleUserList }" [@slideInOutRight]>
-  <app-chat-user-list (ChatToggle)="onChatToggle($event)"
-    (ChatCollapse)="this.visibleUserList = !this.visibleUserList; this.chatMessage = false"></app-chat-user-list>
-</section>
-}
+
 
 @if (chatMessage) {
 <section class="header-chat" [ngClass]="{ open: chatMessage }" [@slideInOutRight]>
