@@ -24,6 +24,7 @@ import { NavigationStart, Router } from '@angular/router';
 export class ArticleDetailsComponent {
   orders: any[] = [];
   private routerSubscription!: Subscription;
+  qrCodeImageSrc!: string;
 
 
   constructor(
@@ -37,6 +38,8 @@ export class ArticleDetailsComponent {
     this.clientOrderService.getOrdersByArticle(this.article.article.id).subscribe( res => {
       this.orders = res;
     })
+
+    this.qrCodeImageSrc = `data:image/png;base64,${this.article.article.qrCodeImage}`;
 
     this.routerSubscription = this.router.events.subscribe(event => {
       if (event instanceof NavigationStart) {

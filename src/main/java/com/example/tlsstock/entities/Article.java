@@ -32,6 +32,12 @@ public class Article extends AbstractClass{
 
     @Lob
     @Column(columnDefinition = "longblob")
+    private byte[] qrCodeImage;
+
+    private String qrCodeText;
+
+    @Lob
+    @Column(columnDefinition = "longblob")
     private byte[] image;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
@@ -58,6 +64,8 @@ public class Article extends AbstractClass{
         articleDto.setByteImage(image);
         articleDto.setCategoryId(category.getId());
         articleDto.setCategoryName(category.getName());
+        articleDto.setQrCodeImage(qrCodeImage);
+        articleDto.setQrCodeText(qrCodeText);
 
         if (stockMovements != null) {
             List<StockMovementDto> stockMovementDtos = stockMovements.stream()

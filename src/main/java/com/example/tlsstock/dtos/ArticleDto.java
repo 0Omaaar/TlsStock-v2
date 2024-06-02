@@ -20,6 +20,10 @@ public class ArticleDto {
 
     private Long quantity;
 
+    private byte[] qrCodeImage;
+
+    private String qrCodeText;
+
     private Long dispoQuantity;
 
     private Long minQuantity;

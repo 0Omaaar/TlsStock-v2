@@ -44,6 +44,7 @@ export class AddOrderComponent {
   sendNotif: boolean = false;
 
   currentDate = new Date();
+  currentDateForReturn!: string;
   returnDate: any | null = null;
   constructor(
     private categorieService: CategoryService,
@@ -235,5 +236,13 @@ export class AddOrderComponent {
     this.getCategories();
     this.getClients();
     this.getArticles();
+
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = ('0' + (today.getMonth() + 1)).slice(-2);
+    const day = ('0' + today.getDate()).slice(-2);
+
+    this.currentDateForReturn = `${year}-${month}-${day}`;
+    console.log(this.currentDateForReturn);
   }
 }

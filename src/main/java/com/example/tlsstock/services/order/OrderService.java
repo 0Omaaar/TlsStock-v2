@@ -2,7 +2,9 @@ package com.example.tlsstock.services.order;
 
 import com.example.tlsstock.dtos.ClientOrderLineDto;
 import com.example.tlsstock.dtos.OrderClientDto;
+import com.google.zxing.WriterException;
 
+import java.io.IOException;
 import java.util.List;
 
 public interface OrderService {
@@ -15,7 +17,7 @@ public interface OrderService {
 
     OrderClientDto getOrderById(Long id);
 
-    OrderClientDto updateStatus(OrderClientDto orderClientDto);
+    OrderClientDto updateStatus(OrderClientDto orderClientDto) throws IOException, WriterException;
 
     List<ClientOrderLineDto> getOrderLinesByArticleId(Long id);
 }

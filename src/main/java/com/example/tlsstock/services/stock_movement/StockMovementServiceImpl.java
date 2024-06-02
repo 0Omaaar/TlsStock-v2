@@ -8,10 +8,13 @@ import com.example.tlsstock.enums.TypeMvtStk;
 import com.example.tlsstock.repositories.ArticleRepository;
 import com.example.tlsstock.repositories.OrderClientRepository;
 import com.example.tlsstock.repositories.StockMovementRepository;
+import com.example.tlsstock.services.QRCode.QRCodeGeneratorService;
+import com.google.zxing.WriterException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.util.List;
@@ -27,6 +30,9 @@ public class StockMovementServiceImpl implements StockMovementService{
     private ArticleRepository articleRepository;
 
     @Autowired
+    private QRCodeGeneratorService qrCodeGeneratorService;
+
+    @Autowired
     private OrderClientRepository orderClientRepository;
 
     public StockMovementServiceImpl(StockMovementRepository stockMovementRepository,
@@ -36,7 +42,7 @@ public class StockMovementServiceImpl implements StockMovementService{
     }
 
     @Override
-    public StockMovementDto correctionStock(StockMovementDto stockMovementDto) {
+    public StockMovementDto correctionStock(StockMovementDto stockMovementDto) throws IOException, WriterException {
         if(stockMovementDto != null){
             StockMovement stockMovement = new StockMovement();
             stockMovement.setMvtDate(LocalDate.now());
@@ -48,11 +54,24 @@ public class StockMovementServiceImpl implements StockMovementService{
                 if(stockMovementDto.getTypeMvt().equals(TypeMvtStk.CORRECTION_POS)
                         || stockMovementDto.getTypeMvt().equals(TypeMvtStk.ENTREE)){
                     article.setDispoQuantity(article.getDispoQuantity() + stockMovementDto.getQuantity());
+                    // Generate QR code image
+                    String qrCodeText = "Code Article: " + article.getCode() + ", Nom: " + article.getName() +
+                            ", Quantité Initiale: " + article.getQuantity() + ", Quantité Disponible: " + (article.getDispoQuantity());
+                    byte[] qrCodeImage = qrCodeGeneratorService.generateQRCodeImage(qrCodeText, 200, 200);
+                    article.setQrCodeImage(qrCodeImage);
+                    article.setQrCodeText(qrCodeText);
 
                 }
                 else if(stockMovementDto.getTypeMvt().equals(TypeMvtStk.CORRECTION_NEG)){
                     article.setDispoQuantity(article.getDispoQuantity() - stockMovementDto.getQuantity());
+                    String qrCodeText = "Code Article: " + article.getCode() + ", Nom: " + article.getName() +
+                            ", Quantité Initiale: " + article.getQuantity() + ", Quantité Disponible: " + (article.getDispoQuantity());
+                    byte[] qrCodeImage = qrCodeGeneratorService.generateQRCodeImage(qrCodeText, 200, 200);
+                    article.setQrCodeImage(qrCodeImage);
+                    article.setQrCodeText(qrCodeText);
+
                 }
+
 
                 articleRepository.save(article);
             }
@@ -60,6 +79,24 @@ public class StockMovementServiceImpl implements StockMovementService{
             return stockMovementRepository.save(stockMovement).getDto();
         }
         return null;
+    }
+
+    private Article generateAndSetQRCode(Article article) throws IOException, WriterException {
+        String qrCodeText = "Code Article: " + article.getCode() + ", Nom: " + article.getName() +
+                ", Quantité Initiale: " + article.getQuantity() + ", Quantité Disponible: " + article.getDispoQuantity();
+        // Check if QR code already exists
+//        if (article.getQrCodeImage() == null) {
+        // Generate QR code image for the first time
+        byte[] qrCodeImage = qrCodeGeneratorService.generateQRCodeImage(qrCodeText, 200, 200);
+        article.setQrCodeText(qrCodeText);
+
+        article.setQrCodeImage(qrCodeImage);
+//        } else {
+        // Update QR code text without changing the image
+//            article.setQrCodeText(qrCodeText);
+//        }
+
+        return articleRepository.save(article);
     }
 
 

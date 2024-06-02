@@ -24,15 +24,13 @@ export class CategoryService {
   }
 
   getAllCategories(): Observable<any> {
-    if (this.categoriesCache) {
-      return of(this.categoriesCache);
-    } else {
+    // if (this.categoriesCache) {
+    //   return of(this.categoriesCache);
+    // } else {
       return this.http.get<any[]>(API + 'categories', {
         headers: this.createAuthorizationHeader()
-      }).pipe(
-        tap(categories => this.categoriesCache = categories)
-      );
-    }
+      });
+    // }
   }
 
   getCategoriesByName(name: string): Observable<any> {
@@ -48,15 +46,9 @@ export class CategoryService {
   }
 
   getArticlesByCategoryId(id: number): Observable<any> {
-    if (this.articlesByCategoryIdCache[id]) {
-      return of(this.articlesByCategoryIdCache[id]);
-    } else {
       return this.http.get<any[]>(API + `categorie/${id}`, {
         headers: this.createAuthorizationHeader()
-      }).pipe(
-        tap(articles => this.articlesByCategoryIdCache[id] = articles)
-      );
-    }
+      });
   }
 
   addCategorie(CategorieDto: any): Observable<any> {

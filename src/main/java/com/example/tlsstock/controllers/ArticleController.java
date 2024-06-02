@@ -7,6 +7,7 @@ import com.example.tlsstock.entities.ClientOrderLine;
 import com.example.tlsstock.entities.OrderClient;
 import com.example.tlsstock.repositories.OrderClientRepository;
 import com.example.tlsstock.services.article.ArticleService;
+import com.google.zxing.WriterException;
 import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -80,7 +81,7 @@ public class ArticleController {
     }
 
     @PostMapping("/article/save")
-    public ResponseEntity<?> addArticle(@ModelAttribute ArticleDto articleDto) throws IOException {
+    public ResponseEntity<?> addArticle(@ModelAttribute ArticleDto articleDto) throws IOException, WriterException {
         if(articleDto != null){
             ArticleDto savedArticle = articleService.saveArticle(articleDto);
             return ResponseEntity.ok(savedArticle);
@@ -89,7 +90,7 @@ public class ArticleController {
     }
 
     @PutMapping("/article/update")
-    public ResponseEntity<?> updateArticle(@ModelAttribute ArticleDto articleDto) throws IOException{
+    public ResponseEntity<?> updateArticle(@ModelAttribute ArticleDto articleDto) throws IOException, WriterException {
         if(articleDto != null){
             ArticleDto articleDto1 = articleService.updateArticle(articleDto);
             return ResponseEntity.ok(articleDto1);

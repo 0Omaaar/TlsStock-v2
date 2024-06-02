@@ -7,13 +7,17 @@ import com.example.tlsstock.entities.*;
 import com.example.tlsstock.enums.OrderStatus;
 import com.example.tlsstock.enums.TypeMvtStk;
 import com.example.tlsstock.repositories.*;
+import com.example.tlsstock.services.QRCode.QRCodeGeneratorService;
 import com.example.tlsstock.services.checker.ArticleChecker;
 import com.example.tlsstock.services.stock_movement.StockMovementService;
+import com.google.zxing.WriterException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
@@ -42,6 +46,9 @@ public class OrderServiceImpl implements OrderService{
 
     @Autowired
     private ArticleChecker articleChecker;
+
+    @Autowired
+    private QRCodeGeneratorService qrCodeGeneratorService;
 
     @Override
     @Transactional
@@ -150,7 +157,7 @@ public class OrderServiceImpl implements OrderService{
     }
 
     @Override
-    public OrderClientDto updateStatus(OrderClientDto orderClientDto) {
+    public OrderClientDto updateStatus(OrderClientDto orderClientDto) throws IOException, WriterException {
         OrderClient orderClient = orderClientRepository.findById(orderClientDto.getId()).orElse(null);
         if(orderClient != null){
             orderClient.setOrderStatus(OrderStatus.LIVREE);
@@ -184,14 +191,15 @@ public class OrderServiceImpl implements OrderService{
     }
 
 
-    public void saveStockMovement(StockMovementDto stockMovementDto){
+    public void saveStockMovement(StockMovementDto stockMovementDto) throws IOException, WriterException {
         StockMovement stockMovement = new StockMovement();
         stockMovement.setQuantity(stockMovementDto.getQuantity());
         Article article = articleRepository.findById(stockMovementDto.getArticleId()).orElse(null);
         if(article != null){
             stockMovement.setArticle(article);
             article.setDispoQuantity(article.getDispoQuantity() - stockMovement.getQuantity());
-            articleRepository.save(article);
+
+            Article savedArticle = generateAndSetQRCode(article);
         }
         stockMovement.setTypeMvt(stockMovementDto.getTypeMvt());
         stockMovement.setMvtDate(stockMovementDto.getMvtDate());
@@ -202,7 +210,7 @@ public class OrderServiceImpl implements OrderService{
 
     @Scheduled(cron = "0 0 0 * * *")
     @Transactional
-    public void checkReturnDate(){
+    public void checkReturnDate() throws IOException, WriterException {
         List<OrderClient> orderClients = orderClientRepository.findAll();
         for(OrderClient orderClient : orderClients){
             if(Objects.equals(orderClient.getReturnDate(), LocalDate.now())){
@@ -222,7 +230,7 @@ public class OrderServiceImpl implements OrderService{
     }
 
     @Transactional
-    public void makeStockMovementEnter(OrderClient orderClient){
+    public void makeStockMovementEnter(OrderClient orderClient) throws IOException, WriterException {
         for(ClientOrderLine clientOrderLine : orderClient.getClientOrderLines()){
             StockMovementDto stockMovementDto = new StockMovementDto();
             stockMovementDto.setQuantity(clientOrderLine.getQuantity());
@@ -233,5 +241,23 @@ public class OrderServiceImpl implements OrderService{
 
             stockMovementService.correctionStock(stockMovementDto);
         }
+    }
+
+    private Article generateAndSetQRCode(Article article) throws IOException, WriterException {
+        String qrCodeText = "Code Article: " + article.getCode() + ", Nom: " + article.getName() +
+                ", Quantité Initiale: " + article.getQuantity() + ", Quantité Disponible: " + article.getDispoQuantity();
+        // Check if QR code already exists
+//        if (article.getQrCodeImage() == null) {
+        // Generate QR code image for the first time
+        byte[] qrCodeImage = qrCodeGeneratorService.generateQRCodeImage(qrCodeText, 200, 200);
+        article.setQrCodeText(qrCodeText);
+
+        article.setQrCodeImage(qrCodeImage);
+//        } else {
+        // Update QR code text without changing the image
+//            article.setQrCodeText(qrCodeText);
+//        }
+
+        return articleRepository.save(article);
     }
 }

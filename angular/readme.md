@@ -5,3 +5,4 @@ TODO
 - design pattern
 - show in dashboard low stock alerts
 - out of stock items
+- import from csv
