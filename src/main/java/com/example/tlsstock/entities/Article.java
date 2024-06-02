@@ -38,9 +38,13 @@ public class Article extends AbstractClass{
     @JsonIgnore
     private Category category;
 
-    @OneToMany(mappedBy = "article", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "article", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     private List<StockMovement> stockMovements;
+
+    @OneToMany(mappedBy = "article", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private List<ClientOrderLine> clientOrderLines;
 
     public ArticleDto getDto(){
         ArticleDto articleDto = new ArticleDto();

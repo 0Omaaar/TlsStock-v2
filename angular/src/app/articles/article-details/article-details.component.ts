@@ -11,6 +11,8 @@ import {
 import { ArticleComponent } from '../articles/article.component';
 import { SharedModule } from 'src/app/theme/shared/shared.module';
 import { ClientOrderService } from 'src/app/services/orders/client-order.service';
+import { Subscription } from 'rxjs';
+import { NavigationStart, Router } from '@angular/router';
 
 @Component({
   selector: 'app-article-details',
@@ -21,19 +23,35 @@ import { ClientOrderService } from 'src/app/services/orders/client-order.service
 })
 export class ArticleDetailsComponent {
   orders: any[] = [];
+  private routerSubscription!: Subscription;
+
+
   constructor(
     private clientOrderService: ClientOrderService,
     public dialogRef: MatDialogRef<ArticleComponent>,
-    @Inject(MAT_DIALOG_DATA) public article: any
+    @Inject(MAT_DIALOG_DATA) public article: any,
+    private router: Router
   ) {}
 
   ngOnInit() {
     this.clientOrderService.getOrdersByArticle(this.article.article.id).subscribe( res => {
       this.orders = res;
     })
+
+    this.routerSubscription = this.router.events.subscribe(event => {
+      if (event instanceof NavigationStart) {
+        this.dialogRef.close();
+      }
+    });
   }
 
   closeDialog(){
     this.dialogRef.close();
+  }
+
+  ngOnDestroy() {
+    if (this.routerSubscription) {
+      this.routerSubscription.unsubscribe();
+    }
   }
 }

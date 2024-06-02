@@ -22,7 +22,7 @@ public class Category extends AbstractClass {
 
     private String description;
 
-    @OneToMany(mappedBy = "category", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     private List<Article> articles;
 

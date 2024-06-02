@@ -1,24 +1,29 @@
-.charts{
-
-    display: flex;
-    margin: 20px;
+.charts {
+  display: flex;
+  margin: 20px;
 }
 
-.pie{
+.pie {
+  flex: 1;
+  box-shadow: 10px 10px 5px #aaaaaa;
 
-    flex: 1;
-    box-shadow: 10px 10px 5px #aaaaaa;
-
-    margin-right: 20px;
+  margin-right: 20px;
 }
 
-.line{
-    flex: 1;
-    box-shadow: 10px 10px 5px #aaaaaa;
+.line {
+  flex: 1;
+  box-shadow: 10px 10px 5px #aaaaaa;
 }
 
-.scroll{
-    color: white;
-    font-weight: bolder;
-    cursor: pointer;
+.scroll {
+  color: white;
+  font-weight: bolder;
+  cursor: pointer;
+}
+
+.custom-card-height {
+  height: 150px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }

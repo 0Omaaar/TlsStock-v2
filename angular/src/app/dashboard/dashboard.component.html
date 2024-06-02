@@ -1,7 +1,7 @@
 <div class="row">
   <!-- Orders Card -->
   <div class="col-md-6 col-xl-3">
-    <app-card [hidHeader]="true" cardClass="bg-c-blue order-card">
+    <app-card [hidHeader]="true" cardClass="bg-c-blue order-card custom-card-height">
       <h6 class="text-white">Commandes</h6>
       <h2 class="text-end text-white">
         <i class="feather icon-shopping-cart float-start"></i><span>{{dashboardDto?.totalOrders}}</span>
@@ -15,7 +15,7 @@
 
   <!-- Clients Card -->
   <div class="col-md-6 col-xl-3">
-    <app-card [hidHeader]="true" cardClass="bg-c-green order-card">
+    <app-card [hidHeader]="true" cardClass="bg-c-green order-card custom-card-height">
       <h6 class="text-white">Clients</h6>
       <h2 class="text-end text-white">
         <i class="feather icon-tag float-start"></i><span>{{dashboardDto?.totalClients}}</span>
@@ -25,7 +25,7 @@
 
   <!-- Articles Card -->
   <div class="col-md-6 col-xl-3">
-    <app-card [hidHeader]="true" cardClass="bg-c-yellow order-card">
+    <app-card [hidHeader]="true" cardClass="bg-c-yellow order-card custom-card-height">
       <h6 class="text-white">Articles</h6>
       <h2 class="text-end text-white">
         <i class="feather icon-shopping-cart float-start"></i><span>{{dashboardDto?.totalArticles}}</span>
@@ -38,8 +38,8 @@
 
   <!-- Low Stock Alerts Card -->
   <div class="col-md-6 col-xl-3">
-    <app-card [hidHeader]="true" cardClass="bg-c-red order-card">
-      <h6 class="text-white">Articles Avec Stock Fabile</h6>
+    <app-card [hidHeader]="true" cardClass="bg-c-red order-card custom-card-height">
+      <h6 class="text-white">Articles Avec Stock Faible</h6>
       <h2 class="text-end text-white">
         <i class="feather icon-shopping-cart float-start"></i><span>{{lowStockArticlesCount}}</span>
       </h2>
