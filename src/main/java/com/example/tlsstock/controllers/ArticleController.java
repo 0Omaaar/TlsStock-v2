@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -97,4 +98,11 @@ public class ArticleController {
         }
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
+
+    @PostMapping("/article/upload")
+    public ResponseEntity<String> uploadCSVFile(@RequestParam("file") MultipartFile file) {
+        articleService.save(file);
+        return ResponseEntity.ok("File uploaded and processed successfully");
+    }
+
 }

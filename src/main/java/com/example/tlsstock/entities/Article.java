@@ -5,13 +5,15 @@ import com.example.tlsstock.dtos.StockMovementDto;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
+import org.hibernate.proxy.HibernateProxy;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
-@Data
+@Getter
+@Setter
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
@@ -42,14 +44,17 @@ public class Article extends AbstractClass{
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JsonIgnore
+    @ToString.Exclude
     private Category category;
 
     @OneToMany(mappedBy = "article", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
+    @ToString.Exclude
     private List<StockMovement> stockMovements;
 
     @OneToMany(mappedBy = "article", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
+    @ToString.Exclude
     private List<ClientOrderLine> clientOrderLines;
 
     public ArticleDto getDto(){
@@ -75,5 +80,21 @@ public class Article extends AbstractClass{
         }
 
         return articleDto;
+    }
+
+    @Override
+    public final boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null) return false;
+        Class<?> oEffectiveClass = o instanceof HibernateProxy ? ((HibernateProxy) o).getHibernateLazyInitializer().getPersistentClass() : o.getClass();
+        Class<?> thisEffectiveClass = this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass() : this.getClass();
+        if (thisEffectiveClass != oEffectiveClass) return false;
+        Article article = (Article) o;
+        return getId() != null && Objects.equals(getId(), article.getId());
+    }
+
+    @Override
+    public final int hashCode() {
+        return this instanceof HibernateProxy ? ((HibernateProxy) this).getHibernateLazyInitializer().getPersistentClass().hashCode() : getClass().hashCode();
     }
 }

@@ -2,6 +2,7 @@ package com.example.tlsstock.services.article;
 
 import com.example.tlsstock.dtos.ArticleDto;
 import com.google.zxing.WriterException;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
@@ -20,4 +21,6 @@ public interface ArticleService {
     ArticleDto getArticle(Long id);
 
     boolean deleteArticle(ArticleDto articleDto);
+
+    void save(MultipartFile file);
 }

@@ -2,7 +2,15 @@
 <div class="row">
     <div class="col-sm-12">
         <app-card cardTitle="Ajouter Article" [options]="true">
-            <form action="javascript:" id="addArticle" [formGroup]="addArticleForm" (submit)="addArticle()" class="was-validated">
+            <div style="display: flex; justify-content: flex-end;">
+                <input class="form-control form-control-sm" style="width: 25%" (change)="onFileChange($event)" type="file" accept=".csv"/>
+                <button (click)="upload()" style="margin-left: 2%" class="btn btn-sm btn-outline-success d-flex align-items-center">
+                    <mat-icon class="me-2">table_chart</mat-icon>
+                    <span>Importer</span>
+                </button>
+            </div>
+            <form action="javascript:" id="addArticle" class="mt-2" [formGroup]="addArticleForm" (submit)="addArticle()"
+                class="was-validated">
                 <div class="row">
                     <div class="form-group col-md-6">
                         <label for="inputEmail4">Code</label>
@@ -56,7 +64,8 @@
                     </div>
                     <div class="form-group col-md-2">
                         <label for="inputZip">Quantité Min</label>
-                        <input type="number" formControlName="minQuantity" class="form-control is-invalid" id="inputZip" />
+                        <input type="number" formControlName="minQuantity" class="form-control is-invalid"
+                            id="inputZip" />
                         <div class="invalid-feedback" *ngIf="addArticleForm.get('minQuantity')?.invalid">
                             Veuillez Entrer Une Quantite Minimale !</div>
                     </div>

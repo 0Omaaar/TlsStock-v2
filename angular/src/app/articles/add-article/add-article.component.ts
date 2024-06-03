@@ -7,19 +7,19 @@ import { SharedModule } from 'src/app/theme/shared/shared.module';
 import { ColorPickerModule } from 'ngx-color-picker';
 import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 import { MatSnackBar } from '@angular/material/snack-bar';
-
-
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-add-article',
   standalone: true,
-  imports: [SharedModule, ColorPickerModule, NgbDropdownModule],
+  imports: [SharedModule, ColorPickerModule, NgbDropdownModule, MatIconModule],
   templateUrl: './add-article.component.html',
   styleUrl: './add-article.component.scss'
 })
 export class AddArticleComponent {
   addArticleForm!: FormGroup;
   selectedFile!: File;
+  importFile: File | null = null;
   imagePreview!: string | ArrayBuffer | null;
   categories: any = [];
 
@@ -44,6 +44,31 @@ export class AddArticleComponent {
     this.getCategories();
   }
 
+  onFileChange(event: any) {
+    this.importFile = event.target.files[0];
+    console.log(this.importFile);
+  }
+
+  upload() {
+    if (this.importFile) {
+      this.articleService.upload(this.importFile).subscribe(
+        (response) => {
+          console.log('Upload successful', response);
+          this.snackbar.open('Articles Ajoutés Avec Succes !', 'Close', {
+            duration: 5000
+          });
+          this.router.navigateByUrl('/articles');
+        },
+        (error) => {
+          this.snackbar.open('Upload Failed !', 'Close', {
+            duration: 5000
+          });
+          console.error('Upload failed', error);
+        }
+      );
+    }
+  }
+
   onFileSelected(event: any) {
     this.selectedFile = event.target.files[0];
     this.previewImage();
@@ -60,7 +85,7 @@ export class AddArticleComponent {
   addArticle() {
     if (this.addArticleForm.valid) {
       const formData: FormData = new FormData();
-      if(this.selectedFile != null){
+      if (this.selectedFile != null) {
         formData.append('image', this.selectedFile);
       }
       formData.append('code', this.addArticleForm.get('code')?.value);
@@ -73,10 +98,10 @@ export class AddArticleComponent {
       this.articleService.addArticle(formData).subscribe((res) => {
         if (res.id != null) {
           console.log('success');
-          this.router.navigateByUrl("/articles");
-          this.snackbar.open("Article Ajoute Avec Succes !", 'Close', {
+          this.router.navigateByUrl('/articles');
+          this.snackbar.open('Article Ajoute Avec Succes !', 'Close', {
             duration: 5000
-          })
+          });
         }
       });
     } else {

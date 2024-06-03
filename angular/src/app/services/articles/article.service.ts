@@ -28,6 +28,16 @@ export class ArticleService {
     }).pipe(tap(() => (this.articlesCache = null)));
   }
 
+  upload(file: File): Observable<any> {
+    const formData: FormData = new FormData();
+    formData.append('file', file);
+
+    return this.http.post(API + 'article/upload', formData, {
+      headers: this.createAuthorizationHeader(),
+      responseType: 'text'
+    });
+  }
+
   updateArticle(articleDto: any): Observable<any> {
     return this.http.put(API + 'article/update', articleDto, {
       headers: this.createAuthorizationHeader()

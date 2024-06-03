@@ -7,10 +7,15 @@ import com.example.tlsstock.repositories.ArticleRepository;
 import com.example.tlsstock.repositories.CategoryRepository;
 import com.example.tlsstock.services.QRCode.QRCodeGeneratorService;
 import com.google.zxing.WriterException;
+import org.hibernate.dialect.function.SybaseTruncFunction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -115,21 +120,62 @@ public class ArticleServiceImpl implements ArticleService{
         return false;
     }
 
+    @Override
+    public void save(MultipartFile file) {
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(file.getInputStream()))) {
+            System.out.println("here");
+            List<Article> articles = new ArrayList<>();
+            String line;
+            boolean isFirstLine = true; // To handle header
+
+            while ((line = reader.readLine()) != null) {
+                if (isFirstLine) {
+                    isFirstLine = false;
+                    continue;
+                }
+
+                String[] data = line.split(",");
+//                if (data.length < 7) {
+//                    // Log or handle the case where the line doesn't have enough data
+//                    System.err.println("Invalid line: " + line);
+//                    continue;
+//                }
+
+                try {
+                    System.out.println("here 2");
+                    Article article = new Article();
+                    article.setCode(data[0]);
+                    article.setDescription(data[1]);
+                    article.setDispoQuantity(Long.parseLong(data[2]));
+                    article.setMinQuantity(Long.parseLong(data[4])); // Assuming this is index 4
+                    article.setName(data[5]);
+                    article.setQuantity(Long.parseLong(data[6]));
+
+                    Category category = categoryRepository.findById(Long.parseLong(data[7])).orElse(null);
+                    if(category != null){
+                        article.setCategory(category);
+                    }
+                    articles.add(article);
+                } catch (NumberFormatException e) {
+                    System.err.println("Error parsing number in line: " + line);
+                    e.printStackTrace();
+                }
+            }
+
+            articleRepository.saveAll(articles);
+        } catch (IOException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Error reading CSV file", e);
+        }
+    }
+
     private Article generateAndSetQRCode(Article article) throws IOException, WriterException {
         String qrCodeText = "Code Article: " + article.getCode() + ", Nom: " + article.getName() +
                 ", Quantité Initiale: " + article.getQuantity() + ", Quantité Disponible: " + article.getDispoQuantity();
-        // Check if QR code already exists
-//        if (article.getQrCodeImage() == null) {
-            // Generate QR code image for the first time
             byte[] qrCodeImage = qrCodeGeneratorService.generateQRCodeImage(qrCodeText, 200, 200);
             article.setQrCodeText(qrCodeText);
 
         article.setQrCodeImage(qrCodeImage);
-//        } else {
-            // Update QR code text without changing the image
-//            article.setQrCodeText(qrCodeText);
-//        }
-
         return articleRepository.save(article);
     }
 }
