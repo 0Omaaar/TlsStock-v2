@@ -62,7 +62,6 @@ export class UpdateArticleComponent {
           name: [this.article.name, [Validators.required]],
           description: [this.article.description, [Validators.required]],
           quantity: [this.article.quantity, [Validators.required]],
-          categoryId: [this.article.categoryId, [Validators.required]]
         });
       }
     });
@@ -79,7 +78,6 @@ export class UpdateArticleComponent {
       formData.append('name', this.updateArticleForm.get('name')?.value);
       formData.append('description', this.updateArticleForm.get('description')?.value);
       formData.append('quantity', this.updateArticleForm.get('quantity')?.value);
-      formData.append('categoryId', this.updateArticleForm.get('categoryId')?.value);
 
       this.articleService.updateArticle(formData).subscribe((res) => {
         if (res.id != null) {

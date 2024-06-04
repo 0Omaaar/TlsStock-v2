@@ -18,7 +18,7 @@ public class SousCategoryDto {
 
     private String categoryName;
 
-    private List<Article> articles;
+    private List<ArticleDto> articles;
 
     private Long nbArticles;
 }

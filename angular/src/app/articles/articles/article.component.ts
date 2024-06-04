@@ -40,7 +40,7 @@ export class ArticleComponent implements AfterViewInit, OnInit {
   @ViewChild('closeButton') closeButton!: ElementRef;
   @ViewChild('content') content!: ElementRef;
 
-  displayedColumns: string[] = ['position', 'code', 'name', 'description', 'quantity', 'dispoQuantity', 'photo', 'categoryName', 'actions'];
+  displayedColumns: string[] = ['position', 'code', 'name', 'description', 'quantity', 'dispoQuantity', 'photo', 'categoryName','sousCategoryName', 'actions'];
   dataSource = new MatTableDataSource<any>();
 
   articles: any[] = [];

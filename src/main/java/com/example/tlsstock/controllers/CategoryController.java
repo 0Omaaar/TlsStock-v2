@@ -2,6 +2,7 @@ package com.example.tlsstock.controllers;
 
 import com.example.tlsstock.dtos.ArticleDto;
 import com.example.tlsstock.dtos.CategoryDto;
+import com.example.tlsstock.repositories.CategoryRepository;
 import com.example.tlsstock.services.category.CategoryService;
 import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,9 @@ public class CategoryController {
 
     @Autowired
     private CategoryService categoryService;
+
+    @Autowired
+    private CategoryRepository categoryRepository;
 
     @PostMapping("/saveCategory")
     public ResponseEntity<?> saveCategory(@RequestBody CategoryDto categoryDto){
@@ -78,5 +82,11 @@ public class CategoryController {
             return ResponseEntity.ok(articleDtos);
         }
         return ResponseEntity.notFound().build();
+    }
+
+    @GetMapping("/category/{id}")
+    public ResponseEntity<?> getCategory(@PathVariable Long id){
+        CategoryDto categoryDto = categoryRepository.findById(id).orElse(null).getDto();
+        return ResponseEntity.ok(categoryDto);
     }
 }

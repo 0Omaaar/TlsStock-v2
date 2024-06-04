@@ -8,6 +8,7 @@ import { ColorPickerModule } from 'ngx-color-picker';
 import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatIconModule } from '@angular/material/icon';
+import { SousCategoryService } from 'src/app/services/sousCategory/sous-category.service';
 
 @Component({
   selector: 'app-add-article',
@@ -22,10 +23,14 @@ export class AddArticleComponent {
   importFile: File | null = null;
   imagePreview!: string | ArrayBuffer | null;
   categories: any = [];
+  sousCategories: any = [];
+  selectedCategory: any;
+  selectedCategoryId: any;
 
   constructor(
     private articleService: ArticleService,
     private categoryService: CategoryService,
+    private sousCategoryService: SousCategoryService,
     private fb: FormBuilder,
     private router: Router,
     private snackbar: MatSnackBar
@@ -38,10 +43,34 @@ export class AddArticleComponent {
       description: [null, [Validators.required]],
       quantity: [null, [Validators.required]],
       minQuantity: [null, [Validators.required]],
-      categoryId: [null, [Validators.required]]
+      categoryId: [null, [Validators.required]],
+      sousCategoryId: [null, [Validators.required]],
     });
 
     this.getCategories();
+
+
+    // this.getSousCategories();
+  }
+
+  storeCategory(event: Event){
+    const selectedCategory = event.target as HTMLSelectElement;
+    this.selectedCategoryId = selectedCategory.value;
+    this.categoryService.getCategorie(this.selectedCategoryId).subscribe( res => {
+      this.selectedCategory = res;
+      this.getSousCategories();
+    })
+  }
+
+  getSousCategories() {
+    this.sousCategories = [];
+    this.sousCategoryService.getSousCategories().subscribe((res: any[]) => {
+      res.forEach(element => {
+        if (element.categoryId == this.selectedCategoryId) {
+          this.sousCategories.push(element);
+        }
+      });
+    });
   }
 
   onFileChange(event: any) {
@@ -94,6 +123,9 @@ export class AddArticleComponent {
       formData.append('quantity', this.addArticleForm.get('quantity')?.value);
       formData.append('minQuantity', this.addArticleForm.get('minQuantity')?.value);
       formData.append('categoryId', this.addArticleForm.get('categoryId')?.value);
+      formData.append('sousCategoryId', this.addArticleForm.get('sousCategoryId')?.value);
+
+      console.log(this.addArticleForm.get('sousCategoryId')?.value)
 
       this.articleService.addArticle(formData).subscribe((res) => {
         if (res.id != null) {

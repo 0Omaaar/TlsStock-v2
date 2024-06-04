@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Data
 @NoArgsConstructor
@@ -32,7 +33,7 @@ public class SousCategory extends AbstractClass{
         sousCategoryDto.setCategoryId(category.getId());
         sousCategoryDto.setCategoryName(category.getName());
         if(articles != null){
-            sousCategoryDto.setArticles(articles);
+            sousCategoryDto.setArticles(articles.stream().map(Article::getDto).collect(Collectors.toList()));
             sousCategoryDto.setNbArticles(articles.stream().count());
         }
         sousCategoryDto.setName(name);

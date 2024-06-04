@@ -156,6 +156,12 @@ export const NavigationItems: NavigationItem[] = [
             url: '/categories'
           },
           {
+            id: 'sousCategories',
+            title: 'Sous Categories',
+            type: 'item',
+            url: '/sousCategories'
+          },
+          {
             id: 'articles',
             title: 'Articles',
             type: 'item',

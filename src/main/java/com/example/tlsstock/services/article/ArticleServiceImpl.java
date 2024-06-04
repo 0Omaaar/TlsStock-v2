@@ -3,8 +3,10 @@ package com.example.tlsstock.services.article;
 import com.example.tlsstock.dtos.ArticleDto;
 import com.example.tlsstock.entities.Article;
 import com.example.tlsstock.entities.Category;
+import com.example.tlsstock.entities.SousCategory;
 import com.example.tlsstock.repositories.ArticleRepository;
 import com.example.tlsstock.repositories.CategoryRepository;
+import com.example.tlsstock.repositories.SousCategoryRepository;
 import com.example.tlsstock.services.QRCode.QRCodeGeneratorService;
 import com.google.zxing.WriterException;
 import org.hibernate.dialect.function.SybaseTruncFunction;
@@ -26,6 +28,9 @@ public class ArticleServiceImpl implements ArticleService{
     private CategoryRepository categoryRepository;
 
     @Autowired
+    private SousCategoryRepository sousCategoryRepository;
+
+    @Autowired
     private ArticleRepository articleRepository;
 
     @Autowired
@@ -33,6 +38,7 @@ public class ArticleServiceImpl implements ArticleService{
 
     @Override
     public ArticleDto saveArticle(ArticleDto articleDto) throws IOException, WriterException {
+        System.out.println(articleDto);
         if(articleDto != null){
             Article article = new Article();
             article.setCode(articleDto.getCode());
@@ -44,6 +50,13 @@ public class ArticleServiceImpl implements ArticleService{
             if(articleDto.getImage() != null){
                 article.setImage(articleDto.getImage().getBytes());
             }
+
+            System.out.println(articleDto.getName());
+            System.out.println(articleDto.getCategoryId());
+            System.out.println(articleDto.getSousCategoryId());
+
+            SousCategory sousCategory = sousCategoryRepository.findById(articleDto.getSousCategoryId()).orElse(null);
+            article.setSousCategory(sousCategory);
 
             Category category = categoryRepository.findById(articleDto.getCategoryId()).orElse(null);
             article.setCategory(category);
@@ -65,13 +78,16 @@ public class ArticleServiceImpl implements ArticleService{
             article.setDescription(articleDto.getDescription());
             article.setQuantity(articleDto.getQuantity());
 
-            Category category = categoryRepository.findById(articleDto.getCategoryId()).orElse(null);
+//            Category category = categoryRepository.findById(articleDto.getCategoryId()).orElse(null);
+//            SousCategory sousCategory = sousCategoryRepository.findById(articleDto.getSousCategoryId()).orElse(null);
+
             if(articleDto.getImage() != null){
                 article.setImage(articleDto.getImage().getBytes());
             }
-            if(category != null){
-                article.setCategory(category);
-            }
+//            if(category != null && sousCategory != null){
+//                article.setCategory(category);
+//                article.setSousCategory(sousCategory);
+//            }
 
 
             Article updateArticle = articleRepository.save(article);
@@ -152,8 +168,10 @@ public class ArticleServiceImpl implements ArticleService{
                     article.setQuantity(Long.parseLong(data[6]));
 
                     Category category = categoryRepository.findById(Long.parseLong(data[7])).orElse(null);
-                    if(category != null){
-                        article.setCategory(category);
+                    SousCategory sousCategory = sousCategoryRepository.findById(Long.parseLong(data[8])).orElse(null);
+
+                    if(category != null && sousCategory != null){
+                        article.setSousCategory(sousCategory);
                     }
                     articles.add(article);
                 } catch (NumberFormatException e) {

@@ -20,6 +20,7 @@ import { LoginComponent } from './login/login.component';
 import { SignupComponent } from './signup/signup.component';
 import { authGuard } from './auth.guard';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { SousCategorieComponent } from './sousCategories/sous-categorie/sous-categorie.component';
 
 const routes: Routes = [
   {
@@ -42,6 +43,11 @@ const routes: Routes = [
       {
         path: 'categories',
         component: GetCategoriesComponent,
+        canActivate: [authGuard],
+      },
+      {
+        path: 'sousCategories',
+        component: SousCategorieComponent,
         canActivate: [authGuard],
       },
       {

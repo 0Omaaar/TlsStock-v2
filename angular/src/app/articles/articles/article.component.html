@@ -73,6 +73,10 @@
                         <th mat-header-cell *matHeaderCellDef>Categorie</th>
                         <td mat-cell *matCellDef="let element">{{element.categoryName}}</td>
                     </ng-container>
+                    <ng-container matColumnDef="sousCategoryName">
+                        <th mat-header-cell *matHeaderCellDef>Sous Categorie</th>
+                        <td mat-cell *matCellDef="let element">{{element.sousCategoryName}}</td>
+                    </ng-container>
 
                     <ng-container matColumnDef="actions">
                         <th mat-header-cell *matHeaderCellDef>Actions</th>
