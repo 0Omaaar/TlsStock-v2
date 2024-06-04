@@ -4,9 +4,6 @@ import com.example.tlsstock.dtos.CategoryDto;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 import java.util.List;
 
@@ -24,6 +21,10 @@ public class Category extends AbstractClass {
 
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
+    private List<SousCategory> sousCategories;
+
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
     private List<Article> articles;
 
     public CategoryDto getDto(){
@@ -34,6 +35,10 @@ public class Category extends AbstractClass {
         if(articles != null){
             categoryDto.setArticles(articles);
             categoryDto.setNbArticles(articles.stream().count());
+        }
+        if(sousCategories != null){
+            categoryDto.setSousCategories(sousCategories);
+            categoryDto.setNbSousCategories(sousCategories.stream().count());
         }
 
         return categoryDto;

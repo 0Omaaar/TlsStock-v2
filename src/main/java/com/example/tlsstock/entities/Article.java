@@ -47,6 +47,12 @@ public class Article extends AbstractClass{
     @ToString.Exclude
     private Category category;
 
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JsonIgnore
+    @ToString.Exclude
+    private SousCategory sousCategory;
+
+
     @OneToMany(mappedBy = "article", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     @ToString.Exclude
@@ -69,6 +75,10 @@ public class Article extends AbstractClass{
         articleDto.setByteImage(image);
         articleDto.setCategoryId(category.getId());
         articleDto.setCategoryName(category.getName());
+
+        articleDto.setSousCategoryId(sousCategory.getId());
+        articleDto.setSousCategoryName(sousCategory.getName());
+
         articleDto.setQrCodeImage(qrCodeImage);
         articleDto.setQrCodeText(qrCodeText);
 

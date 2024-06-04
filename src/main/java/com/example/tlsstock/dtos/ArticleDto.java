@@ -37,5 +37,9 @@ public class ArticleDto {
 
     private String categoryName;
 
+    private Long sousCategoryId;
+
+    private String sousCategoryName;
+
     private List<StockMovementDto> stockMovements;
 }

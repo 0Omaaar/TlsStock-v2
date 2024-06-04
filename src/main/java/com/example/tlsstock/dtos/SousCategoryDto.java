@@ -7,17 +7,16 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class CategoryDto {
-
+public class SousCategoryDto {
     private Long id;
 
     private String name;
 
     private String description;
 
-    private List<SousCategory> sousCategories;
+    private Long categoryId;
 
-    private Long nbSousCategories;
+    private String categoryName;
 
     private List<Article> articles;
 
