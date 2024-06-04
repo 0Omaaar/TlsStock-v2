@@ -18,6 +18,20 @@ export class SousCategoryService {
     })
   }
 
+  addSousCategory(sousCategoryDto: any): Observable<any>{
+    return this.http.post(API + 'saveSousCategory', sousCategoryDto, {
+      headers: this.createAuthorizationHeader()
+    })
+  }
+
+  deleteSousCategory(sousCategoryDto: any): Observable<any>{
+    return this.http.delete(API + 'deleteSousCategory', {
+      body: sousCategoryDto, 
+      headers: this.createAuthorizationHeader()
+    });
+  }
+
+
   private createAuthorizationHeader(): HttpHeaders {
     return new HttpHeaders().set(
       'Authorization',
