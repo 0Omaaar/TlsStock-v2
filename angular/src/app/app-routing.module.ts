@@ -21,6 +21,7 @@ import { SignupComponent } from './signup/signup.component';
 import { authGuard } from './auth.guard';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { SousCategorieComponent } from './sousCategories/sous-categorie/sous-categorie.component';
+import { ArticlesSousCategoryComponent } from './sousCategories/articles-sous-category/articles-sous-category.component';
 
 const routes: Routes = [
   {
@@ -97,6 +98,11 @@ const routes: Routes = [
       {
         path: 'categorie/:id/articles',
         component: CategoryArticlesComponent,
+        canActivate: [authGuard],
+      },
+      {
+        path: 'sousCategory/:id/articles',
+        component: ArticlesSousCategoryComponent,
         canActivate: [authGuard],
       },
       {

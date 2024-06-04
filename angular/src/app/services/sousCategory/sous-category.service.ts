@@ -18,6 +18,12 @@ export class SousCategoryService {
     })
   }
 
+  getArticlesBySousCategory(id: number): Observable<any>{
+    return this.http.get(API +`sousCategory/${id}/articles`, {
+      headers: this.createAuthorizationHeader()
+    })
+  }
+
   addSousCategory(sousCategoryDto: any): Observable<any>{
     return this.http.post(API + 'saveSousCategory', sousCategoryDto, {
       headers: this.createAuthorizationHeader()

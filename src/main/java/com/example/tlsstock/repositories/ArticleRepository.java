@@ -16,4 +16,7 @@ public interface ArticleRepository extends JpaRepository<Article, Long> {
 
     @Query("SELECT a FROM Article a WHERE a.category.id = :id")
     List<Article> findArticlesByCategory(Long id);
+
+    @Query("SELECT a FROM Article a WHERE a.sousCategory.id = :id")
+    List<Article> findArticlesBySousCategory(Long id);
 }

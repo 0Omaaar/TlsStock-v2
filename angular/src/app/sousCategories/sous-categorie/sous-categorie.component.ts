@@ -19,8 +19,10 @@ import { SharedModule } from 'src/app/theme/shared/shared.module';
 export class SousCategorieComponent {
   sousCategories: any = [];
   categories: any = [];
+  sousCategoryToDelete!: any;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild('close') closeButton!: ElementRef;
+  @ViewChild('closeButton') closeButtonDelete!: ElementRef;
   displayedColumns: string[] = ['position', 'name', 'description', 'category', 'nbArticles', 'actions'];
   dataSource = new MatTableDataSource<any>();
   addSousCategoryForm!: FormGroup;
@@ -40,54 +42,70 @@ export class SousCategorieComponent {
     this.addSousCategoryForm = this.fb.group({
       name: [null, [Validators.required]],
       description: [null, [Validators.required]],
-      categoryId: [null, [Validators.required]],
-    }
-    )
+      categoryId: [null, [Validators.required]]
+    });
   }
 
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
   }
 
-  saveSousCategory(){
+  saveSousCategory() {
     const sousCategoryDto = {
       name: this.addSousCategoryForm.get('name')?.value,
       description: this.addSousCategoryForm.get('description')?.value,
-      categoryId: this.addSousCategoryForm.get('categoryId')?.value,
-    }
+      categoryId: this.addSousCategoryForm.get('categoryId')?.value
+    };
 
-    if(this.addSousCategoryForm.valid){
-      this.sousCategoryService.addSousCategory(sousCategoryDto).subscribe(res => {
-        if(res != null){
-          this.snackBar.open("Sous Categorie Ajoutée !", 'Close', {
+    if (this.addSousCategoryForm.valid) {
+      this.sousCategoryService.addSousCategory(sousCategoryDto).subscribe((res) => {
+        if (res != null) {
+          this.snackBar.open('Sous Categorie Ajoutée !', 'Close', {
             duration: 5000
           });
           this.getSousCategories();
           this.closeButton.nativeElement.click();
-        }else{
-          this.snackBar.open("Erreur Survenue Lors De la Creation !", 'Close', {
+        } else {
+          this.snackBar.open('Erreur Survenue Lors De la Creation !', 'Close', {
             duration: 5000
-          })
+          });
         }
-      })
-    }else{
-      this.snackBar.open("Erreue Survenue !", 'Close', {
+      });
+    } else {
+      this.snackBar.open('Erreue Survenue !', 'Close', {
         duration: 5000
-      })
+      });
     }
   }
 
   getSousCategories() {
-    this.sousCategoryService.getSousCategories().subscribe( res => {
+    this.sousCategoryService.getSousCategories().subscribe((res) => {
       this.sousCategories = res;
       this.dataSource.data = res;
-    })
+    });
   }
 
-  getCategories(){
-    this.categoryService.getAllCategories().subscribe( res => {
+  getCategories() {
+    this.categoryService.getAllCategories().subscribe((res) => {
       this.categories = res;
-    })
+    });
+  }
+
+  storeSousCategoryToDelete(sousCategoryDto: any) {
+    this.sousCategoryToDelete = sousCategoryDto;
+  }
+
+  deleteSousCategory() {
+    this.sousCategoryService.deleteSousCategory(this.sousCategoryToDelete).subscribe((res) => {
+      if (res) {
+        this.closeButtonDelete.nativeElement.click();
+        this.snackBar.open('Sous Categorie Supprimeée', 'Close', {
+          duration: 5000
+        });
+        this.getSousCategories();
+        this.sousCategoryToDelete = {};
+      }
+    });
   }
 
   applyFilter(event: Event) {

@@ -2,8 +2,10 @@ package com.example.tlsstock.services.sousCategory;
 
 import com.example.tlsstock.dtos.ArticleDto;
 import com.example.tlsstock.dtos.SousCategoryDto;
+import com.example.tlsstock.entities.Article;
 import com.example.tlsstock.entities.Category;
 import com.example.tlsstock.entities.SousCategory;
+import com.example.tlsstock.repositories.ArticleRepository;
 import com.example.tlsstock.repositories.CategoryRepository;
 import com.example.tlsstock.repositories.SousCategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +22,9 @@ public class SousCategoryServiceImpl implements SousCategoryService{
 
     @Autowired
     private SousCategoryRepository sousCategoryRepository;
+
+    @Autowired
+    private ArticleRepository articleRepository;
 
     @Override
     public SousCategoryDto saveSousCategory(SousCategoryDto sousCategoryDto) {
@@ -60,6 +65,10 @@ public class SousCategoryServiceImpl implements SousCategoryService{
 
     @Override
     public List<ArticleDto> getArticlesBySousCategoryId(Long id) {
+        List<Article> articles = articleRepository.findArticlesBySousCategory(id);
+        if(articles != null){
+            return articles.stream().map(Article::getDto).collect(Collectors.toList());
+        }
         return null;
     }
 }

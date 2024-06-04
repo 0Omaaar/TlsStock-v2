@@ -1,5 +1,6 @@
 package com.example.tlsstock.controllers;
 
+import com.example.tlsstock.dtos.ArticleDto;
 import com.example.tlsstock.dtos.SousCategoryDto;
 import com.example.tlsstock.entities.SousCategory;
 import com.example.tlsstock.services.sousCategory.SousCategoryService;
@@ -22,6 +23,15 @@ public class SousCategoryController {
         List<SousCategoryDto> sousCategoryDtos = sousCategoryService.getSousCategories();
         if(sousCategoryDtos != null){
             return ResponseEntity.ok(sousCategoryDtos);
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+    @GetMapping("/sousCategory/{id}/articles")
+    public ResponseEntity<?> getArticlesBySousCategory(@PathVariable Long id){
+        List<ArticleDto> articleDtos = sousCategoryService.getArticlesBySousCategoryId(id);
+        if(articleDtos != null){
+            return ResponseEntity.ok(articleDtos);
         }
         return ResponseEntity.notFound().build();
     }

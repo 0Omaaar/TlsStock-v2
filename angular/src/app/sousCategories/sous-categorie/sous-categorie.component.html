@@ -44,16 +44,16 @@
                                 (click)="editCategory(element)" type="button"
                                 class="btn btn-icon btn-warning text-dark d-inline-flex m-1">
                                 <i class="feather icon-edit"></i>
-                            </button>
+                            </button>-->
                             <button data-bs-toggle="modal" data-bs-target="#deleteCategory" type="button"
-                                (click)="deleteCategoryStore(element)"
+                                (click)="storeSousCategoryToDelete(element)"
                                 class="btn btn-icon btn-danger d-inline-flex m-1">
                                 <i class="feather icon-trash"></i>
                             </button>
-                            <button type="button" routerLink="/categorie/{{element.id}}/articles"
+                            <button type="button" routerLink="/sousCategory/{{element.id}}/articles"
                                 class="btn btn-icon btn-info d-inline-flex">
                                 <i class="feather icon-info"></i>
-                            </button> -->
+                            </button> 
                         </td>
                     </ng-container>
 
@@ -66,7 +66,8 @@
                     aria-hidden="true">
                     <div class="modal-dialog">
                         <div class="modal-content" *ngIf="addSousCategoryForm">
-                            <form [formGroup]="addSousCategoryForm" action="javascript:" class="was-validated" (submit)="saveSousCategory()">
+                            <form [formGroup]="addSousCategoryForm" action="javascript:" class="was-validated"
+                                (submit)="saveSousCategory()">
                                 <div class="modal-header">
                                     <h5 class="modal-title" id="exampleModalLabel">Ajouter Une Nouvelle Sous Categorie
                                     </h5>
@@ -105,7 +106,8 @@
                                     </div>
                                 </div>
                                 <div class="modal-footer">
-                                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal" #close>Fermer</button>
+                                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal"
+                                        #close>Fermer</button>
                                     <button type="submit" class="btn btn-primary">Ajouter</button>
                                 </div>
                             </form>
@@ -152,12 +154,12 @@
                     </div>
                 </div> -->
                 <!-- delete category modal  -->
-                <!-- <div class="modal fade" id="deleteCategory" tabindex="-1" aria-labelledby="exampleModalLabel"
+                <div class="modal fade" id="deleteCategory" tabindex="-1" aria-labelledby="exampleModalLabel"
                     aria-hidden="true">
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title" id="exampleModalLabel">Supprimer Categorie</h5>
+                                <h5 class="modal-title" id="exampleModalLabel">Supprimer Sous Categorie</h5>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal"
                                     aria-label="Close"></button>
                             </div>
@@ -170,11 +172,11 @@
                                 <button type="button" class="btn btn-secondary" #closeButton
                                     data-bs-dismiss="modal">Annuler</button>
                                 <button type="button" class="btn btn-danger"
-                                    (click)="deleteCategory()">Supprimer</button>
+                                    (click)="deleteSousCategory()">Supprimer</button>
                             </div>
                         </div>
                     </div>
-                </div> -->
+                </div>
 
             </div>
         </app-card>
