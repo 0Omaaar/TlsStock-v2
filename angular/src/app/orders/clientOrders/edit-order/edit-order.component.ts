@@ -7,6 +7,7 @@ import { ArticleService } from 'src/app/services/articles/article.service';
 import { CategoryService } from 'src/app/services/category.service';
 import { ClientService } from 'src/app/services/clients/client.service';
 import { ClientOrderService } from 'src/app/services/orders/client-order.service';
+import { SousCategoryService } from 'src/app/services/sousCategory/sous-category.service';
 import { SharedModule } from 'src/app/theme/shared/shared.module';
 
 @Component({
@@ -18,9 +19,10 @@ import { SharedModule } from 'src/app/theme/shared/shared.module';
 })
 export class EditOrderComponent {
   orderId!: number;
-  categories: any;
+  categories: any = [];
+  sousCategories: any = [];
   category: any = null;
-  articles: any;
+  articles: any = [];
   selectedArticleId: any = null;
   clientId: any = null;
   selectedArticle: any = null;
@@ -42,10 +44,11 @@ export class EditOrderComponent {
     private clientService: ClientService,
     private articleService: ArticleService,
     private clientOrderService: ClientOrderService,
+    private sousCategoryService: SousCategoryService,
     private snackBar: MatSnackBar,
     private router: Router,
     private activatedRoute: ActivatedRoute
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.orderId = this.activatedRoute.snapshot.params['id'];
@@ -68,6 +71,38 @@ export class EditOrderComponent {
     this.articleService.getArticles().subscribe((res) => {
       if (res != null) {
         this.articlesList = res;
+      }
+    });
+  }
+  getSousCategoriesByCategory(event: Event) {
+    const selectElement = event.target as HTMLSelectElement;
+    const categoryId = Number(selectElement.value);
+
+    this.resetArticleSelection();
+    this.sousCategories = [];
+    this.articles = [];
+
+    this.categorieService.getSousCategoriesByCategoryId(categoryId).subscribe(res => {
+      if (res) {
+        this.sousCategories = res;
+      } else {
+        this.snackBar.open("Pas de Sous Categories pour cette Categorie !", 'Close', { duration: 5000 });
+      }
+    });
+  }
+
+  getArticlesBySousCategory(event: Event) {
+    const selectElement = event.target as HTMLSelectElement;
+    const sousCategoryId = Number(selectElement.value);
+
+    this.resetArticleSelection();
+    this.articles = [];
+
+    this.sousCategoryService.getArticlesBySousCategory(sousCategoryId).subscribe(res => {
+      if (res) {
+        this.articles = res;
+      } else {
+        this.snackBar.open("Pas d'articles pour cette Sous Categorie !", 'Close', { duration: 5000 });
       }
     });
   }
@@ -116,11 +151,14 @@ export class EditOrderComponent {
   }
 
   storeSelectedArticle(event: Event) {
+
+    this.resetArticleSelection();
+
     const selectedArticle = event.target as HTMLSelectElement;
     this.selectedArticleId = selectedArticle.value;
 
-    this.articleService.getArticle(this.selectedArticleId).subscribe((res) => {
-      if (res != null) {
+    this.articleService.getArticle(this.selectedArticleId).subscribe(res => {
+      if (res) {
         this.selectedArticleDispoQuantity = res.dispoQuantity;
         this.isArticleSelected = true;
         this.selectedArticleName = res.name;

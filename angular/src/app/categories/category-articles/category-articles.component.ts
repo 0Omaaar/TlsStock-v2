@@ -39,9 +39,12 @@ export class CategoryArticlesComponent {
     });
   }
 
+
+  
+
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
-  }
+  } 
 
   getCategoryArticles(id: number) {
     this.categoryService.getArticlesByCategoryId(id).subscribe( {

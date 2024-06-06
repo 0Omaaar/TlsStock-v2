@@ -1,153 +1,186 @@
 <app-breadcrumb></app-breadcrumb>
 <div class="row">
-    <div class="col-xl-12">
-        <app-card cardTitle="Liste des Clients" blockClass="table-border-style">
-            <div class="row">
-                <div class="col-md-6">
-                    <button type="button" style="margin-top: -25px;" class="btn btn-outline-primary"
-                        data-bs-toggle="modal" data-bs-target="#addClient">
-                        Ajouter Client
-                    </button>
-                </div>
-                <div class="col-md-6" style="margin-top: -1%;">
-                    <!-- <form [formGroup]="searchForm" class="d-flex"> -->
-                        <input type="text" class="form-control me-2"
-                            placeholder="Chercher Client" aria-label="Search" (keyup)="applyFilter($event)">
-                    <!-- </form> -->
-                </div>
-            </div>
-
-            <div class="table-responsive" style="margin-top: 1;">
-                <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
-                    <ng-container matColumnDef="position">
-                        <th mat-header-cell *matHeaderCellDef>#</th>
-                        <td mat-cell *matCellDef="let element; let i = index">{{i + 1}}</td>
-                    </ng-container>
-                    <ng-container matColumnDef="name">
-                        <th mat-header-cell *matHeaderCellDef>Nom</th>
-                        <td mat-cell *matCellDef="let element">{{element.name}}</td>
-                    </ng-container>
-                    <ng-container matColumnDef="email">
-                        <th mat-header-cell *matHeaderCellDef>Email</th>
-                        <td mat-cell *matCellDef="let element">{{element.email}}</td>
-                    </ng-container>
-                    <ng-container matColumnDef="phone">
-                        <th mat-header-cell *matHeaderCellDef>N Telephone</th>
-                        <td mat-cell *matCellDef="let element">{{element.phone}}</td>
-                    </ng-container>
-                    <ng-container matColumnDef="nbOrders">
-                        <th mat-header-cell *matHeaderCellDef>Orders</th>
-                        <td mat-cell *matCellDef="let element">{{element.nbOrders}}</td>
-                    </ng-container>
-                    <ng-container matColumnDef="actions">
-                        <th mat-header-cell *matHeaderCellDef>Actions</th>
-                        <td mat-cell *matCellDef="let element">
-                            <button data-bs-toggle="modal" data-bs-target="#updateClient" (click)="editClient(element)"
-                                type="button" class="btn btn-icon btn-warning text-dark d-inline-flex m-1">
-                                <i class="feather icon-edit"></i>
-                            </button>
-                            <button type="button" class="btn btn-icon btn-info d-inline-flex">
-                                <i class="feather icon-info"></i>
-                            </button>
-                        </td>
-                    </ng-container>
-
-                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-                </table>
-                <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
-
-                <!-- update category modal form -->
-                <div class="modal fade" id="updateClient" tabindex="-1" aria-labelledby="exampleModalLabel"
-                    aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content" *ngIf="updateForm">
-                            <form [formGroup]="updateForm" (submit)="updateClient()" action="javascript:"
-                                class="was-validated">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="exampleModalLabel">Modifier Client</h5>
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                        aria-label="Close"></button>
-                                </div>
-                                <div class="modal-body">
-                                    <input type="hidden" formArrayName="id">
-                                    <div class="mb-3">
-                                        <label for="validationTextarea" class="form-label">Nom</label>
-                                        <input formControlName="name" class="form-control is-invalid" required
-                                            id="validationTextarea" placeholder="Nom Du Client" />
-                                        <div class="invalid-feedback" *ngIf="updateForm.get('name')?.invalid">
-                                            Veuillez Entrer Un Nom !</div>
-                                    </div>
-
-                                    <div class="mb-3">
-                                        <label for="validationTextarea" class="form-label">Email</label>
-                                        <input formControlName="email" type="email" class="form-control is-invalid"
-                                            required id="validationTextarea" placeholder="Email Du Client" />
-                                        <div class="invalid-feedback" *ngIf="updateForm.get('email')?.invalid">
-                                            Veuillez Entrer Un Email !</div>
-                                    </div>
-
-                                    <div class="mb-3">
-                                        <label for="validationTextarea" class="form-label">Telephone</label>
-                                        <input formControlName="phone" type="number" class="form-control is-invalid"
-                                            required id="validationTextarea" placeholder="Telephone Du Client" />
-                                        <div class="invalid-feedback" *ngIf="updateForm.get('phone')?.invalid">
-                                            Veuillez Entrer Un Numero De Telephone !</div>
-                                    </div>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal"
-                                        #closeButton>Fermer</button>
-                                    <button type="submit" class="btn btn-primary">Modifier</button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </app-card>
-        <!-- add Client modal form -->
-        <div class="modal fade" id="addClient" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content" *ngIf="addForm">
-                    <form [formGroup]="addForm" action="javascript:" class="was-validated" (submit)="addClient()">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">Ajouter Un Nouveau Client</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <div class="mb-3">
-                                <label for="validationTextarea" class="form-label">Nom</label>
-                                <input formControlName="name" class="form-control is-invalid" required
-                                    id="validationTextarea" placeholder="Nom Du Client" />
-                                <div class="invalid-feedback" *ngIf="addForm.get('name')?.invalid">
-                                    Veuillez Entrer Un Nom !</div>
-                            </div>
-
-                            <div class="mb-3">
-                                <label for="validationTextarea" class="form-label">Email</label>
-                                <input formControlName="email" type="email" class="form-control is-invalid" required
-                                    id="validationTextarea" placeholder="Email Du Client" />
-                                <div class="invalid-feedback" *ngIf="addForm.get('email')?.invalid">
-                                    Veuillez Entrer Un Email !</div>
-                            </div>
-
-                            <div class="mb-3">
-                                <label for="validationTextarea" class="form-label">Telephone</label>
-                                <input formControlName="phone" type="number" class="form-control is-invalid" required
-                                    id="validationTextarea" placeholder="Telephone Du Client" />
-                                <div class="invalid-feedback" *ngIf="addForm.get('phone')?.invalid">
-                                    Veuillez Entrer Un Numero De Telephone !</div>
-                            </div>
-
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Fermer</button>
-                                <button type="submit" class="btn btn-primary">Ajouter</button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
+  <div class="col-xl-12">
+    <app-card cardTitle="Liste des Clients" blockClass="table-border-style">
+      <div class="row">
+        <div class="col-md-6">
+          <button
+            type="button"
+            style="margin-top: -25px"
+            class="btn btn-outline-primary"
+            data-bs-toggle="modal"
+            data-bs-target="#addClient"
+          >
+            Ajouter Client
+          </button>
         </div>
+        <div class="col-md-6" style="margin-top: -1%">
+          <!-- <form [formGroup]="searchForm" class="d-flex"> -->
+          <input type="text" class="form-control me-2" placeholder="Chercher Client" aria-label="Search" (keyup)="applyFilter($event)" />
+          <!-- </form> -->
+        </div>
+      </div>
+
+      <div class="table-responsive" style="margin-top: 1">
+        <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+          <ng-container matColumnDef="position">
+            <th mat-header-cell *matHeaderCellDef>#</th>
+            <td mat-cell *matCellDef="let element; let i = index">{{ i + 1 }}</td>
+          </ng-container>
+          <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef>Nom</th>
+            <td mat-cell *matCellDef="let element">{{ element.name }}</td>
+          </ng-container>
+          <ng-container matColumnDef="email">
+            <th mat-header-cell *matHeaderCellDef>Email</th>
+            <td mat-cell *matCellDef="let element">{{ element.email }}</td>
+          </ng-container>
+          <ng-container matColumnDef="phone">
+            <th mat-header-cell *matHeaderCellDef>N Telephone</th>
+            <td mat-cell *matCellDef="let element">{{ element.phone }}</td>
+          </ng-container>
+          <ng-container matColumnDef="nbOrders">
+            <th mat-header-cell *matHeaderCellDef>Orders</th>
+            <td mat-cell *matCellDef="let element">{{ element.nbOrders }}</td>
+          </ng-container>
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef>Actions</th>
+            <td mat-cell *matCellDef="let element">
+              <button
+                data-bs-toggle="modal"
+                data-bs-target="#updateClient"
+                (click)="editClient(element)"
+                type="button"
+                class="btn btn-icon btn-warning text-dark d-inline-flex m-1"
+              >
+                <i class="feather icon-edit"></i>
+              </button>
+              <button type="button" class="btn btn-icon btn-info d-inline-flex">
+                <i class="feather icon-info"></i>
+              </button>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        </table>
+        <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+
+        <!-- update category modal form -->
+        <div class="modal fade" id="updateClient" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content" *ngIf="updateForm">
+              <form [formGroup]="updateForm" (submit)="updateClient()" action="javascript:" class="was-validated">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel">Modifier Client</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  <input type="hidden" formArrayName="id" />
+                  <div class="mb-3">
+                    <label for="validationTextarea" class="form-label">Nom</label>
+                    <input
+                      formControlName="name"
+                      class="form-control is-invalid"
+                      required
+                      id="validationTextarea"
+                      placeholder="Nom Du Client"
+                    />
+                    <div class="invalid-feedback" *ngIf="updateForm.get('name')?.invalid"> Veuillez Entrer Un Nom !</div>
+                  </div>
+
+                  <div class="mb-3">
+                    <label for="validationTextarea" class="form-label">Email</label>
+                    <input
+                      formControlName="email"
+                      type="email"
+                      class="form-control is-invalid"
+                      required
+                      id="validationTextarea"
+                      placeholder="Email Du Client"
+                    />
+                    <div class="invalid-feedback" *ngIf="updateForm.get('email')?.invalid"> Veuillez Entrer Un Email !</div>
+                  </div>
+
+                  <div class="mb-3">
+                    <label for="validationTextarea" class="form-label">Telephone</label>
+                    <input
+                      formControlName="phone"
+                      type="number"
+                      class="form-control is-invalid"
+                      required
+                      id="validationTextarea"
+                      placeholder="Telephone Du Client"
+                    />
+                    <div class="invalid-feedback" *ngIf="updateForm.get('phone')?.invalid"> Veuillez Entrer Un Numero De Telephone !</div>
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-danger" data-bs-dismiss="modal" #closeButton>Fermer</button>
+                  <button type="submit" class="btn btn-primary">Modifier</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </app-card>
+    <!-- add Client modal form -->
+    <div class="modal fade" id="addClient" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content" *ngIf="addForm">
+          <form [formGroup]="addForm" action="javascript:" class="was-validated" (submit)="addClient()">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel">Ajouter Un Nouveau Client</h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <div class="mb-3">
+                <label for="validationTextarea" class="form-label">Nom</label>
+                <input
+                  formControlName="name"
+                  class="form-control is-invalid"
+                  required
+                  id="validationTextarea"
+                  placeholder="Nom Du Client"
+                />
+                <div class="invalid-feedback" *ngIf="addForm.get('name')?.invalid"> Veuillez Entrer Un Nom !</div>
+              </div>
+
+              <div class="mb-3">
+                <label for="validationTextarea" class="form-label">Email</label>
+                <input
+                  formControlName="email"
+                  type="email"
+                  class="form-control is-invalid"
+                  required
+                  id="validationTextarea"
+                  placeholder="Email Du Client"
+                />
+                <div class="invalid-feedback" *ngIf="addForm.get('email')?.invalid"> Veuillez Entrer Un Email !</div>
+              </div>
+
+              <div class="mb-3">
+                <label for="validationTextarea" class="form-label">Telephone</label>
+                <input
+                  formControlName="phone"
+                  type="number"
+                  class="form-control is-invalid"
+                  required
+                  id="validationTextarea"
+                  placeholder="Telephone Du Client"
+                />
+                <div class="invalid-feedback" *ngIf="addForm.get('phone')?.invalid"> Veuillez Entrer Un Numero De Telephone !</div>
+              </div>
+
+              <div class="modal-footer">
+                <button type="button" class="btn btn-danger" data-bs-dismiss="modal" #close>Fermer</button>
+                <button type="submit" class="btn btn-primary">Ajouter</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
     </div>
+  </div>
 </div>

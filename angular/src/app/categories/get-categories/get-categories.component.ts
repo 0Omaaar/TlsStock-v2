@@ -21,7 +21,7 @@ export class GetCategoriesComponent {
   @ViewChild('closeButton') closeButton!: ElementRef;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  displayedColumns: string[] = ['position', 'name', 'description', 'nbArticles', 'actions'];
+  displayedColumns: string[] = ['position', 'name', 'description', 'nbSousCategories', 'nbArticles', 'actions'];
   dataSource = new MatTableDataSource<any>();
   articlesCount: number = 0;
 
@@ -40,7 +40,7 @@ export class GetCategoriesComponent {
     private fb: FormBuilder,
     private snackbar: MatSnackBar,
     private routerLink: Router
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.searchForm = this.fb.group({

@@ -2,10 +2,13 @@ package com.example.tlsstock.services.category;
 
 import com.example.tlsstock.dtos.ArticleDto;
 import com.example.tlsstock.dtos.CategoryDto;
+import com.example.tlsstock.dtos.SousCategoryDto;
 import com.example.tlsstock.entities.Article;
 import com.example.tlsstock.entities.Category;
+import com.example.tlsstock.entities.SousCategory;
 import com.example.tlsstock.repositories.ArticleRepository;
 import com.example.tlsstock.repositories.CategoryRepository;
+import com.example.tlsstock.repositories.SousCategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +22,8 @@ public class CategoryServiceImpl implements CategoryService{
     private CategoryRepository categoryRepository;
     @Autowired
     private ArticleRepository articleRepository;
+    @Autowired
+    private SousCategoryRepository sousCategoryRepository;
 
     @Override
     public CategoryDto saveCategory(CategoryDto categoryDto) {
@@ -70,6 +75,15 @@ public class CategoryServiceImpl implements CategoryService{
         List<Article> articles = articleRepository.findArticlesByCategory(id);
         if(articles != null){
             return articles.stream().map(Article::getDto).collect(Collectors.toList());
+        }
+        return null;
+    }
+
+    @Override
+    public List<SousCategoryDto> getSousCategoriesByCategoryId(Long id) {
+        List<SousCategory> sousCategories = sousCategoryRepository.findAllByCategoryId(id);
+        if(sousCategories != null){
+            return sousCategories.stream().map(SousCategory::getDto).toList();
         }
         return null;
     }

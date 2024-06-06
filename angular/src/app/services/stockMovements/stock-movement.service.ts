@@ -22,26 +22,22 @@ export class StockMovementService {
       'Bearer ' + UserStorageService.getToken()
     );
   }
-  
+
   getArticlesStock(): Observable<any[]> {
-    if (this.stocksCache) {
-      return of(this.stocksCache);
-    } else {
-      return this.http.get<any[]>(API + 'articles', {
-        headers: this.createAuthorizationHeader()
-      });
-    }
+    return this.http.get<any[]>(API + 'articles', {
+      headers: this.createAuthorizationHeader()
+    });
   }
 
-  correctionStock(stockMovementDto: any): Observable<any>{
+  correctionStock(stockMovementDto: any): Observable<any> {
     this.stocksCache = null;
     return this.http.post(API + 'correct-stock', stockMovementDto, {
       headers: this.createAuthorizationHeader()
     })
-    .pipe(tap(() => (this.articleService.clearCache())));; 
+      ;
   }
 
-  clearCache(){
+  clearCache() {
     this.stocksCache = null;
   }
 }

@@ -2,6 +2,7 @@ package com.example.tlsstock.controllers;
 
 import com.example.tlsstock.dtos.ArticleDto;
 import com.example.tlsstock.dtos.CategoryDto;
+import com.example.tlsstock.dtos.SousCategoryDto;
 import com.example.tlsstock.repositories.CategoryRepository;
 import com.example.tlsstock.services.category.CategoryService;
 import org.apache.coyote.Response;
@@ -88,5 +89,14 @@ public class CategoryController {
     public ResponseEntity<?> getCategory(@PathVariable Long id){
         CategoryDto categoryDto = categoryRepository.findById(id).orElse(null).getDto();
         return ResponseEntity.ok(categoryDto);
+    }
+
+    @GetMapping("/category/{id}/sousCategories")
+    public ResponseEntity<?> getSousCategoriesByCategoryId(@PathVariable Long id){
+        List<SousCategoryDto> sousCategoryDtos = categoryService.getSousCategoriesByCategoryId(id);
+        if(sousCategoryDtos != null){
+            return ResponseEntity.ok(sousCategoryDtos);
+        }
+        return ResponseEntity.notFound().build();
     }
 }

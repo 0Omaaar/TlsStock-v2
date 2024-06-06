@@ -2,6 +2,7 @@ package com.example.tlsstock.services.category;
 
 import com.example.tlsstock.dtos.ArticleDto;
 import com.example.tlsstock.dtos.CategoryDto;
+import com.example.tlsstock.dtos.SousCategoryDto;
 import com.example.tlsstock.entities.Category;
 
 import java.util.List;
@@ -19,4 +20,6 @@ public interface CategoryService {
     List<CategoryDto> getCategoriesByName(String name);
 
     List<ArticleDto> getArticlesByCategoryId(Long id);
+
+    List<SousCategoryDto> getSousCategoriesByCategoryId(Long id);
 }

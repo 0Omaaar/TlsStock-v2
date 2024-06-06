@@ -1,28 +1,32 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { CategoryService } from 'src/app/services/category.service';
 import { ClientService } from 'src/app/services/clients/client.service';
 import { SharedModule } from 'src/app/theme/shared/shared.module';
 import { MatIconModule } from '@angular/material/icon';
-import { DatePipe } from '@angular/common';
 import { ArticleService } from 'src/app/services/articles/article.service';
 import { ClientOrderService } from 'src/app/services/orders/client-order.service';
 import { Router } from '@angular/router';
 import { NotificationService, Notification } from 'src/app/services/notifications/notification.service';
+import { SousCategoryService } from 'src/app/services/sousCategory/sous-category.service';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-add-order',
   standalone: true,
   imports: [SharedModule, FormsModule, MatIconModule],
   templateUrl: './add-order.component.html',
-  styleUrl: './add-order.component.scss'
+  styleUrls: ['./add-order.component.scss']
 })
-export class AddOrderComponent {
-  categories: any;
-  clients: any;
+export class AddOrderComponent implements OnInit, OnDestroy {
+  private unsubscribe$ = new Subject<void>();
+
+  categories: any[] = [];
+  clients: any[] = [];
   category: any = null;
-  articles: any;
+  articles: any[] = [];
   client: any = {};
   selectedClient: any = null;
   selectedArticleId: any = null;
@@ -31,11 +35,12 @@ export class AddOrderComponent {
   selectedArticle: any = null;
   selectedQuantity: number = 0;
   selectedArticleDispoQuantity: any = null;
-  articlesList: any = [];
+  articlesList: any[] = [];
   filteredArticlesList: any[] = [];
 
   isArticleSelected: boolean = false;
   selectedArticleName: string = '';
+  sousCategories: any[] = [];
 
   searchkeyArticle!: string;
 
@@ -46,40 +51,72 @@ export class AddOrderComponent {
   currentDate = new Date();
   currentDateForReturn!: string;
   returnDate: any | null = null;
+
   constructor(
     private categorieService: CategoryService,
     private clientService: ClientService,
     private articleService: ArticleService,
     private clientOrderService: ClientOrderService,
+    private sousCategoryService: SousCategoryService,
     private snackBar: MatSnackBar,
     private router: Router,
     private notificationService: NotificationService
-  ) {}
+  ) { }
+
+  ngOnInit() {
+    this.getCategories();
+    this.getClients();
+    this.getArticles();
+
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = ('0' + (today.getMonth() + 1)).slice(-2);
+    const day = ('0' + today.getDate()).slice(-2);
+
+    this.currentDateForReturn = `${year}-${month}-${day}`;
+    console.log(this.currentDateForReturn);
+  }
+
+  ngOnDestroy() {
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
+  }
 
   getCategories() {
-    this.categorieService.getAllCategories().subscribe((res) => {
+    this.categorieService.getAllCategories().pipe(takeUntil(this.unsubscribe$)).subscribe(res => {
       this.categories = res;
+    });
+  }
+
+  getClients() {
+    this.clientService.getClients().pipe(takeUntil(this.unsubscribe$)).subscribe(res => {
+      this.clients = res;
+    });
+  }
+
+  getArticles() {
+    this.articleService.getArticles().pipe(takeUntil(this.unsubscribe$)).subscribe(res => {
+      if (res) {
+        this.articlesList = res;
+      }
     });
   }
 
   displayClient(event: Event) {
     const selectedClient = event.target as HTMLSelectElement;
     const clientId = this.selectedClient.id;
-
     this.orderCode = 'o-' + this.selectedClient.name + '-' + clientId;
-  }
-  getClients() {
-    this.clientService.getClients().subscribe((res) => {
-      this.clients = res;
-    });
   }
 
   storeSelectedArticle(event: Event) {
+
+    this.resetArticleSelection();
+
     const selectedArticle = event.target as HTMLSelectElement;
     this.selectedArticleId = selectedArticle.value;
 
-    this.articleService.getArticle(this.selectedArticleId).subscribe((res) => {
-      if (res != null) {
+    this.articleService.getArticle(this.selectedArticleId).pipe(takeUntil(this.unsubscribe$)).subscribe(res => {
+      if (res) {
         this.selectedArticleDispoQuantity = res.dispoQuantity;
         this.isArticleSelected = true;
         this.selectedArticleName = res.name;
@@ -92,8 +129,8 @@ export class AddOrderComponent {
     this.selectedArticleId = selectedArticle.id;
 
     console.log(selectedArticle);
-    this.articleService.getArticle(this.selectedArticleId).subscribe((res) => {
-      if (res != null) {
+    this.articleService.getArticle(this.selectedArticleId).pipe(takeUntil(this.unsubscribe$)).subscribe(res => {
+      if (res) {
         this.selectedArticleDispoQuantity = res.dispoQuantity;
         this.isArticleSelected = true;
         this.selectedArticleName = res.name;
@@ -117,7 +154,7 @@ export class AddOrderComponent {
         duration: 5000
       });
     } else {
-      this.articleService.getArticle(this.selectedArticleId).subscribe((res) => {
+      this.articleService.getArticle(this.selectedArticleId).pipe(takeUntil(this.unsubscribe$)).subscribe(res => {
         this.selectedArticle = res;
 
         const newOrderLine = {
@@ -170,11 +207,11 @@ export class AddOrderComponent {
       returnDate: this.returnDate
     };
 
-    if (this.sendNotif == true) {
+    if (this.sendNotif) {
       this.addNotification();
     }
 
-    this.clientOrderService.addOrder(clientOrderDto).subscribe((res) => {
+    this.clientOrderService.addOrder(clientOrderDto).pipe(takeUntil(this.unsubscribe$)).subscribe(res => {
       if (res.id != null) {
         this.snackBar.open('Commande Ajoutee Avec Succes !', 'Close', { duration: 5000 });
         this.router.navigateByUrl('/get-orders');
@@ -193,56 +230,43 @@ export class AddOrderComponent {
     }
   }
 
-  getArticlesByCategory(event: Event) {
+  getSousCategoriesByCategory(event: Event) {
     const selectElement = event.target as HTMLSelectElement;
     const categoryId = Number(selectElement.value);
-    this.categorieService.getArticlesByCategoryId(categoryId).subscribe((res) => {
-      if (res != null) {
-        this.articles = res.map((element: { image: any; processedImg: string; byteImage: string }) => {
-          if (element.byteImage != null) {
-            element.processedImg = 'data:image/jpeg;base64,' + element.byteImage;
-          }
-          return element;
-        });
+
+    this.resetArticleSelection();
+    this.sousCategories = [];
+    this.articles = [];
+
+    this.categorieService.getSousCategoriesByCategoryId(categoryId).pipe(takeUntil(this.unsubscribe$)).subscribe(res => {
+      if (res) {
+        this.sousCategories = res;
       } else {
-        this.snackBar.open("Cette Categorie n'as pas d'articles", 'Close', {
-          duration: 5000
-        });
+        this.snackBar.open("Pas de Sous Categories pour cette Categorie !", 'Close', { duration: 5000 });
       }
     });
   }
 
-  getArticles() {
-    this.articleService.getArticles().subscribe((res) => {
-      if (res != null) {
-        this.articlesList = res;
+  getArticlesBySousCategory(event: Event) {
+    const selectElement = event.target as HTMLSelectElement;
+    const sousCategoryId = Number(selectElement.value);
+
+    this.resetArticleSelection();
+    this.articles = [];
+
+    this.sousCategoryService.getArticlesBySousCategory(sousCategoryId).pipe(takeUntil(this.unsubscribe$)).subscribe(res => {
+      if (res) {
+        this.articles = res;
+      } else {
+        this.snackBar.open("Pas d'articles pour cette Sous Categorie !", 'Close', { duration: 5000 });
       }
     });
   }
 
   searchArticles() {
-    if (this.searchkeyArticle.length === 0) {
-      this.filteredArticlesList = [];
-    } else {
-      this.filteredArticlesList = this.articlesList.filter(
-        (art: { code: string; name: string }) =>
-          art.code?.toLowerCase().startsWith(this.searchkeyArticle.toLowerCase()) ||
-          art.name?.toLowerCase().startsWith(this.searchkeyArticle.toLowerCase())
-      );
-    }
-  }
-
-  ngOnInit() {
-    this.getCategories();
-    this.getClients();
-    this.getArticles();
-
-    const today = new Date();
-    const year = today.getFullYear();
-    const month = ('0' + (today.getMonth() + 1)).slice(-2);
-    const day = ('0' + today.getDate()).slice(-2);
-
-    this.currentDateForReturn = `${year}-${month}-${day}`;
-    console.log(this.currentDateForReturn);
+    this.filteredArticlesList = this.articlesList.filter(article =>
+      article.name.toLowerCase().includes(this.searchkeyArticle.toLowerCase()) ||
+      article.code.toLowerCase().includes(this.searchkeyArticle.toLowerCase())
+    );
   }
 }

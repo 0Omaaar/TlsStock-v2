@@ -19,12 +19,13 @@ import { SharedModule } from 'src/app/theme/shared/shared.module';
 export class ClientsComponent {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild('closeButton') closeButton!: ElementRef;
+  @ViewChild('close') addClose!: ElementRef;
 
   constructor(
     private clientService: ClientService,
     private snackbar: MatSnackBar,
     private fb: FormBuilder
-  ) {}
+  ) { }
 
   clients: any;
   dataSource = new MatTableDataSource<any>();
@@ -71,6 +72,7 @@ export class ClientsComponent {
             duration: 5000
           });
           this.getClients();
+          this.addClose.nativeElement.click();
         } else {
           this.snackbar.open('Erreur Survenue !', 'Close', {
             duration: 5000
@@ -80,7 +82,7 @@ export class ClientsComponent {
     }
   }
 
-  editClient(clientDto: any){
+  editClient(clientDto: any) {
     this.client = clientDto;
     const id = clientDto.id;
     this.updateForm = this.fb.group({
@@ -91,11 +93,11 @@ export class ClientsComponent {
     })
   }
 
-  updateClient(){
+  updateClient() {
     const client = this.updateForm.value;
-    if(this.updateForm.valid){
+    if (this.updateForm.valid) {
       this.clientService.updateClient(client).subscribe(res => {
-        if(res.id != null){
+        if (res.id != null) {
           this.snackbar.open("Client Modifie Avec Succes !", 'Close', {
             duration: 5000
           })
@@ -103,7 +105,7 @@ export class ClientsComponent {
           this.closeButton.nativeElement.click();
         }
       })
-    }else{
+    } else {
       this.snackbar.open("Erreur Survenue !", 'Close', {
         duration: 5000
       })

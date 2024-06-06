@@ -14,7 +14,7 @@ export class CategoryService {
   private categoriesByNameCache: { [name: string]: any } = {};
   private articlesByCategoryIdCache: { [id: number]: any } = {};
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   private createAuthorizationHeader(): HttpHeaders {
     return new HttpHeaders().set(
@@ -27,9 +27,9 @@ export class CategoryService {
     // if (this.categoriesCache) {
     //   return of(this.categoriesCache);
     // } else {
-      return this.http.get<any[]>(API + 'categories', {
-        headers: this.createAuthorizationHeader()
-      });
+    return this.http.get<any[]>(API + 'categories', {
+      headers: this.createAuthorizationHeader()
+    });
     // }
   }
 
@@ -45,8 +45,8 @@ export class CategoryService {
     }
   }
 
-  getCategorie(id: number): Observable<any>{
-    return this.http.get<any[]>(API + `category/${id}`, 
+  getCategorie(id: number): Observable<any> {
+    return this.http.get<any[]>(API + `category/${id}`,
       {
         headers: this.createAuthorizationHeader()
       }
@@ -54,9 +54,15 @@ export class CategoryService {
   }
 
   getArticlesByCategoryId(id: number): Observable<any> {
-      return this.http.get<any[]>(API + `categorie/${id}`, {
-        headers: this.createAuthorizationHeader()
-      });
+    return this.http.get<any[]>(API + `categorie/${id}`, {
+      headers: this.createAuthorizationHeader()
+    });
+  }
+
+  getSousCategoriesByCategoryId(id: number): Observable<any> {
+    return this.http.get(API + `category/${id}/sousCategories`, {
+      headers: this.createAuthorizationHeader()
+    })
   }
 
   addCategorie(CategorieDto: any): Observable<any> {
