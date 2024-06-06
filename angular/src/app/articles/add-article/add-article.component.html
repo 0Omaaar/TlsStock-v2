@@ -1,91 +1,238 @@
 <app-breadcrumb></app-breadcrumb>
 <div class="row">
-    <div class="col-sm-12">
-        <app-card cardTitle="Ajouter Article" [options]="true">
-            <div style="display: flex; justify-content: flex-end;">
-                <input class="form-control form-control-sm" style="width: 25%" (change)="onFileChange($event)"
-                    type="file" accept=".csv" />
-                <button (click)="upload()" style="margin-left: 2%"
-                    class="btn btn-sm btn-outline-success d-flex align-items-center">
-                    <mat-icon class="me-2">table_chart</mat-icon>
-                    <span>Importer</span>
-                </button>
+  <div class="col-sm-12">
+    <app-card cardTitle="Ajouter Article" [options]="true">
+      <ul class="nav nav-tabs mb-3" ngbNav #nav="ngbNav">
+        <li class="nav-item" [ngbNavItem]="1">
+          <a class="nav-link text-uppercase" aria-controls="home" aria-selected="true" ngbNavLink>Ajout Normal</a>
+          <ng-template ngbNavContent>
+            <div style="display: flex; justify-content: flex-end">
+              <input class="form-control form-control-sm" style="width: 25%" (change)="onFileChange($event)" type="file" accept=".csv" />
+              <button (click)="upload()" style="margin-left: 2%" class="btn btn-sm btn-outline-success d-flex align-items-center">
+                <mat-icon class="me-2">table_chart</mat-icon>
+                <span>Importer</span>
+              </button>
             </div>
-            <form action="javascript:" id="addArticle" class="mt-2" [formGroup]="addArticleForm" (submit)="addArticle()"
-                class="was-validated">
-                <div class="row">
-                    <div class="form-group col-md-6">
-                        <label for="inputEmail4">Code</label>
-                        <input formControlName="code" type="text" class="form-control is-invalid" id="inputEmail4"
-                            placeholder="Code D'Article" />
-                        <div class="invalid-feedback" *ngIf="addArticleForm.get('code')!.invalid">
-                            Veuillez Entrer Un Code !</div>
-                    </div>
-                    <div class="form-group col-md-6">
-                        <label for="inputPassword4">Nom</label>
-                        <input type="text" formControlName="name" class="form-control is-invalid " id="inputPassword4"
-                            placeholder="Nom" />
-                        <div class="invalid-feedback" *ngIf="addArticleForm.get('name')?.invalid">
-                            Veuillez Entrer Un Nom !</div>
-                    </div>
+            <form
+              action="javascript:"
+              id="addArticle"
+              class="mt-2"
+              [formGroup]="addArticleForm"
+              (submit)="addArticle()"
+              class="was-validated"
+            >
+              <div class="row">
+                <div class="form-group col-md-6">
+                  <label for="inputEmail4">Code</label>
+                  <input formControlName="code" type="text" class="form-control is-invalid" id="inputEmail4" placeholder="Code D'Article" />
+                  <div class="invalid-feedback" *ngIf="addArticleForm.get('code')!.invalid"> Veuillez Entrer Un Code !</div>
                 </div>
-                <div class="form-group">
-                    <label for="inputAddress">Description</label>
-                    <textarea formControlName="description" class="form-control is-invalid" id="inputAddress"
-                        placeholder="Description"></textarea>
-                    <div class="invalid-feedback" *ngIf="addArticleForm.get('description')?.invalid">
-                        Veuillez Entrer Une Description !</div>
+                <div class="form-group col-md-6">
+                  <label for="inputPassword4">Nom</label>
+                  <input type="text" formControlName="name" class="form-control is-invalid" id="inputPassword4" placeholder="Nom" />
+                  <div class="invalid-feedback" *ngIf="addArticleForm.get('name')?.invalid"> Veuillez Entrer Un Nom !</div>
                 </div>
-                <div class="row">
-                    <div class="form-group col-md-2">
-                        <label for="fileInput">Image</label>
-                        <input type="file" class="form-control" id="fileInput" (change)="onFileSelected($event)">
-                    </div>
+              </div>
+              <div class="form-group">
+                <label for="inputAddress">Description</label>
+                <textarea
+                  formControlName="description"
+                  class="form-control is-invalid"
+                  id="inputAddress"
+                  placeholder="Description"
+                ></textarea>
+                <div class="invalid-feedback" *ngIf="addArticleForm.get('description')?.invalid"> Veuillez Entrer Une Description !</div>
+              </div>
+              <div class="row">
+                <div class="form-group col-md-2">
+                  <label for="fileInput">Image</label>
+                  <input type="file" class="form-control" id="fileInput" (change)="onFileSelected($event)" />
+                </div>
 
-                    <div *ngIf="selectedFile" class="image-preview col-md-2">
-                        <div class="preview-container">
-                            <img [src]="imagePreview" alt="Selected Image" class="preview-image">
-                        </div>
-                    </div>
-
-                    <div class="form-group col-md-4">
-                        <label for="category">Categorie</label>
-                        <select id="category" class="form-control is-invalid" formControlName="categoryId"
-                            (change)="storeCategory($event)">
-                            <option selected disabled>Choisir Categorie</option>
-                            <option *ngFor="let category of categories" value="{{category.id}}">{{category.name}}
-                            </option>
-                        </select>
-                        <div class="invalid-feedback" *ngIf="addArticleForm.get('categoryId')?.invalid">
-                            Veuillez Entrer Une Categorie !</div>
-                    </div>
-                    <div class="form-group col-md-4">
-                        <label for="category">Sous Categorie</label>
-                        <select id="category" class="form-control is-invalid" formControlName="sousCategoryId">
-                            <option selected disabled>Choisir Sous Categorie</option>
-                            <option *ngFor="let sousCategory of sousCategories" value="{{sousCategory.id}}">
-                                {{sousCategory.name}}
-                            </option>
-                        </select>
-                        <div class="invalid-feedback" *ngIf="addArticleForm.get('sousCategoryId')?.invalid">
-                            Veuillez Entrer Une Sous Categorie !</div>
-                    </div>
-                    <div class="form-group col-md-2">
-                        <label for="inputZip">Quantité</label>
-                        <input type="number" formControlName="quantity" class="form-control is-invalid" id="inputZip" />
-                        <div class="invalid-feedback" *ngIf="addArticleForm.get('quantity')?.invalid">
-                            Veuillez Entrer Une Quantite !</div>
-                    </div>
-                    <div class="form-group col-md-2">
-                        <label for="inputZip">Quantité Min</label>
-                        <input type="number" formControlName="minQuantity" class="form-control is-invalid"
-                            id="inputZip" />
-                        <div class="invalid-feedback" *ngIf="addArticleForm.get('minQuantity')?.invalid">
-                            Veuillez Entrer Une Quantite Minimale !</div>
-                    </div>
+                <div *ngIf="selectedFile" class="image-preview col-md-2">
+                  <div class="preview-container">
+                    <img [src]="imagePreview" alt="Selected Image" class="preview-image" />
+                  </div>
                 </div>
-                <button type="submit" class="btn btn-primary">Ajouter Article</button>
+
+                <div class="form-group col-md-4">
+                  <label for="category">Categorie</label>
+                  <select id="category" class="form-control is-invalid" formControlName="categoryId" (change)="storeCategory($event)">
+                    <option selected disabled>Choisir Categorie</option>
+                    <option *ngFor="let category of categories" value="{{ category.id }}">{{ category.name }} </option>
+                  </select>
+                  <div class="invalid-feedback" *ngIf="addArticleForm.get('categoryId')?.invalid"> Veuillez Entrer Une Categorie !</div>
+                </div>
+                <div class="form-group col-md-4">
+                  <label for="category">Sous Categorie</label>
+                  <select id="category" class="form-control is-invalid" formControlName="sousCategoryId">
+                    <option selected disabled>Choisir Sous Categorie</option>
+                    <option *ngFor="let sousCategory of sousCategories" value="{{ sousCategory.id }}">
+                      {{ sousCategory.name }}
+                    </option>
+                  </select>
+                  <div class="invalid-feedback" *ngIf="addArticleForm.get('sousCategoryId')?.invalid">
+                    Veuillez Entrer Une Sous Categorie !</div
+                  >
+                </div>
+                <div class="form-group col-md-2">
+                  <label for="inputZip">Quantité</label>
+                  <input type="number" formControlName="quantity" class="form-control is-invalid" id="inputZip" />
+                  <div class="invalid-feedback" *ngIf="addArticleForm.get('quantity')?.invalid"> Veuillez Entrer Une Quantite !</div>
+                </div>
+                <div class="form-group col-md-2">
+                  <label for="inputZip">Quantité Min</label>
+                  <input type="number" formControlName="minQuantity" class="form-control is-invalid" id="inputZip" />
+                  <div class="invalid-feedback" *ngIf="addArticleForm.get('minQuantity')?.invalid">
+                    Veuillez Entrer Une Quantite Minimale !</div
+                  >
+                </div>
+              </div>
+              <button type="submit" class="btn btn-primary">Ajouter Article</button>
             </form>
-        </app-card>
-    </div>
+          </ng-template>
+        </li>
+        <li class="nav-item" [ngbNavItem]="2">
+          <a class="nav-link text-uppercase" aria-controls="home" aria-selected="true" ngbNavLink>Ajout Avec Plus De Details</a>
+          <ng-template ngbNavContent>
+            <div style="display: flex; justify-content: flex-end">
+              <input class="form-control form-control-sm" style="width: 25%" (change)="onFileChange($event)" type="file" accept=".csv" />
+              <button (click)="upload()" style="margin-left: 2%" class="btn btn-sm btn-outline-success d-flex align-items-center">
+                <mat-icon class="me-2">table_chart</mat-icon>
+                <span>Importer</span>
+              </button>
+            </div>
+            <form
+              action="javascript:"
+              id="addArticle"
+              class="mt-2"
+              [formGroup]="addArticleForm"
+              (submit)="addArticle()"
+              class="was-validated"
+            >
+              <div class="row">
+                <div class="form-group col-md-6">
+                  <label for="inputEmail4">Code</label>
+                  <input formControlName="code" type="text" class="form-control is-invalid" id="inputEmail4" placeholder="Code D'Article" />
+                  <div class="invalid-feedback" *ngIf="addArticleForm.get('code')!.invalid"> Veuillez Entrer Un Code !</div>
+                </div>
+                <div class="form-group col-md-6">
+                  <label for="inputPassword4">Nom</label>
+                  <input type="text" formControlName="name" class="form-control is-invalid" id="inputPassword4" placeholder="Nom" />
+                  <div class="invalid-feedback" *ngIf="addArticleForm.get('name')?.invalid"> Veuillez Entrer Un Nom !</div>
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="inputAddress">Description</label>
+                <textarea
+                  formControlName="description"
+                  class="form-control is-invalid"
+                  id="inputAddress"
+                  placeholder="Description"
+                ></textarea>
+                <div class="invalid-feedback" *ngIf="addArticleForm.get('description')?.invalid"> Veuillez Entrer Une Description !</div>
+              </div>
+              <div class="row">
+                <div class="form-group col-md-2">
+                  <label for="fileInput">Image</label>
+                  <input type="file" class="form-control" id="fileInput" (change)="onFileSelected($event)" />
+                </div>
+
+                <div *ngIf="selectedFile" class="image-preview col-md-2">
+                  <div class="preview-container">
+                    <img [src]="imagePreview" alt="Selected Image" class="preview-image" />
+                  </div>
+                </div>
+
+                <div class="form-group col-md-4">
+                  <label for="category">Categorie</label>
+                  <select id="category" class="form-control is-invalid" formControlName="categoryId" (change)="storeCategory($event)">
+                    <option selected disabled>Choisir Categorie</option>
+                    <option *ngFor="let category of categories" value="{{ category.id }}">{{ category.name }} </option>
+                  </select>
+                  <div class="invalid-feedback" *ngIf="addArticleForm.get('categoryId')?.invalid"> Veuillez Entrer Une Categorie !</div>
+                </div>
+                <div class="form-group col-md-4">
+                  <label for="category">Sous Categorie</label>
+                  <select id="category" class="form-control is-invalid" formControlName="sousCategoryId">
+                    <option selected disabled>Choisir Sous Categorie</option>
+                    <option *ngFor="let sousCategory of sousCategories" value="{{ sousCategory.id }}">
+                      {{ sousCategory.name }}
+                    </option>
+                  </select>
+                  <div class="invalid-feedback" *ngIf="addArticleForm.get('sousCategoryId')?.invalid">
+                    Veuillez Entrer Une Sous Categorie !</div
+                  >
+                </div>
+                <div class="form-group col-md-2">
+                  <label for="inputZip">Quantité</label>
+                  <input type="number" formControlName="quantity" class="form-control is-invalid" id="inputZip" />
+                  <div class="invalid-feedback" *ngIf="addArticleForm.get('quantity')?.invalid"> Veuillez Entrer Une Quantite !</div>
+                </div>
+                <div class="form-group col-md-2">
+                  <label for="inputZip">Quantité Min</label>
+                  <input type="number" formControlName="minQuantity" class="form-control is-invalid" id="inputZip" />
+                  <div class="invalid-feedback" *ngIf="addArticleForm.get('minQuantity')?.invalid">
+                    Veuillez Entrer Une Quantite Minimale !</div
+                  >
+                </div>
+                <div class="form-group col-md-6" style="margin-left: 15%" *ngIf="listOfColors.length > 0">
+                  <div class="card">
+                    <div class="card-header">
+                      <h5 class="text-success">Liste Des Couleurs Dispo</h5>
+                    </div>
+                    <div class="card-body">
+                      <ul>
+                        <li *ngFor="let item of listOfColors"> {{ item.color }} -> {{ item.quantity }} </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <button type="submit" style="margin-left: 40%" class="btn btn-primary">Ajouter Article</button>
+            </form>
+            <div class="form-group mt-4">
+              <div class="card">
+                <div class="card-header">
+                  <h4 class="text-info mb-1">Couleurs D'Article</h4>
+                </div>
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col">
+                      <input placeholder="Couleur" class="form-control-sm" type="color" [(ngModel)]="selectedColor" />
+                    </div>
+                    <div class="col">
+                      <input
+                        style="margin-top: 16%"
+                        type="file"
+                        class="form-control"
+                        (change)="onFileSelected2($event)"
+                        [(ngModel)]="selectedImage"
+                      />
+                    </div>
+                    <div class="col image-preview">
+                      <div class="preview-container">
+                        <img *ngIf="imagePreview2" [src]="imagePreview2" alt="Selected Image" class="preview-image" />
+                      </div>
+                    </div>
+                    <div class="col" style="display: flex; align-items: center">
+                      <button style="margin-top: 11%" (click)="addColor()" class="btn btn-sm btn-outline-success"
+                        ><mat-icon class="mt-1">add</mat-icon></button
+                      >
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-2">
+                      <input placeholder="Quantite" style="width: 100%" class="form-control" [(ngModel)]="selectedQuantity" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </ng-template>
+        </li>
+      </ul>
+      <div [ngbNavOutlet]="nav" class="mt-2"></div>
+    </app-card>
+  </div>
 </div>

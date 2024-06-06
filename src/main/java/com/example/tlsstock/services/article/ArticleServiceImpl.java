@@ -1,9 +1,12 @@
 package com.example.tlsstock.services.article;
 
+import com.example.tlsstock.dtos.ArticleColorDto;
 import com.example.tlsstock.dtos.ArticleDto;
 import com.example.tlsstock.entities.Article;
+import com.example.tlsstock.entities.ArticleColor;
 import com.example.tlsstock.entities.Category;
 import com.example.tlsstock.entities.SousCategory;
+import com.example.tlsstock.repositories.ArticleColorRepository;
 import com.example.tlsstock.repositories.ArticleRepository;
 import com.example.tlsstock.repositories.CategoryRepository;
 import com.example.tlsstock.repositories.SousCategoryRepository;
@@ -36,6 +39,9 @@ public class ArticleServiceImpl implements ArticleService{
     @Autowired
     private QRCodeGeneratorService qrCodeGeneratorService;
 
+    @Autowired
+    private ArticleColorRepository articleColorRepository;
+
     @Override
     public ArticleDto saveArticle(ArticleDto articleDto) throws IOException, WriterException {
         System.out.println(articleDto);
@@ -51,9 +57,20 @@ public class ArticleServiceImpl implements ArticleService{
                 article.setImage(articleDto.getImage().getBytes());
             }
 
-            System.out.println(articleDto.getName());
-            System.out.println(articleDto.getCategoryId());
-            System.out.println(articleDto.getSousCategoryId());
+            if(articleDto.getArticleColors() != null){
+                for(ArticleColorDto articleColorDto: articleDto.getArticleColors()){
+                    ArticleColor articleColor = new ArticleColor();
+                    Article findedArticle = articleRepository.findById(articleColorDto.getArticleId()).orElse(null);
+                    if(findedArticle != null){
+                        articleColor.setArticle(findedArticle);
+                        articleColor.setQuantity(articleColorDto.getQuantity());
+                        articleColor.setColor(articleColorDto.getColor());
+                        articleColor.setImage(article.getImage());
+
+                        articleColorRepository.save(articleColor);
+                    }
+                }
+            }
 
             SousCategory sousCategory = sousCategoryRepository.findById(articleDto.getSousCategoryId()).orElse(null);
             article.setSousCategory(sousCategory);

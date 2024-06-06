@@ -38,6 +38,7 @@
     "crypto-browserify": "^3.12.0",
     "file-saver": "^2.0.5",
     "hammerjs": "^2.0.8",
+    "hex-color-to-color-name": "^1.0.2",
     "highcharts": "^11.4.3",
     "highcharts-accessibility": "^0.1.7",
     "html2canvas": "^1.4.1",

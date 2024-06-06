@@ -9,6 +9,8 @@ import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatIconModule } from '@angular/material/icon';
 import { SousCategoryService } from 'src/app/services/sousCategory/sous-category.service';
+import { color } from 'highcharts';
+import { GetColorName } from 'hex-color-to-color-name';
 
 @Component({
   selector: 'app-add-article',
@@ -20,12 +22,21 @@ import { SousCategoryService } from 'src/app/services/sousCategory/sous-category
 export class AddArticleComponent {
   addArticleForm!: FormGroup;
   selectedFile!: File;
+  selectedFile2!: File;
   importFile: File | null = null;
   imagePreview!: string | ArrayBuffer | null;
+  imagePreview2!: string | ArrayBuffer | null;
   categories: any = [];
   sousCategories: any = [];
   selectedCategory: any;
   selectedCategoryId: any;
+
+
+  selectedColor!: string;
+  selectedQuantity!: number;
+  selectedImage!: any;
+
+  listOfColors: any[] = [];
 
   constructor(
     private articleService: ArticleService,
@@ -34,7 +45,7 @@ export class AddArticleComponent {
     private fb: FormBuilder,
     private router: Router,
     private snackbar: MatSnackBar
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.addArticleForm = this.fb.group({
@@ -53,10 +64,33 @@ export class AddArticleComponent {
     // this.getSousCategories();
   }
 
-  storeCategory(event: Event){
+  addColor() {
+
+    const colorName = GetColorName(this.selectedColor);
+
+    const articleColorDto = {
+      color: colorName,
+      quantity: Number(this.selectedQuantity),
+      image: this.selectedFile2
+    }
+
+    if ((articleColorDto.color == '') || (articleColorDto.quantity == 0) || (articleColorDto.image == null)) {
+      this.snackbar.open("Erreur Survenue !", 'Close', { duration: 5000 });
+    } else {
+      this.listOfColors.push(articleColorDto);
+      this.selectedColor = '';
+      this.selectedQuantity = 0;
+      this.selectedImage = null;
+
+      console.log(this.listOfColors);
+    }
+
+  }
+
+  storeCategory(event: Event) {
     const selectedCategory = event.target as HTMLSelectElement;
     this.selectedCategoryId = selectedCategory.value;
-    this.categoryService.getCategorie(this.selectedCategoryId).subscribe( res => {
+    this.categoryService.getCategorie(this.selectedCategoryId).subscribe(res => {
       this.selectedCategory = res;
       this.getSousCategories();
     })
@@ -103,6 +137,20 @@ export class AddArticleComponent {
     this.previewImage();
   }
 
+  onFileSelected2(event: any) {
+    this.selectedFile2 = event.target.files[0];
+    this.previewImage2();
+  }
+
+  previewImage2() {
+    const reader = new FileReader();
+    reader.onload = () => {
+      this.imagePreview2 = reader.result;
+    };
+    reader.readAsDataURL(this.selectedFile2);
+  }
+
+
   previewImage() {
     const reader = new FileReader();
     reader.onload = () => {
@@ -110,6 +158,7 @@ export class AddArticleComponent {
     };
     reader.readAsDataURL(this.selectedFile);
   }
+
 
   addArticle() {
     if (this.addArticleForm.valid) {

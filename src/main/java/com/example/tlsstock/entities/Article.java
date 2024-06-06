@@ -52,6 +52,8 @@ public class Article extends AbstractClass{
     @ToString.Exclude
     private SousCategory sousCategory;
 
+    @OneToMany(mappedBy = "article", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ArticleColor> articleColors;
 
     @OneToMany(mappedBy = "article", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
@@ -81,6 +83,10 @@ public class Article extends AbstractClass{
 
         articleDto.setQrCodeImage(qrCodeImage);
         articleDto.setQrCodeText(qrCodeText);
+
+        if(articleColors != null){
+            articleDto.setArticleColors(articleColors.stream().map(ArticleColor::getDto).collect(Collectors.toList()));
+        }
 
         if (stockMovements != null) {
             List<StockMovementDto> stockMovementDtos = stockMovements.stream()

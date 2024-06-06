@@ -41,5 +41,7 @@ public class ArticleDto {
 
     private String sousCategoryName;
 
+    private List<ArticleColorDto> articleColors;
+
     private List<StockMovementDto> stockMovements;
 }
