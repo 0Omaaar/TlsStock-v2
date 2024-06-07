@@ -185,7 +185,7 @@ export class AddArticleComponent {
           totalArticleColorsQuantity += colorObj.quantity;
 
           if (this.selectedFile2 != null) {
-            formData.append(`articleColors[${index}].image`, this.selectedFile2);
+            formData.append(`articleColors[${index}].image`, colorObj.image);
           }
         });
       }

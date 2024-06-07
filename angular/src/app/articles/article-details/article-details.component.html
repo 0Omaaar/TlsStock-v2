@@ -1,109 +1,218 @@
 <div class="row">
-    <div class="col-sm-12">
-        <div class="card">
-            <div class="card-body">
-                <div style="display: flex; align-items: center; justify-content: space-between;">
-                    <h5 class="mb-3">Details Article</h5>
-                    <button type="button" class="btn btn-light-secondary" (click)="closeDialog()">Fermer</button>
-                </div>
-                <ul class="nav nav-tabs mb-3" ngbNav #nav="ngbNav">
-                    <li class="nav-item" [ngbNavItem]="1">
-                        <a class="nav-link text-uppercase" aria-controls="home" aria-selected="true"
-                            ngbNavLink>Mouvements Stock</a>
-                        <ng-template ngbNavContent>
-                            <p class="mb-0">
-                                <app-card cardTitle="Liste des Mouvements De Stock" [options]="true"
-                                    blockClass="table-border-style">
-                                    <div class="table-responsive">
-                                        <table class="table table-hover">
-                                            <thead>
-                                                <tr>
-                                                    <th>#</th>
-                                                    <th>Nom Article</th>
-                                                    <th style="text-align: center;">Type Mouvement</th>
-                                                    <th>Quantite</th>
-                                                    <th>Date Mouvement</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr
-                                                    *ngFor="let mouvement of article.article.stockMovements; let i = index">
-                                                    <th scope="row">{{i + 1}}</th>
-                                                    <td>{{mouvement.articleName}}</td>
-                                                    <td *ngIf="mouvement.typeMvt == 'SORTIE' || mouvement.typeMvt == 'CORRECTION_NEG'"
-                                                        style="color: rgb(200, 88, 88); font-weight: bolder; font-size: 110%; text-align: center;">
-                                                        {{mouvement.typeMvt}}</td>
-                                                    <td *ngIf="mouvement.typeMvt == 'CORRECTION_POS' || mouvement.typeMvt == 'ENTREE'"
-                                                        style="color: rgb(97, 202, 85); font-weight: bolder; font-size: 110%; text-align: center;">
-                                                        {{mouvement.typeMvt}}</td>
-                                                    <td style="text-align: center;">{{mouvement.quantity}}</td>
-                                                    <td>{{mouvement.mvtDate | date}}</td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </app-card>
-                            </p>
-                        </ng-template>
-                    </li>
-                    <li class="nav-item" [ngbNavItem]="2">
-                        <a class="nav-link text-uppercase" aria-controls="home" aria-selected="true"
-                            ngbNavLink>Commandes Passées Avec Cet Article</a>
-                        <ng-template ngbNavContent>
-                            <p class="mb-0">
-                                <app-card cardTitle="Liste des Mouvements De Stock" [options]="true"
-                                    blockClass="table-border-style">
-                                    <div class="table-responsive">
-                                        <table class="table table-hover">
-                                            <thead>
-                                                <tr>
-                                                    <th>#</th>
-                                                    <th>Code</th>
-                                                    <th style="text-align: center;">Statut</th>
-                                                    <th>Client</th>
-                                                    <th>Date</th>
-                                                    <th>Retour</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr *ngFor="let order of orders; let i = index">
-                                                    <th scope="row">{{i + 1}}</th>
-                                                    <td>{{order.code}}</td>
-                                                    <td *ngIf="order.orderStatus == 'EN_PREPARATION' || order.orderStatus == 'VALIDEE'"
-                                                        style="color: rgb(216, 144, 81); font-weight: bolder; font-size: 110%; text-align: center;">
-                                                        {{order.orderStatus}}</td>
-                                                    <td *ngIf="order.orderStatus == 'LIVREE' || order.orderStatus=='RETURNED'"
-                                                        style="color: rgb(97, 202, 85); font-weight: bolder; font-size: 110%; text-align: center;">
-                                                        {{order.orderStatus}}</td>
-                                                    <td style="text-align: center;">{{order.clientName}}</td>
-                                                    <td>{{order.orderDate | date}}</td>
-                                                    <td>{{order.returnDate | date}}</td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
-                                </app-card>
-                            </p>
-                        </ng-template>
-                    </li>
-                    <li class="nav-item" [ngbNavItem]="3">
-                        <a class="nav-link text-uppercase" aria-controls="home" aria-selected="true" ngbNavLink>Code Bar
-                            d'Article</a>
-                        <ng-template ngbNavContent>
-                            <p class="mb-0">
-                                <app-card cardTitle="Liste des Mouvements De Stock" [options]="true"
-                                    blockClass="table-border-style">
-                                    <div *ngIf="article.article">
-                                        <h1>{{ article.name }}</h1>
-                                        <img [src]="qrCodeImageSrc" alt="QR Code">
-                                    </div>
-                                </app-card>
-                            </p>
-                        </ng-template>
-                    </li>
-                </ul>
-                <div [ngbNavOutlet]="nav" class="mt-2"></div>
-            </div>
+  <div class="col-sm-12">
+    <div class="card">
+      <div class="card-body">
+        <div style="display: flex; align-items: center; justify-content: space-between">
+          <h5 class="mb-3">Details Article</h5>
+          <button type="button" class="btn btn-light-secondary" (click)="closeDialog()">Fermer</button>
         </div>
+        <ul class="nav nav-tabs mb-3" ngbNav #nav="ngbNav">
+          <li class="nav-item" [ngbNavItem]="1">
+            <a class="nav-link text-uppercase" aria-controls="home" aria-selected="true" ngbNavLink>Details Article</a>
+            <ng-template ngbNavContent>
+              <mat-accordion class="example-headers-align">
+                <mat-expansion-panel hideToggle>
+                  <mat-expansion-panel-header style="height: 30%">
+                    <mat-panel-title>
+                      <div style="margin: 0 auto; text-align: center; padding: 10px">
+                        <img
+                          *ngIf="articleDet.processedImg"
+                          [src]="articleDet.processedImg"
+                          alt="{{ articleDet.name }}"
+                          style="max-width: 100px; border-radius: 5px; margin-bottom: 10px"
+                        />
+                        <p *ngIf="!articleDet.processedImg" style="font-size: 100%; margin-top: 5%" class="badge m-r-5 badge-light-danger"
+                          >Pas De Photo</p
+                        >
+                        <br />
+                        <span style="font-size: 1.2em; font-weight: bold">{{ articleDet.name }}</span>
+                      </div>
+                    </mat-panel-title>
+
+                    <mat-panel-title>
+                      <div style="margin-top: 3%; margin-left: 15%">
+                        <p class="icon-text"
+                          ><mat-icon>label_important</mat-icon
+                          ><span
+                            >Code : <br />
+                            {{ articleDet.code }}</span
+                          >
+                        </p>
+                        <p class="icon-text"
+                          ><mat-icon>title</mat-icon><span>Nom : <br />{{ articleDet.name }}</span></p
+                        >
+                        <p class="icon-text"
+                          ><mat-icon>inventory</mat-icon
+                          ><span
+                            >Quantite Initiale :<br />
+                            {{ articleDet.quantity }}</span
+                          ></p
+                        >
+                      </div>
+                    </mat-panel-title>
+                    <mat-panel-title>
+                      <div style="margin-top: 3%; margin-left: 15%">
+                        <p class="icon-text"
+                          ><mat-icon>label_important</mat-icon
+                          ><span
+                            >Categorie : <br />
+                            {{ articleDet.categoryName }}</span
+                          >
+                        </p>
+                        <p class="icon-text"
+                          ><mat-icon>title</mat-icon><span>Sous Categorie : <br />{{ articleDet.sousCategoryName }}</span></p
+                        >
+                      </div>
+                    </mat-panel-title>
+                    <mat-panel-description>
+                      <div style="margin-top: 3%; margin-left: 20%; text-align: center; font-size: 130%">
+                        Stock Min <br />
+                        <b>{{ articleDet.minQuantity }}</b>
+                      </div>
+                      <div style="margin-top: 3%; margin-left: 20%; text-align: center; font-size: 130%">
+                        Stock Actuel <br />
+                        <b>{{ articleDet.dispoQuantity }}</b>
+                      </div>
+                      <br />
+                    </mat-panel-description>
+                  </mat-expansion-panel-header>
+
+                  <div class="col-xl-12 mt-3">
+                    <app-card cardTitle="Liste des Couleurs Dispo" [options]="true" blockClass="table-border-style">
+                      <div class="table-responsive">
+                        <table class="table table-hover">
+                          <thead>
+                            <tr>
+                              <th>#</th>
+                              <th>Couleur</th>
+                              <th>Quantite</th>
+                              <th>Image</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr *ngFor="let item of articleDet.articleColors; let i = index">
+                              <th scope="row">{{ i + 1 }}</th>
+                              <td>{{ item.color }}</td>
+                              <td>{{ item.quantity }}</td>
+                              <td>
+                                <img
+                                  [src]="'data:image/jpeg;base64,' + item.byteImage"
+                                  alt="{{ item.name }}"
+                                  style="max-width: 100px; border-radius: 5px; margin-bottom: 10px"
+                                />
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </app-card>
+                  </div>
+                </mat-expansion-panel>
+              </mat-accordion>
+            </ng-template>
+          </li>
+          <li class="nav-item" [ngbNavItem]="2">
+            <a class="nav-link text-uppercase" aria-controls="home" aria-selected="true" ngbNavLink>Mouvements Stock</a>
+            <ng-template ngbNavContent>
+              <p class="mb-0">
+                <app-card cardTitle="Liste des Mouvements De Stock" [options]="true" blockClass="table-border-style">
+                  <div class="table-responsive">
+                    <table class="table table-hover">
+                      <thead>
+                        <tr>
+                          <th>#</th>
+                          <th>Nom Article</th>
+                          <th style="text-align: center">Type Mouvement</th>
+                          <th>Quantite</th>
+                          <th>Date Mouvement</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let mouvement of article.article.stockMovements; let i = index">
+                          <th scope="row">{{ i + 1 }}</th>
+                          <td>{{ mouvement.articleName }}</td>
+                          <td
+                            *ngIf="mouvement.typeMvt == 'SORTIE' || mouvement.typeMvt == 'CORRECTION_NEG'"
+                            style="color: rgb(200, 88, 88); font-weight: bolder; font-size: 110%; text-align: center"
+                          >
+                            {{ mouvement.typeMvt }}</td
+                          >
+                          <td
+                            *ngIf="mouvement.typeMvt == 'CORRECTION_POS' || mouvement.typeMvt == 'ENTREE'"
+                            style="color: rgb(97, 202, 85); font-weight: bolder; font-size: 110%; text-align: center"
+                          >
+                            {{ mouvement.typeMvt }}</td
+                          >
+                          <td style="text-align: center">{{ mouvement.quantity }}</td>
+                          <td>{{ mouvement.mvtDate | date }}</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </app-card>
+              </p>
+            </ng-template>
+          </li>
+          <li class="nav-item" [ngbNavItem]="3">
+            <a class="nav-link text-uppercase" aria-controls="home" aria-selected="true" ngbNavLink>Commandes Passées Avec Cet Article</a>
+            <ng-template ngbNavContent>
+              <p class="mb-0">
+                <app-card cardTitle="Liste des Mouvements De Stock" [options]="true" blockClass="table-border-style">
+                  <div class="table-responsive">
+                    <table class="table table-hover">
+                      <thead>
+                        <tr>
+                          <th>#</th>
+                          <th>Code</th>
+                          <th style="text-align: center">Statut</th>
+                          <th>Client</th>
+                          <th>Date</th>
+                          <th>Retour</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let order of orders; let i = index">
+                          <th scope="row">{{ i + 1 }}</th>
+                          <td>{{ order.code }}</td>
+                          <td
+                            *ngIf="order.orderStatus == 'EN_PREPARATION' || order.orderStatus == 'VALIDEE'"
+                            style="color: rgb(216, 144, 81); font-weight: bolder; font-size: 110%; text-align: center"
+                          >
+                            {{ order.orderStatus }}</td
+                          >
+                          <td
+                            *ngIf="order.orderStatus == 'LIVREE' || order.orderStatus == 'RETURNED'"
+                            style="color: rgb(97, 202, 85); font-weight: bolder; font-size: 110%; text-align: center"
+                          >
+                            {{ order.orderStatus }}</td
+                          >
+                          <td style="text-align: center">{{ order.clientName }}</td>
+                          <td>{{ order.orderDate | date }}</td>
+                          <td>{{ order.returnDate | date }}</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </app-card>
+              </p>
+            </ng-template>
+          </li>
+          <li class="nav-item" [ngbNavItem]="4">
+            <a class="nav-link text-uppercase" aria-controls="home" aria-selected="true" ngbNavLink>Code Bar d'Article</a>
+            <ng-template ngbNavContent>
+              <p class="mb-0">
+                <app-card cardTitle="Liste des Mouvements De Stock" [options]="true" blockClass="table-border-style">
+                  <div *ngIf="article.article">
+                    <h1>{{ article.name }}</h1>
+                    <img [src]="qrCodeImageSrc" alt="QR Code" />
+                  </div>
+                </app-card>
+              </p>
+            </ng-template>
+          </li>
+        </ul>
+        <div [ngbNavOutlet]="nav" class="mt-2"></div>
+      </div>
     </div>
+  </div>
 </div>

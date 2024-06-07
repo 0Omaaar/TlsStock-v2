@@ -12,12 +12,30 @@ import { ArticleComponent } from '../articles/article.component';
 import { SharedModule } from 'src/app/theme/shared/shared.module';
 import { ClientOrderService } from 'src/app/services/orders/client-order.service';
 import { Subscription } from 'rxjs';
-import { NavigationStart, Router } from '@angular/router';
+import { NavigationStart, Router, RouterModule } from '@angular/router';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatTableModule } from '@angular/material/table';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-article-details',
   standalone: true,
-  imports: [SharedModule, MatButtonModule, MatDialogActions, MatDialogClose, MatDialogTitle, MatDialogContent],
+  imports: [SharedModule, MatButtonModule, MatDialogActions, MatDialogClose, MatDialogTitle, MatDialogContent,
+    CommonModule,
+    RouterModule,
+    MatExpansionModule,
+    MatPaginatorModule,
+    MatTableModule,
+    MatIconModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatDatepickerModule
+  ],
   templateUrl: './article-details.component.html',
   styleUrl: './article-details.component.scss'
 })
@@ -25,6 +43,7 @@ export class ArticleDetailsComponent {
   orders: any[] = [];
   private routerSubscription!: Subscription;
   qrCodeImageSrc!: string;
+  articleDet: any;
 
 
   constructor(
@@ -32,10 +51,10 @@ export class ArticleDetailsComponent {
     public dialogRef: MatDialogRef<ArticleComponent>,
     @Inject(MAT_DIALOG_DATA) public article: any,
     private router: Router
-  ) {}
+  ) { }
 
   ngOnInit() {
-    this.clientOrderService.getOrdersByArticle(this.article.article.id).subscribe( res => {
+    this.clientOrderService.getOrdersByArticle(this.article.article.id).subscribe(res => {
       this.orders = res;
     })
 
@@ -46,9 +65,11 @@ export class ArticleDetailsComponent {
         this.dialogRef.close();
       }
     });
+
+    this.articleDet = this.article.article;
   }
 
-  closeDialog(){
+  closeDialog() {
     this.dialogRef.close();
   }
 
