@@ -83,6 +83,7 @@ public class ArticleController {
 
     @PostMapping("/article/save")
     public ResponseEntity<?> addArticle(@ModelAttribute ArticleDto articleDto) throws IOException, WriterException {
+        System.out.println(articleDto);
         if(articleDto != null){
             ArticleDto savedArticle = articleService.saveArticle(articleDto);
             return ResponseEntity.ok(savedArticle);

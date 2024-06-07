@@ -53,6 +53,8 @@ public class Article extends AbstractClass{
     private SousCategory sousCategory;
 
     @OneToMany(mappedBy = "article", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    @ToString.Exclude
     private List<ArticleColor> articleColors;
 
     @OneToMany(mappedBy = "article", cascade = CascadeType.ALL, orphanRemoval = true)

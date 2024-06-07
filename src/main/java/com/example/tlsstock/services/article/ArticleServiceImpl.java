@@ -15,6 +15,7 @@ import com.google.zxing.WriterException;
 import org.hibernate.dialect.function.SybaseTruncFunction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.BufferedReader;
@@ -42,7 +43,7 @@ public class ArticleServiceImpl implements ArticleService{
     @Autowired
     private ArticleColorRepository articleColorRepository;
 
-    @Override
+    @Override @Transactional
     public ArticleDto saveArticle(ArticleDto articleDto) throws IOException, WriterException {
         System.out.println(articleDto);
         if(articleDto != null){
@@ -57,21 +58,6 @@ public class ArticleServiceImpl implements ArticleService{
                 article.setImage(articleDto.getImage().getBytes());
             }
 
-            if(articleDto.getArticleColors() != null){
-                for(ArticleColorDto articleColorDto: articleDto.getArticleColors()){
-                    ArticleColor articleColor = new ArticleColor();
-                    Article findedArticle = articleRepository.findById(articleColorDto.getArticleId()).orElse(null);
-                    if(findedArticle != null){
-                        articleColor.setArticle(findedArticle);
-                        articleColor.setQuantity(articleColorDto.getQuantity());
-                        articleColor.setColor(articleColorDto.getColor());
-                        articleColor.setImage(article.getImage());
-
-                        articleColorRepository.save(articleColor);
-                    }
-                }
-            }
-
             SousCategory sousCategory = sousCategoryRepository.findById(articleDto.getSousCategoryId()).orElse(null);
             article.setSousCategory(sousCategory);
 
@@ -81,7 +67,20 @@ public class ArticleServiceImpl implements ArticleService{
             // Generate QR code image
             Article newArticle = generateAndSetQRCode(article);
 
-            return articleRepository.save(newArticle).getDto();
+            Article savedArticle =  articleRepository.save(newArticle);
+
+            if(articleDto.getArticleColors() != null){
+                for(ArticleColorDto articleColorDto: articleDto.getArticleColors()){
+                    ArticleColor articleColor = new ArticleColor();
+                    articleColor.setArticle(savedArticle);
+                    articleColor.setQuantity(articleColorDto.getQuantity());
+                    articleColor.setColor(articleColorDto.getColor());
+                    articleColor.setImage(articleColorDto.getImage().getBytes());
+
+                    articleColorRepository.save(articleColor);
+                }
+            }
+            return savedArticle.getDto();
         }
         return null;
     }

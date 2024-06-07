@@ -1,8 +1,10 @@
 package com.example.tlsstock.entities;
 
 import com.example.tlsstock.dtos.ArticleColorDto;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.ToString;
 
 @Data @Entity
 public class ArticleColor {
@@ -15,6 +17,8 @@ public class ArticleColor {
     private byte[] image;
 
     @ManyToOne @JoinColumn(nullable = false)
+    @JsonIgnore
+    @ToString.Exclude
     private Article article;
 
     private String color;
@@ -28,7 +32,7 @@ public class ArticleColor {
         dto.setColor(color);
         dto.setArticleName(article.getName());
         dto.setQuantity(quantity);
-        dto.setImage(image);
+        dto.setByteImage(image);
 
         return dto;
     }

@@ -82,7 +82,6 @@ export class AddArticleComponent {
       this.selectedQuantity = 0;
       this.selectedImage = null;
 
-      console.log(this.listOfColors);
     }
 
   }
@@ -161,6 +160,9 @@ export class AddArticleComponent {
 
 
   addArticle() {
+
+    let totalArticleColorsQuantity: any = 0;
+
     if (this.addArticleForm.valid) {
       const formData: FormData = new FormData();
       if (this.selectedFile != null) {
@@ -174,17 +176,35 @@ export class AddArticleComponent {
       formData.append('categoryId', this.addArticleForm.get('categoryId')?.value);
       formData.append('sousCategoryId', this.addArticleForm.get('sousCategoryId')?.value);
 
-      console.log(this.addArticleForm.get('sousCategoryId')?.value)
 
-      this.articleService.addArticle(formData).subscribe((res) => {
-        if (res.id != null) {
-          console.log('success');
-          this.router.navigateByUrl('/articles');
-          this.snackbar.open('Article Ajoute Avec Succes !', 'Close', {
-            duration: 5000
-          });
-        }
-      });
+      if (this.listOfColors.length > 0) {
+        this.listOfColors.forEach((colorObj, index) => {
+          formData.append(`articleColors[${index}].color`, colorObj.color);
+          formData.append(`articleColors[${index}].quantity`, colorObj.quantity);
+
+          totalArticleColorsQuantity += colorObj.quantity;
+
+          if (this.selectedFile2 != null) {
+            formData.append(`articleColors[${index}].image`, this.selectedFile2);
+          }
+        });
+      }
+
+      if (totalArticleColorsQuantity != this.addArticleForm.get('quantity')?.value) {
+        this.snackbar.open("Veuillez Choisir Une Quantite Convenable !", 'Close', {
+          duration: 5000
+        })
+      } else {
+        this.articleService.addArticle(formData).subscribe((res) => {
+          if (res.id != null) {
+            console.log('success');
+            this.router.navigateByUrl('/articles');
+            this.snackbar.open('Article Ajoute Avec Succes !', 'Close', {
+              duration: 5000
+            });
+          }
+        });
+      }
     } else {
       for (const i in this.addArticleForm.controls) {
         this.addArticleForm.controls[i].markAsDirty();

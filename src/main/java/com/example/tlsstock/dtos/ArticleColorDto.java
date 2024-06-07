@@ -1,6 +1,7 @@
 package com.example.tlsstock.dtos;
 
 import lombok.Data;
+import org.springframework.web.multipart.MultipartFile;
 
 @Data
 public class ArticleColorDto {
@@ -15,5 +16,7 @@ public class ArticleColorDto {
 
     private String articleName;
 
-    private byte[] image;
+    private byte[] byteImage;
+
+    private MultipartFile image;
 }
