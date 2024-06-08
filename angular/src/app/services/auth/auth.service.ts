@@ -2,6 +2,7 @@ import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, map } from 'rxjs';
 import { UserStorageService } from '../storage/user-storage.service';
+import { Router } from '@angular/router';
 
 const BASIC_URL = 'http://localhost:8080/';
 
@@ -12,8 +13,9 @@ export class AuthService {
   isAuth: boolean = false;
   constructor(
     private http: HttpClient,
-    private userStorageService: UserStorageService
-  ) {}
+    private userStorageService: UserStorageService,
+    private router: Router
+  ) { }
 
   register(signupRequest: any): Observable<any> {
     return this.http.post(BASIC_URL + 'sign-up', signupRequest);
@@ -43,5 +45,12 @@ export class AuthService {
 
   getOrderByTrackingId(trackingID: number): Observable<any> {
     return this.http.get(BASIC_URL + `order/${trackingID}`);
+  }
+
+  logout() {
+    localStorage.removeItem('ecom-user');
+    localStorage.removeItem('ecom-token');
+
+    this.router.navigateByUrl('login');
   }
 }

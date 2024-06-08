@@ -22,7 +22,7 @@ export class LoginComponent {
     private authService: AuthService,
     private snackBar: MatSnackBar,
     private router: Router
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.loginForm = this.fb.group({
@@ -42,8 +42,8 @@ export class LoginComponent {
     this.authService.login(username, password).subscribe(
       () => {
         if (UserStorageService.isAdminLoggedIn()) {
-          this.router.navigateByUrl('/analytics');
-        } 
+          this.router.navigateByUrl('/dashboard');
+        }
         this.snackBar.open('Login Success', 'OK', { duration: 5000 });
       },
       () => {
