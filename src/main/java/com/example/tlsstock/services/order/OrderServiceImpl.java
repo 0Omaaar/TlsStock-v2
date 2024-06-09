@@ -50,6 +50,9 @@ public class OrderServiceImpl implements OrderService{
     @Autowired
     private QRCodeGeneratorService qrCodeGeneratorService;
 
+    @Autowired
+    private ArticleColorRepository articleColorRepository;
+
     @Override
     @Transactional
     public OrderClientDto saveOrder(OrderClientDto orderClientDto) {
@@ -85,6 +88,15 @@ public class OrderServiceImpl implements OrderService{
                             Long dispoQuantity = article.getDispoQuantity() - orderLine.getQuantity();
 
                             articleChecker.minArticleQuantityChecker(dispoQuantity, article.getDto());
+
+                            if(orderLine.getArticleColorId() != null){
+                                ArticleColor articleColor = articleColorRepository.findById(orderLine.getArticleColorId()).orElse(null);
+                                if(articleColor != null){
+                                    articleColor.setDispoQuantity(articleColor.getDispoQuantity() - orderLine.getQuantity());
+                                    clientOrderLine.setArticleColor(articleColor);
+                                    articleColorRepository.save(articleColor);
+                                }
+                            }
                             clientOrderLineRepository.save(clientOrderLine);
                         }
                     }

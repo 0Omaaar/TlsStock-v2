@@ -74,6 +74,7 @@ public class ArticleServiceImpl implements ArticleService{
                     ArticleColor articleColor = new ArticleColor();
                     articleColor.setArticle(savedArticle);
                     articleColor.setQuantity(articleColorDto.getQuantity());
+                    articleColor.setDispoQuantity(articleColorDto.getQuantity());
                     articleColor.setColor(articleColorDto.getColor());
                     articleColor.setImage(articleColorDto.getImage().getBytes());
 

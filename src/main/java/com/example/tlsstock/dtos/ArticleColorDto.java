@@ -12,6 +12,8 @@ public class ArticleColorDto {
 
     private Long quantity;
 
+    private Long dispoQuantity;
+
     private Long articleId;
 
     private String articleName;

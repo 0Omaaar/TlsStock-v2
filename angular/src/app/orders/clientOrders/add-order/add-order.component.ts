@@ -12,6 +12,7 @@ import { NotificationService, Notification } from 'src/app/services/notification
 import { SousCategoryService } from 'src/app/services/sousCategory/sous-category.service';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { ArticleColorService } from 'src/app/services/articleColors/article-color.service';
 
 @Component({
   selector: 'app-add-order',
@@ -37,6 +38,9 @@ export class AddOrderComponent implements OnInit, OnDestroy {
   selectedArticleDispoQuantity: any = null;
   articlesList: any[] = [];
   filteredArticlesList: any[] = [];
+  storedArticleForColors: any = null;
+  storedArticleColor: any = null;
+  storedArticleColorId: any = null;
 
   isArticleSelected: boolean = false;
   selectedArticleName: string = '';
@@ -60,7 +64,8 @@ export class AddOrderComponent implements OnInit, OnDestroy {
     private sousCategoryService: SousCategoryService,
     private snackBar: MatSnackBar,
     private router: Router,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private articleColorService: ArticleColorService
   ) { }
 
   ngOnInit() {
@@ -120,8 +125,25 @@ export class AddOrderComponent implements OnInit, OnDestroy {
         this.selectedArticleDispoQuantity = res.dispoQuantity;
         this.isArticleSelected = true;
         this.selectedArticleName = res.name;
+        this.storedArticleForColors = res;
+
       }
     });
+
+
+  }
+
+  storeSelectedColor(event: Event) {
+    const html = event.target as HTMLSelectElement;
+    const selectColorArticleId = html.value as any;
+
+    this.articleColorService.getArticleColor(selectColorArticleId).subscribe(res => {
+      if (res != null) {
+        this.storedArticleColor = res;
+        this.storedArticleColorId = res.id;
+      }
+    })
+
   }
 
   storeSelectedArticleOption2(articleDto: any) {
@@ -161,7 +183,9 @@ export class AddOrderComponent implements OnInit, OnDestroy {
           quantity: Number(this.selectedQuantity),
           articleId: Number(this.selectedArticleId),
           articleCode: this.selectedArticle.code,
-          articleName: this.selectedArticle.name
+          articleName: this.selectedArticle.name,
+          articleColorId: this.storedArticleColorId,
+          articleColor: this.storedArticleColor?.color
         };
 
         const dispoQuantity = res.dispoQuantity - this.selectedQuantity;
@@ -172,8 +196,12 @@ export class AddOrderComponent implements OnInit, OnDestroy {
         if (this.selectedClient == null) {
           this.snackBar.open('Veuillez Choisir Un Client !', 'Close', { duration: 5000 });
         } else {
+          console.log(newOrderLine);
           this.orderLinesList.push(newOrderLine);
           this.resetArticleSelection();
+          this.storedArticleColor = null;
+          this.storedArticleForColors = null;
+          this.storedArticleColorId = null;
         }
       });
     }

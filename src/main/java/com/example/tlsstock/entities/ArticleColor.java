@@ -25,6 +25,8 @@ public class ArticleColor {
 
     private Long quantity;
 
+    private Long dispoQuantity;
+
     public ArticleColorDto getDto(){
         ArticleColorDto dto = new ArticleColorDto();
         dto.setId(id);
@@ -32,6 +34,7 @@ public class ArticleColor {
         dto.setColor(color);
         dto.setArticleName(article.getName());
         dto.setQuantity(quantity);
+        dto.setDispoQuantity(dispoQuantity);
         dto.setByteImage(image);
 
         return dto;

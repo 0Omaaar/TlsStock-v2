@@ -11,6 +11,10 @@ public class    ClientOrderLineDto {
 
     private Long articleId;
 
+    private Long articleColorId;
+
+    private String articleColor;
+
     private String articleCode;
 
     private String articleName;

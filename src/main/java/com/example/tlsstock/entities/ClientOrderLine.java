@@ -18,6 +18,9 @@ public class ClientOrderLine extends AbstractClass {
 
     private Long quantity;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    private ArticleColor articleColor;
+
     @ManyToOne
     private OrderClient orderClient;
 
@@ -30,6 +33,10 @@ public class ClientOrderLine extends AbstractClass {
         clientOrderLineDto.setArticleCode(article.getCode());
         clientOrderLineDto.setArticleId(article.getId());
         clientOrderLineDto.setArticleName(article.getName());
+        if(articleColor != null){
+            clientOrderLineDto.setArticleColor(articleColor.getColor());
+            clientOrderLineDto.setArticleColorId(articleColor.getId());
+        }
 
         return clientOrderLineDto;
     }
