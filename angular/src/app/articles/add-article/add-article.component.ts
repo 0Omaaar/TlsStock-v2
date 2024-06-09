@@ -190,11 +190,7 @@ export class AddArticleComponent {
         });
       }
 
-      if (totalArticleColorsQuantity != this.addArticleForm.get('quantity')?.value) {
-        this.snackbar.open("Veuillez Choisir Une Quantite Convenable !", 'Close', {
-          duration: 5000
-        })
-      } else {
+      if (totalArticleColorsQuantity == 0) {
         this.articleService.addArticle(formData).subscribe((res) => {
           if (res.id != null) {
             console.log('success');
@@ -204,6 +200,24 @@ export class AddArticleComponent {
             });
           }
         });
+      }
+
+      if (totalArticleColorsQuantity != 0) {
+        if (totalArticleColorsQuantity != this.addArticleForm.get('quantity')?.value) {
+          this.snackbar.open("Veuillez Choisir Une Quantite Convenable !", 'Close', {
+            duration: 5000
+          })
+        } else {
+          this.articleService.addArticle(formData).subscribe((res) => {
+            if (res.id != null) {
+              console.log('success');
+              this.router.navigateByUrl('/articles');
+              this.snackbar.open('Article Ajoute Avec Succes !', 'Close', {
+                duration: 5000
+              });
+            }
+          });
+        }
       }
     } else {
       for (const i in this.addArticleForm.controls) {

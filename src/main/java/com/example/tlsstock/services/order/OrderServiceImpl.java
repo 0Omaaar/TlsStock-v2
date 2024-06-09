@@ -17,6 +17,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.swing.plaf.basic.BasicInternalFrameTitlePane;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
@@ -91,11 +92,7 @@ public class OrderServiceImpl implements OrderService{
 
                             if(orderLine.getArticleColorId() != null){
                                 ArticleColor articleColor = articleColorRepository.findById(orderLine.getArticleColorId()).orElse(null);
-                                if(articleColor != null){
-                                    articleColor.setDispoQuantity(articleColor.getDispoQuantity() - orderLine.getQuantity());
-                                    clientOrderLine.setArticleColor(articleColor);
-                                    articleColorRepository.save(articleColor);
-                                }
+                                clientOrderLine.setArticleColor(articleColor);
                             }
                             clientOrderLineRepository.save(clientOrderLine);
                         }
@@ -185,6 +182,11 @@ public class OrderServiceImpl implements OrderService{
                 stockMovementDto.setArticleId(orderLine.getArticleId());
                 stockMovementDto.setQuantity(orderLine.getQuantity());
 
+                if(orderLine.getArticleColorId() != null && orderLine.getArticleColor() != null){
+                    stockMovementDto.setArticleColorId(orderLine.getArticleColorId());
+                    stockMovementDto.setArticleColor(orderLine.getArticleColor());
+                }
+
                 saveStockMovement(stockMovementDto);
             }
 
@@ -204,14 +206,27 @@ public class OrderServiceImpl implements OrderService{
 
 
     public void saveStockMovement(StockMovementDto stockMovementDto) throws IOException, WriterException {
+        System.out.println("inside function");
         StockMovement stockMovement = new StockMovement();
         stockMovement.setQuantity(stockMovementDto.getQuantity());
         Article article = articleRepository.findById(stockMovementDto.getArticleId()).orElse(null);
         if(article != null){
+            System.out.println("Article : " + article);
             stockMovement.setArticle(article);
             article.setDispoQuantity(article.getDispoQuantity() - stockMovement.getQuantity());
 
             Article savedArticle = generateAndSetQRCode(article);
+
+            if (stockMovementDto.getArticleColorId() != null) {
+                ArticleColor articleColor = articleColorRepository.findById(stockMovementDto.getArticleColorId()).orElse(null);
+                if(articleColor != null){
+                    System.out.println("Article Color : " + articleColor);
+                    stockMovement.setArticleColor(articleColor);
+                    articleColor.setDispoQuantity(articleColor.getDispoQuantity() - stockMovement.getQuantity());
+
+                    articleColorRepository.save(articleColor);
+                }
+            }
         }
         stockMovement.setTypeMvt(stockMovementDto.getTypeMvt());
         stockMovement.setMvtDate(stockMovementDto.getMvtDate());

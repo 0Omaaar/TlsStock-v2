@@ -18,6 +18,10 @@ public class StockMovementDto {
 
     private String articleName;
 
+    private Long articleColorId;
+
+    private String articleColor;
+
     private TypeMvtStk typeMvt;
 
     private Long quantity;

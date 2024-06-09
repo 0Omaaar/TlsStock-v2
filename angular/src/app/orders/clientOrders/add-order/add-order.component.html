@@ -93,7 +93,7 @@
                       <select class="form-control" (change)="storeSelectedColor($event)">
                         <option selected disabled>-- Choisir Couleur --</option>
                         <option *ngFor="let item of storedArticleForColors.articleColors" [value]="item.id">
-                          {{ item.color }} => {{ item.quantity }}
+                          {{ item.color }} => {{ item.dispoQuantity }}
                         </option>
                       </select>
 
@@ -121,6 +121,18 @@
 
                     <div class="col-md-4">
                       <button
+                        *ngIf="storedArticleForColors.articleColors.length > 0"
+                        class="btn btn-outline-primary btn-block"
+                        [disabled]="
+                          selectedQuantity > selectedArticleDispoQuantity ||
+                          selectedQuantity <= 0 ||
+                          selectedQuantity > storedArticleColor.quantity
+                        "
+                        (click)="addOrderLine()"
+                        >Ajouter</button
+                      >
+                      <button
+                        *ngIf="storedArticleForColors.articleColors.length == 0"
                         class="btn btn-outline-primary btn-block"
                         [disabled]="selectedQuantity > selectedArticleDispoQuantity || selectedQuantity <= 0"
                         (click)="addOrderLine()"

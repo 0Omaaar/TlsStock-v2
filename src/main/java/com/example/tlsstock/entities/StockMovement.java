@@ -26,6 +26,10 @@ public class StockMovement extends AbstractClass{
     @JsonIgnore
     private Article article;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnore
+    private ArticleColor articleColor;
+
     private Long quantity;
 
     public StockMovementDto getDto(){
@@ -36,6 +40,11 @@ public class StockMovement extends AbstractClass{
         stockMovementDto.setArticleName(article.getName());
         stockMovementDto.setTypeMvt(typeMvt);
         stockMovementDto.setMvtDate(mvtDate);
+
+        if(articleColor != null){
+            stockMovementDto.setArticleColor(articleColor.getColor());
+            stockMovementDto.setArticleColorId(articleColor.getId());
+        }
 
         return stockMovementDto;
     }

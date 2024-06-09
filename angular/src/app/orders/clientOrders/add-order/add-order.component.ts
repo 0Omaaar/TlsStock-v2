@@ -79,7 +79,6 @@ export class AddOrderComponent implements OnInit, OnDestroy {
     const day = ('0' + today.getDate()).slice(-2);
 
     this.currentDateForReturn = `${year}-${month}-${day}`;
-    console.log(this.currentDateForReturn);
   }
 
   ngOnDestroy() {
@@ -150,7 +149,7 @@ export class AddOrderComponent implements OnInit, OnDestroy {
     const selectedArticle = articleDto;
     this.selectedArticleId = selectedArticle.id;
 
-    console.log(selectedArticle);
+
     this.articleService.getArticle(this.selectedArticleId).pipe(takeUntil(this.unsubscribe$)).subscribe(res => {
       if (res) {
         this.selectedArticleDispoQuantity = res.dispoQuantity;
@@ -196,7 +195,7 @@ export class AddOrderComponent implements OnInit, OnDestroy {
         if (this.selectedClient == null) {
           this.snackBar.open('Veuillez Choisir Un Client !', 'Close', { duration: 5000 });
         } else {
-          console.log(newOrderLine);
+
           this.orderLinesList.push(newOrderLine);
           this.resetArticleSelection();
           this.storedArticleColor = null;
