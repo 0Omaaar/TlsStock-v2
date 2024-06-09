@@ -3,6 +3,7 @@ import { FormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
+import { ArticleColorService } from 'src/app/services/articleColors/article-color.service';
 import { ArticleService } from 'src/app/services/articles/article.service';
 import { CategoryService } from 'src/app/services/category.service';
 import { ClientService } from 'src/app/services/clients/client.service';
@@ -39,12 +40,28 @@ export class EditOrderComponent {
   orderLinesList: Array<any> = [];
   order: any = {};
 
+  selectedColor!: string;
+  selectedImage!: any;
+
+  storedArticleForColors: any = null;
+  storedArticleColor: any = null;
+  storedArticleColorId: any = null;
+
+  sendNotif: boolean = false;
+
+  currentDate = new Date();
+  currentDateForReturn!: string;
+  returnDate: any | null = null;
+
+  listOfColors: any[] = [];
+
   constructor(
     private categorieService: CategoryService,
     private clientService: ClientService,
     private articleService: ArticleService,
     private clientOrderService: ClientOrderService,
     private sousCategoryService: SousCategoryService,
+    private articleColorService: ArticleColorService,
     private snackBar: MatSnackBar,
     private router: Router,
     private activatedRoute: ActivatedRoute
@@ -57,6 +74,8 @@ export class EditOrderComponent {
     this.getArticles();
     this.getOrderLines();
   }
+
+
 
   getOrderLines() {
     this.clientOrderService.getOrder(this.orderId).subscribe((res) => {
@@ -150,21 +169,6 @@ export class EditOrderComponent {
     });
   }
 
-  storeSelectedArticle(event: Event) {
-
-    this.resetArticleSelection();
-
-    const selectedArticle = event.target as HTMLSelectElement;
-    this.selectedArticleId = selectedArticle.value;
-
-    this.articleService.getArticle(this.selectedArticleId).subscribe(res => {
-      if (res) {
-        this.selectedArticleDispoQuantity = res.dispoQuantity;
-        this.isArticleSelected = true;
-        this.selectedArticleName = res.name;
-      }
-    });
-  }
 
   storeSelectedArticleOption2(articleDto: any) {
     const selectedArticle = articleDto;
@@ -186,24 +190,68 @@ export class EditOrderComponent {
     }
   }
 
+  storeSelectedArticle(event: Event) {
+
+    this.resetArticleSelection();
+
+    const selectedArticle = event.target as HTMLSelectElement;
+    this.selectedArticleId = selectedArticle.value;
+
+    this.articleService.getArticle(this.selectedArticleId).subscribe(res => {
+      if (res) {
+        this.selectedArticleDispoQuantity = res.dispoQuantity;
+        this.isArticleSelected = true;
+        this.selectedArticleName = res.name;
+        this.storedArticleForColors = res;
+
+      }
+    });
+
+
+  }
+
+  storeSelectedColor(event: Event) {
+    const html = event.target as HTMLSelectElement;
+    const selectColorArticleId = html.value as any;
+
+    this.articleColorService.getArticleColor(selectColorArticleId).subscribe(res => {
+      if (res != null) {
+        this.storedArticleColor = res;
+        this.storedArticleColorId = res.id;
+      }
+    })
+
+  }
+
   addOrderLine() {
     if (this.selectedQuantity <= 0) {
       this.snackBar.open('Veuillez Choisir Une Quantite Pour Cet Article !', 'Close', {
         duration: 5000
       });
     } else {
-      this.articleService.getArticle(this.selectedArticleId).subscribe((res) => {
+      this.articleService.getArticle(this.selectedArticleId).subscribe(res => {
         this.selectedArticle = res;
 
         const newOrderLine = {
           quantity: Number(this.selectedQuantity),
           articleId: Number(this.selectedArticleId),
           articleCode: this.selectedArticle.code,
-          articleName: this.selectedArticle.name
+          articleName: this.selectedArticle.name,
+          articleColorId: this.storedArticleColorId,
+          articleColor: this.storedArticleColor?.color
         };
+
+        const dispoQuantity = res.dispoQuantity - this.selectedQuantity;
+        if (dispoQuantity <= res.minQuantity) {
+          this.sendNotif = true;
+        }
 
         this.orderLinesList.push(newOrderLine);
         this.resetArticleSelection();
+        this.storedArticleColor = null;
+        this.storedArticleForColors = null;
+        this.storedArticleColorId = null;
+
       });
     }
   }

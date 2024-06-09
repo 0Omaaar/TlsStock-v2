@@ -64,26 +64,71 @@
                 </div>
                 <div class="col-md-12 mt-2" *ngIf="isArticleSelected">
                   <div class="row align-items-center">
-                    <div class="col-md-4 mb-2 mt-2">
-                      <input
-                        type="number"
-                        class="form-control"
-                        placeholder="Quantite"
-                        [(ngModel)]="selectedQuantity"
-                        (ngModelChange)="checkDispoQuantity()"
-                      />
+                    <div *ngIf="storedArticleForColors.articleColors.length == 0">
+                      <div class="col-md-4 mb-2 mt-2">
+                        <input
+                          type="number"
+                          class="form-control"
+                          placeholder="Quantite"
+                          [(ngModel)]="selectedQuantity"
+                          (ngModelChange)="checkDispoQuantity()"
+                        />
+                      </div>
+                      <div class="col-md-4 mb-2 mt-2">
+                        <input
+                          type="number"
+                          disabled
+                          class="form-control"
+                          placeholder="Quantite Disponible"
+                          [value]="selectedArticleDispoQuantity"
+                        />
+                      </div>
                     </div>
-                    <div class="col-md-4 mb-2 mt-2">
-                      <input
-                        type="number"
-                        disabled
-                        class="form-control"
-                        placeholder="Quantite Disponible"
-                        [value]="selectedArticleDispoQuantity"
-                      />
+
+                    <div *ngIf="storedArticleForColors.articleColors.length > 0" class="mb-2">
+                      <select class="form-control" (change)="storeSelectedColor($event)">
+                        <option selected disabled>-- Choisir Couleur --</option>
+                        <option *ngFor="let item of storedArticleForColors.articleColors" [value]="item.id">
+                          {{ item.color }} => {{ item.dispoQuantity }}
+                        </option>
+                      </select>
+
+                      <div *ngIf="storedArticleColor != null">
+                        <div class="col-md-4 mb-2 mt-2">
+                          <input
+                            type="number"
+                            class="form-control"
+                            placeholder="Quantite"
+                            [(ngModel)]="selectedQuantity"
+                            (ngModelChange)="checkDispoQuantity()"
+                          />
+                        </div>
+                        <div class="col-md-4 mb-2 mt-2">
+                          <input
+                            type="number"
+                            disabled
+                            class="form-control"
+                            placeholder="Quantite Disponible"
+                            [value]="storedArticleColor.dispoQuantity"
+                          />
+                        </div>
+                      </div>
                     </div>
+
                     <div class="col-md-4">
                       <button
+                        *ngIf="storedArticleForColors.articleColors.length > 0"
+                        class="btn btn-outline-primary btn-block"
+                        [disabled]="
+                          selectedQuantity > selectedArticleDispoQuantity ||
+                          selectedQuantity <= 0 ||
+                          selectedQuantity > storedArticleColor.quantity
+                        "
+                        (click)="addOrderLine()"
+                        >Ajouter</button
+                      >
+                      <button
+                        *ngIf="storedArticleForColors.articleColors.length == 0"
                         class="btn btn-outline-primary btn-block"
                         [disabled]="selectedQuantity > selectedArticleDispoQuantity || selectedQuantity <= 0"
                         (click)="addOrderLine()"
