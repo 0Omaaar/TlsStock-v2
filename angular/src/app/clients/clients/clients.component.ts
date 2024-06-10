@@ -1,5 +1,10 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
@@ -12,7 +17,15 @@ import { SharedModule } from 'src/app/theme/shared/shared.module';
 @Component({
   selector: 'app-clients',
   standalone: true,
-  imports: [SharedModule, NgbDropdownModule, MatTableModule, MatPaginatorModule, RouterModule],
+  imports: [SharedModule, NgbDropdownModule, MatTableModule, MatPaginatorModule, RouterModule,
+    MatExpansionModule,
+    MatPaginatorModule,
+    MatTableModule,
+    MatIconModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatButtonModule,
+  ],
   templateUrl: './clients.component.html',
   styleUrl: './clients.component.scss'
 })
@@ -34,6 +47,8 @@ export class ClientsComponent {
   addForm!: FormGroup;
   updateForm!: FormGroup;
   client: any;
+  clientName: any;
+  orders: any = [];
 
   ngOnInit() {
     this.getClients();
@@ -56,6 +71,15 @@ export class ClientsComponent {
         this.dataSource.data = res;
       }
     });
+  }
+
+
+  getOrdersByClient(clientId: number) {
+    this.clientService.getOrdersByClient(clientId).subscribe(res => {
+      if (res != null) {
+        this.orders = res;
+      }
+    })
   }
 
   applyFilter(event: Event) {

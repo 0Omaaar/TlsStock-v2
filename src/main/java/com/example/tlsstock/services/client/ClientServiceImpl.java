@@ -1,8 +1,11 @@
 package com.example.tlsstock.services.client;
 
 import com.example.tlsstock.dtos.ClientDto;
+import com.example.tlsstock.dtos.OrderClientDto;
 import com.example.tlsstock.entities.Client;
+import com.example.tlsstock.entities.OrderClient;
 import com.example.tlsstock.repositories.ClientRepository;
+import com.example.tlsstock.repositories.OrderClientRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +17,9 @@ public class ClientServiceImpl implements ClientService{
 
     @Autowired
     private ClientRepository clientRepository;
+
+    @Autowired
+    private OrderClientRepository orderClientRepository;
 
     @Override
     public ClientDto saveClient(ClientDto clientDto) {
@@ -34,6 +40,15 @@ public class ClientServiceImpl implements ClientService{
                 .map(Client::getDto).collect(Collectors.toList());
         if(clientDtos != null){
             return clientDtos;
+        }
+        return null;
+    }
+
+    @Override
+    public List<OrderClientDto> getOrdersByClient(Long clientId) {
+        List<OrderClient> orderClients = orderClientRepository.findAllByClientId(clientId);
+        if(orderClients != null){
+            return orderClients.stream().map(OrderClient::getDto).collect(Collectors.toList());
         }
         return null;
     }

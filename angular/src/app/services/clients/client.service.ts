@@ -13,7 +13,7 @@ export class ClientService {
   private clientsCache: any[] | null = null;
 
   constructor(private http: HttpClient
-  ) {}
+  ) { }
 
   private createAuthorizationHeader(): HttpHeaders {
     return new HttpHeaders().set(
@@ -41,6 +41,12 @@ export class ClientService {
     }
   }
 
+  getOrdersByClient(clientId: number): Observable<any> {
+    return this.http.get(API + `client/${clientId}/orders`, {
+      headers: this.createAuthorizationHeader()
+    })
+  }
+
   updateClient(clientDto: any): Observable<any> {
     this.clientsCache = null;
     return this.http.put(API + 'client/update', clientDto, {
@@ -56,7 +62,7 @@ export class ClientService {
     });
   }
 
-  clearCache(){
+  clearCache() {
     this.clientsCache = null;
   }
 }

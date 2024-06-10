@@ -11,5 +11,5 @@ public interface OrderClientRepository extends JpaRepository<OrderClient, Long> 
 
     List<OrderClient> findAllByOrderByLastModifiedDateDesc();
 
-//    List<OrderClient> findAllById(Long clientId);
+    List<OrderClient> findAllByClientId(Long clientId);
 }

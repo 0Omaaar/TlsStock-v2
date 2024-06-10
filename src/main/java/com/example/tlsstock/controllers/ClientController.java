@@ -1,6 +1,7 @@
 package com.example.tlsstock.controllers;
 
 import com.example.tlsstock.dtos.ClientDto;
+import com.example.tlsstock.dtos.OrderClientDto;
 import com.example.tlsstock.services.client.ClientService;
 import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,15 @@ public class ClientController {
         List<ClientDto> clientDtos = clientService.getClients();
         if(clientDtos != null){
             return ResponseEntity.ok(clientDtos);
+        }
+        return ResponseEntity.notFound().build();
+    }
+
+    @GetMapping("client/{id}/orders")
+    public ResponseEntity<?> getClientOrders(@PathVariable Long id){
+        List<OrderClientDto> orderClientDtos = clientService.getOrdersByClient(id);
+        if(orderClientDtos != null){
+            return ResponseEntity.ok(orderClientDtos);
         }
         return ResponseEntity.notFound().build();
     }

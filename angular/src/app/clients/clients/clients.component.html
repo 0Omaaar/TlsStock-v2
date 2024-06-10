@@ -15,13 +15,11 @@
           </button>
         </div>
         <div class="col-md-6" style="margin-top: -1%">
-          <!-- <form [formGroup]="searchForm" class="d-flex"> -->
           <input type="text" class="form-control me-2" placeholder="Chercher Client" aria-label="Search" (keyup)="applyFilter($event)" />
-          <!-- </form> -->
         </div>
       </div>
 
-      <div class="table-responsive" style="margin-top: 1">
+      <div class="table-responsive" style="margin-top: 1%">
         <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
           <ng-container matColumnDef="position">
             <th mat-header-cell *matHeaderCellDef>#</th>
@@ -55,7 +53,13 @@
               >
                 <i class="feather icon-edit"></i>
               </button>
-              <button type="button" class="btn btn-icon btn-info d-inline-flex">
+              <button
+                type="button"
+                class="btn btn-icon btn-info d-inline-flex"
+                (click)="getOrdersByClient(element.id)"
+                data-bs-toggle="modal"
+                data-bs-target="#clientOrders"
+              >
                 <i class="feather icon-info"></i>
               </button>
             </td>
@@ -66,7 +70,97 @@
         </table>
         <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
 
-        <!-- update category modal form -->
+        <!-- Client Orders Modal -->
+        <div class="modal fade" id="clientOrders" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered" role="document" style="max-width: 70%; max-height: 30%">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">
+                  Commandes Client <strong>{{ clientName }}</strong>
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body">
+                <app-card cardTitle="Liste Des Commandes Clients" [options]="true">
+                  <mat-accordion class="example-headers-align">
+                    <mat-expansion-panel *ngFor="let order of orders" hideToggle>
+                      <mat-expansion-panel-header style="height: auto">
+                        <mat-panel-title>
+                          <div class="order-summary">
+                            <mat-icon>shopping_basket</mat-icon>
+                            <br />
+                            <span
+                              ><b>{{ order.clientOrderLines.length }}</b> Articles Commandé(s)</span
+                            >
+                          </div>
+                        </mat-panel-title>
+                        <mat-panel-title>
+                          <div class="client-details">
+                            <p class="icon-text"
+                              ><mat-icon>person</mat-icon><span>{{ order.clientName }}</span></p
+                            >
+                            <p class="icon-text"
+                              ><mat-icon>email</mat-icon><span>{{ order.clientEmail }}</span></p
+                            >
+                            <p class="icon-text"
+                              ><mat-icon>phone</mat-icon><span>{{ order.clientPhone }}</span></p
+                            >
+                          </div>
+                        </mat-panel-title>
+                        <mat-panel-description>
+                          <div class="order-details">
+                            <p class="icon-text"
+                              ><mat-icon>gamepad</mat-icon><span>{{ order.code }}</span></p
+                            >
+                            <p class="icon-text"
+                              ><mat-icon>date_range</mat-icon><span>{{ order.orderDate | date }}</span></p
+                            >
+                            <p class="icon-text"
+                              ><mat-icon>date_range</mat-icon><span>{{ order.returnDate | date }}</span></p
+                            >
+                            <p class="icon-text"
+                              ><mat-icon>shopping_cart</mat-icon><span>{{ order.orderStatus }}</span></p
+                            >
+                          </div>
+                        </mat-panel-description>
+                      </mat-expansion-panel-header>
+
+                      <div class="col-xl-12">
+                        <app-card cardTitle="Liste Des Lignes De Commandes" [options]="false" blockClass="table-border-style">
+                          <div class="table-responsive">
+                            <table class="table table-hover">
+                              <thead>
+                                <tr>
+                                  <th>#</th>
+                                  <th>Nom Article</th>
+                                  <th>Code Article</th>
+                                  <th>Quantite</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <tr *ngFor="let orderLine of order.clientOrderLines; let i = index">
+                                  <th scope="row">{{ i + 1 }}</th>
+                                  <td>{{ orderLine.articleName }}</td>
+                                  <td>{{ orderLine.articleCode }}</td>
+                                  <td>{{ orderLine.quantity }}</td>
+                                </tr>
+                              </tbody>
+                            </table>
+                          </div>
+                        </app-card>
+                      </div>
+                    </mat-expansion-panel>
+                  </mat-accordion>
+                </app-card>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Update Client Modal -->
         <div class="modal fade" id="updateClient" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
           <div class="modal-dialog">
             <div class="modal-content" *ngIf="updateForm">
@@ -125,7 +219,7 @@
         </div>
       </div>
     </app-card>
-    <!-- add Client modal form -->
+    <!-- Add Client Modal -->
     <div class="modal fade" id="addClient" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content" *ngIf="addForm">
