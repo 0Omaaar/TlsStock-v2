@@ -1,54 +1,89 @@
 <app-breadcrumb></app-breadcrumb>
 <div class="row">
-    <div class="col-sm-12">
-        <app-card cardTitle="Modifier Article" [options]="true" *ngIf="updateArticleForm">
-            <form action="javascript:" [formGroup]="updateArticleForm" (submit)="modifierArticle()"
-                class="was-validated">
-                <div class="row">
-                    <div class="form-group col-md-6">
-                        <label for="inputEmail4">Code</label>
-                        <input formControlName="code" type="text" class="form-control is-invalid" id="inputEmail4"
-                            placeholder="Code D'Article" />
-                        <div class="invalid-feedback" *ngIf="updateArticleForm.get('code')!.invalid">
-                            Veuillez Entrer Un Code !</div>
-                    </div>
-                    <div class="form-group col-md-6">
-                        <label for="inputPassword4">Nom</label>
-                        <input type="text" formControlName="name" class="form-control is-invalid" id="inputPassword4"
-                            placeholder="Nom" />
-                        <div class="invalid-feedback" *ngIf="updateArticleForm.get('name')!.invalid">
-                            Veuillez Entrer Un Nom !</div>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="inputAddress">Description</label>
-                    <textarea formControlName="description" class="form-control is-invalid" id="inputAddress"
-                        placeholder="Description"></textarea>
-                    <div class="invalid-feedback" *ngIf="updateArticleForm.get('description')!.invalid">
-                        Veuillez Entrer Une Description !</div>
-                </div>
-                <div class="row">
-                    <div class="form-group col-md-2">
-                        <label for="fileInput">Image</label>
-                        <input type="file" class="form-control is-invalid" id="fileInput"
-                            (change)="onFileSelected($event)">
-                    </div>
+  <div class="col-sm-12">
+    <app-card cardTitle="Modifier Article" [options]="true" *ngIf="updateArticleForm">
+      <form action="javascript:" [formGroup]="updateArticleForm" (submit)="modifierArticle()" class="was-validated">
+        <div class="row">
+          <div class="form-group col-md-6">
+            <label for="inputEmail4">Code</label>
+            <input formControlName="code" type="text" class="form-control is-invalid" id="inputEmail4" placeholder="Code D'Article" />
+            <div class="invalid-feedback" *ngIf="updateArticleForm.get('code')!.invalid"> Veuillez Entrer Un Code !</div>
+          </div>
+          <div class="form-group col-md-6">
+            <label for="inputPassword4">Nom</label>
+            <input type="text" formControlName="name" class="form-control is-invalid" id="inputPassword4" placeholder="Nom" />
+            <div class="invalid-feedback" *ngIf="updateArticleForm.get('name')!.invalid"> Veuillez Entrer Un Nom !</div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="inputAddress">Description</label>
+          <textarea formControlName="description" class="form-control is-invalid" id="inputAddress" placeholder="Description"></textarea>
+          <div class="invalid-feedback" *ngIf="updateArticleForm.get('description')!.invalid"> Veuillez Entrer Une Description !</div>
+        </div>
+        <div class="row">
+          <div class="form-group col-md-4">
+            <label for="fileInput">Image</label>
+            <input type="file" class="form-control is-invalid" id="fileInput" (change)="onFileSelected($event)" />
+          </div>
 
-                    <div *ngIf="selectedFile || imageSrc" class="image-preview col-md-2">
-                        <div class="preview-container">
-                            <img *ngIf="imageSrc" [src]="imageSrc" alt="Selected Image" class="preview-image">
-                            <img *ngIf="selectedFile" [src]="imagePreview" alt="Selected Image" class="preview-image">
-                        </div>
-                    </div>
-                    <div class="form-group col-md-2">
-                        <label for="inputZip">Quantité</label>
-                        <input type="number" formControlName="quantity" class="form-control is-invalid" id="inputZip" />
-                        <div class="invalid-feedback" *ngIf="updateArticleForm.get('quantity')!.invalid">
-                            Veuillez Entrer Une Quantite !</div>
-                    </div>
-                </div>
-                <button type="submit" class="btn btn-primary">Modifier Article</button>
-            </form>
-        </app-card>
-    </div>
+          <div *ngIf="selectedFile || imageSrc" class="image-preview col-md-2">
+            <div class="preview-container">
+              <img *ngIf="imageSrc" [src]="imageSrc" alt="Selected Image" class="preview-image" />
+              <img *ngIf="selectedFile" [src]="imagePreview" alt="Selected Image" class="preview-image" />
+            </div>
+          </div>
+          <div class="form-group col-md-2">
+            <label for="inputZip">Quantité</label>
+            <input type="number" formControlName="quantity" class="form-control is-invalid" id="inputZip" />
+            <div class="invalid-feedback" *ngIf="updateArticleForm.get('quantity')!.invalid"> Veuillez Entrer Une Quantite !</div>
+          </div>
+        </div>
+
+        <div class="row mt-4" *ngIf="article.articleColors.length > 0">
+          <div class="col-6"> </div>
+          <div class="col-6">
+            <div class="card">
+              <div class="card-header" style="font-weight: bolder"> Liste Des Couleurs Dispo </div>
+              <div class="card-body">
+                <ul>
+                  @for (color of listOfColors; track $index) {
+                    <li class="color-item">
+                      <span>Couleur : {{ color.color }}, Quantité: {{ color.quantity }}</span>
+                      <mat-icon class="remove-icon" title="Impossible De Supprimer Une Couleur">remove_circle</mat-icon>
+                    </li>
+                  }
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <button type="submit" class="btn btn-primary" style="margin-left: 40%">Modifier Article</button>
+      </form>
+
+      <div class="row mt-4">
+        <div class="col">
+          <input placeholder="Couleur" class="form-control-sm" type="color" [(ngModel)]="selectedColor" />
+        </div>
+        <div class="col">
+          <input style="margin-top: 16%" type="file" class="form-control" (change)="onFileSelected2($event)" [(ngModel)]="selectedImage" />
+        </div>
+        <div class="col image-preview">
+          <div class="preview-container">
+            <img *ngIf="imagePreview2" [src]="imagePreview2" alt="Selected Image" class="preview-image" />
+          </div>
+        </div>
+        <div class="col" style="display: flex; align-items: center">
+          <button style="margin-top: 11%" (click)="addColor()" class="btn btn-sm btn-outline-success"
+            ><mat-icon class="mt-1">add</mat-icon></button
+          >
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-md-2">
+          <input placeholder="Quantite" style="width: 100%" class="form-control" [(ngModel)]="selectedQuantity" />
+        </div>
+      </div>
+    </app-card>
+  </div>
 </div>

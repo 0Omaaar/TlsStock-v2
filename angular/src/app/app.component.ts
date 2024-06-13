@@ -15,6 +15,13 @@ export class AppComponent implements OnInit {
     private authService: AuthService
   ) { }
 
+
+  private tokenExpired(token: string) {
+    const expiry = (JSON.parse(atob(token.split('.')[1]))).exp;
+    return (Math.floor((new Date).getTime() / 1000)) >= expiry;
+  }
+
+
   // life cycle event
   ngOnInit() {
     this.router.events.subscribe((evt) => {
@@ -23,6 +30,19 @@ export class AppComponent implements OnInit {
       }
       window.scrollTo(0, 0);
     });
+
+
+    const user = localStorage.getItem('ecom-user');
+    const token = localStorage.getItem('ecom-token');
+
+    if (token != null) {
+      if (this.tokenExpired(token)) {
+        console.log("Token expired !");
+        this.authService.logout();
+      } else {
+        console.log("Token Not Expired !");
+      }
+    }
 
     if (!UserStorageService.getToken()) {
       this.authService.logout();

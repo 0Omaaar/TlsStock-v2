@@ -88,6 +88,7 @@ public class ArticleServiceImpl implements ArticleService{
 
     @Override
     public ArticleDto updateArticle(ArticleDto articleDto) throws IOException, WriterException {
+        System.out.println(articleDto);
         Article article = articleRepository.findById(articleDto.getId()).orElse(null);
         if(article != null){
             article.setName(articleDto.getName());
@@ -95,16 +96,29 @@ public class ArticleServiceImpl implements ArticleService{
             article.setDescription(articleDto.getDescription());
             article.setQuantity(articleDto.getQuantity());
 
-//            Category category = categoryRepository.findById(articleDto.getCategoryId()).orElse(null);
-//            SousCategory sousCategory = sousCategoryRepository.findById(articleDto.getSousCategoryId()).orElse(null);
-
             if(articleDto.getImage() != null){
                 article.setImage(articleDto.getImage().getBytes());
             }
-//            if(category != null && sousCategory != null){
-//                article.setCategory(category);
-//                article.setSousCategory(sousCategory);
-//            }
+
+
+
+            if(articleDto.getArticleColors() != null){
+                for(ArticleColorDto articleColorDto: articleDto.getArticleColors()){
+
+                   System.out.println(articleColorDto);
+                   if(articleColorDto.getColor() != null && articleColorDto.getQuantity() != null && articleColorDto.getImage() != null){
+                       ArticleColor newArticleColor = new ArticleColor();
+                       newArticleColor.setArticle(article);
+                       newArticleColor.setQuantity(articleColorDto.getQuantity());
+                       newArticleColor.setDispoQuantity(articleColorDto.getQuantity());
+                       newArticleColor.setColor(articleColorDto.getColor());
+                       newArticleColor.setImage(articleColorDto.getImage().getBytes());
+
+                       articleColorRepository.save(newArticleColor);
+                   }
+
+                }
+            }
 
 
             Article updateArticle = articleRepository.save(article);

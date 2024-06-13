@@ -17,3 +17,20 @@
   height: 100%;
   object-fit: cover;
 }
+
+.color-list {
+  list-style-type: none;
+  padding: 0;
+}
+
+.color-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px; 
+}
+
+.remove-icon {
+  margin-left: 10px; 
+  cursor: not-allowed; 
+  color: rgb(247, 110, 110);
+}
