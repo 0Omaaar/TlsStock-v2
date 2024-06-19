@@ -46,10 +46,10 @@ export class GetOrdersComponent {
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  constructor(private clientOrderService: ClientOrderService, 
+  constructor(private clientOrderService: ClientOrderService,
     private clientService: ClientService,
     private snackBar: MatSnackBar,
-  ) {}
+  ) { }
 
   getOrders() {
     this.clientOrderService.getOrders().subscribe((res) => {
@@ -64,18 +64,18 @@ export class GetOrdersComponent {
     this.currentOrders = this.allOrders.slice(startIndex, endIndex);
   }
 
-  udpateOrderStatus(orderClientDto: any){
+  udpateOrderStatus(orderClientDto: any) {
 
-    this.clientOrderService.updateOrderStatus(orderClientDto).subscribe( res => {
-      if(res != null){
-        this.snackBar.open("Commande Definie Livree !", 'Close', 
+    this.clientOrderService.updateOrderStatus(orderClientDto).subscribe(res => {
+      if (res != null) {
+        this.snackBar.open("Commande Definie Livree !", 'Close',
           {
             duration: 5000
           }
         );
         this.getOrders();
-      }else{
-        this.snackBar.open("Erreur Survenue !", 'Close', {duration: 5000});
+      } else {
+        this.snackBar.open("Erreur Survenue !", 'Close', { duration: 5000 });
       }
     })
   }
@@ -101,25 +101,26 @@ export class GetOrdersComponent {
 
     doc.text('Client N° ' + order.clientId, 150, 95);
     doc.text('Nom Client : ' + order.clientName, 150, 100);
-    doc.text('Email : '+order.clientEmail, 150, 105);
+    doc.text('Email : ' + order.clientEmail, 150, 105);
 
     const orderLines = order.clientOrderLines.map((line: any) => [
       line.articleCode,
       line.articleName,
+      line.articleColor,
       line.quantity
     ]);
 
     const startY = 55;
     autoTable(doc, {
       startY,
-      head: [['Code Article', 'Nom Article', 'Quantite']],
+      head: [['Code Article', 'Nom Article', 'Couleur Article', 'Quantite']],
       body: orderLines,
       styles: { cellPadding: 2, fontSize: 10 },
       headStyles: { fillColor: [220, 220, 220], textColor: [0, 0, 0] },
       footStyles: { fillColor: [220, 220, 220], textColor: [0, 0, 0] },
     });
 
-  
+
     doc.save(`facture_client_${order.clientName}_${order.id}.pdf`);
   }
 }

@@ -109,6 +109,7 @@ export class AddOrderComponent implements OnInit, OnDestroy {
   displayClient(event: Event) {
     const selectedClient = event.target as HTMLSelectElement;
     const clientId = this.selectedClient.id;
+    console.log(this.selectedClient);
     this.orderCode = 'o-' + this.selectedClient.name + '-' + clientId;
   }
 

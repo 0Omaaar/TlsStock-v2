@@ -53,6 +53,7 @@ export class CategoryService {
     )
   }
 
+
   getArticlesByCategoryId(id: number): Observable<any> {
     return this.http.get<any[]>(API + `categorie/${id}`, {
       headers: this.createAuthorizationHeader()

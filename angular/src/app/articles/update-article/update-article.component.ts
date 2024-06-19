@@ -156,8 +156,6 @@ export class UpdateArticleComponent {
         });
 
       }
-      console.log();
-      console.log();
       if (this.updateArticleForm.get('quantity')?.value == totalArticleColorsQuantity) {
         this.articleService.updateArticle(formData).subscribe((res) => {
           if (res.id != null) {

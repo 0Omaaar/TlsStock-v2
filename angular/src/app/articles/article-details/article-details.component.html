@@ -204,7 +204,7 @@
             <ng-template ngbNavContent>
               <p class="mb-0">
                 <app-card cardTitle="Liste des Mouvements De Stock" [options]="true" blockClass="table-border-style">
-                  <div *ngIf="article.article">
+                  <div *ngIf="article.article" style="margin-left: 40%">
                     <h1>{{ article.name }}</h1>
                     <img [src]="qrCodeImageSrc" alt="QR Code" />
                   </div>

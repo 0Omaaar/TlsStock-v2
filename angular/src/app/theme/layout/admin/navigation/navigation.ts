@@ -135,7 +135,7 @@ export const NavigationItems: NavigationItem[] = [
     children: [
       {
         id: 'commandes',
-        title: 'Commande Client',
+        title: 'Commandes Client',
         type: 'collapse',
         icon: 'feather icon-box',
         children: [
@@ -157,13 +157,13 @@ export const NavigationItems: NavigationItem[] = [
   },
   {
     id: 'stockMovements',
-    title: 'Mouvement Stock',
+    title: 'Mouvements Stock',
     type: 'group',
     icon: 'icon-layers',
     children: [
       {
         id: 'stockMovements',
-        title: 'Mouvement Stock',
+        title: 'Mouvements Stock',
         type: 'collapse',
         icon: 'feather icon-box',
         children: [

@@ -22,6 +22,7 @@ import { authGuard } from './auth.guard';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { SousCategorieComponent } from './sousCategories/sous-categorie/sous-categorie.component';
 import { ArticlesSousCategoryComponent } from './sousCategories/articles-sous-category/articles-sous-category.component';
+import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
 
 const routes: Routes = [
   {
@@ -32,10 +33,10 @@ const routes: Routes = [
         path: 'login',
         component: LoginComponent,
       },
-      // {
-      //   path: 'signup',
-      //   component: SignupComponent,
-      // },
+      {
+        path: '*',
+        component: PageNotFoundComponent
+      },
       {
         path: '',
         redirectTo: '/dashboard',
@@ -157,4 +158,4 @@ const routes: Routes = [
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule]
 })
-export class AppRoutingModule {}
+export class AppRoutingModule { }

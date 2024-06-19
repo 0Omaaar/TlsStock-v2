@@ -1,6 +1,6 @@
 <div class="row">
   <div class="col-md-6">
-    <app-card cardTitle="Ajouter Commande Client" [options]="true">
+    <app-card cardTitle="Modifier Commande Client" [options]="true">
       <div class="row">
         <div class="col-md-6">
           <label>Code Commande</label>
@@ -9,7 +9,7 @@
           <label>Date Commande</label>
           <input type="text" class="form-control" [value]="order?.orderDate | date: 'dd-MM-yyyy'" disabled />
 
-          <label>Client</label>
+          <label>Client</label>OrderOrder
           <select class="form-control" disabled>
             <option *ngIf="order?.clientName" selected disabled>{{ order?.clientName }}</option>
           </select>
