@@ -2,5 +2,7 @@ package com.example.tlsstock.services.stockPrediction;
 
 public interface StockPredictionService {
 
-    double predictRecommendedQuantity(Long articleId);
+    double predictRecommendedQuantityByArithmeticAverage(Long articleId);
+
+    double predictRecommendedQuantityByTrainedModel(Long articleId);
 }

@@ -16,6 +16,11 @@ public class StockPredictionController {
 
     @GetMapping("predict/{articleId}")
     public ResponseEntity<?> predict(@PathVariable Long articleId) {
-        return ResponseEntity.ok(stockPredictionService.predictRecommendedQuantity(articleId));
+        return ResponseEntity.ok(stockPredictionService.predictRecommendedQuantityByArithmeticAverage(articleId));
+    }
+
+    @GetMapping("predict/model/{articleId}")
+    public ResponseEntity<?> predictModel(@PathVariable Long articleId) {
+        return ResponseEntity.ok(stockPredictionService.predictRecommendedQuantityByTrainedModel(articleId));
     }
 }
