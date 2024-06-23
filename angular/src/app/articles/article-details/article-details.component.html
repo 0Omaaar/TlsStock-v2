@@ -212,6 +212,46 @@
               </p>
             </ng-template>
           </li>
+          <li class="nav-item" [ngbNavItem]="5">
+            <a class="nav-link text-uppercase" aria-controls="home" aria-selected="true" ngbNavLink>Preditction Quantite Aricle</a>
+            <ng-template ngbNavContent>
+              <p class="mb-0">
+                <app-card cardTitle="Prediction De Stock" [options]="true" blockClass="table-border-style">
+                  <p>
+                    <button
+                      type="button"
+                      class="btn btn-outline-primary"
+                      (click)="collapse.toggle()"
+                      (click)="getPredictedQuantityByArithmeticAverage(articleDet.id)"
+                      [attr.aria-expanded]="!isCollapsed"
+                      aria-controls="collapseExample"
+                    >
+                      Avec Algorithme de Moyenne Arithmétique
+                    </button>
+
+                    <button
+                      type="button"
+                      style="margin-left: 1%"
+                      class="btn btn-outline-primary"
+                      (click)="collapse.toggle()"
+                      (click)="getPredictedQuantityByTrainedModel(articleDet.id)"
+                      [attr.aria-expanded]="isCollapsed"
+                      aria-controls="collapseExample"
+                    >
+                      Avec Régression Linéaire</button
+                    >
+                  </p>
+                  <div style="min-height: 100px">
+                    <div #collapse="ngbCollapse" [(ngbCollapse)]="isCollapsed" [horizontal]="true" style="max-width: 300px">
+                      <div class="card" style="width: 300px">
+                        <div class="card-body">{{ predictedQuantity }}</div>
+                      </div>
+                    </div>
+                  </div>
+                </app-card>
+              </p>
+            </ng-template>
+          </li>
         </ul>
         <div [ngbNavOutlet]="nav" class="mt-2"></div>
       </div>

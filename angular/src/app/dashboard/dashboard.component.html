@@ -4,12 +4,17 @@
     <app-card [hidHeader]="true" cardClass="bg-c-blue order-card custom-card-height">
       <h6 class="text-white">Commandes</h6>
       <h2 class="text-end text-white">
-        <i class="feather icon-shopping-cart float-start"></i><span>{{dashboardDto?.totalOrders}}</span>
+        <i class="feather icon-shopping-cart float-start"></i><span>{{ dashboardDto?.totalOrders }}</span>
       </h2>
-      <p class="m-b-0">Commandes Livrées<span class="float-end">{{ dashboardDto?.totalShippedOrders }}</span></p>
-      <p class="m-b-0">Commandes En Préparation<span class="float-end">{{ dashboardDto?.totalPreparationOrders }}</span>
+      <p class="m-b-0"
+        >Commandes Livrées<span class="float-end">{{ dashboardDto?.totalShippedOrders }}</span></p
+      >
+      <p class="m-b-0"
+        >Commandes En Préparation<span class="float-end">{{ dashboardDto?.totalPreparationOrders }}</span>
       </p>
-      <p class="m-b-0">Commandes Retournées<span class="float-end">{{ dashboardDto?.totalReturnedOrders }}</span></p>
+      <p class="m-b-0"
+        >Commandes Retournées<span class="float-end">{{ dashboardDto?.totalReturnedOrders }}</span></p
+      >
     </app-card>
   </div>
 
@@ -18,7 +23,7 @@
     <app-card [hidHeader]="true" cardClass="bg-c-green order-card custom-card-height">
       <h6 class="text-white">Clients</h6>
       <h2 class="text-end text-white">
-        <i class="feather icon-tag float-start"></i><span>{{dashboardDto?.totalClients}}</span>
+        <i class="feather icon-tag float-start"></i><span>{{ dashboardDto?.totalClients }}</span>
       </h2>
     </app-card>
   </div>
@@ -28,11 +33,14 @@
     <app-card [hidHeader]="true" cardClass="bg-c-yellow order-card custom-card-height">
       <h6 class="text-white">Articles</h6>
       <h2 class="text-end text-white">
-        <i class="feather icon-shopping-cart float-start"></i><span>{{dashboardDto?.totalArticles}}</span>
+        <i class="feather icon-shopping-cart float-start"></i><span>{{ dashboardDto?.totalArticles }}</span>
       </h2>
-      <p class="m-b-0">Articles Livrées<span class="float-end">{{ dashboardDto?.totalShippedArticles }}</span></p>
-      <p class="m-b-0">Articles En Préparation<span class="float-end">{{ dashboardDto?.totalPreparationArticles
-          }}</span></p>
+      <p class="m-b-0"
+        >Articles Livrées<span class="float-end">{{ dashboardDto?.totalShippedArticles }}</span></p
+      >
+      <p class="m-b-0"
+        >Articles En Préparation<span class="float-end">{{ dashboardDto?.totalPreparationArticles }}</span></p
+      >
     </app-card>
   </div>
 
@@ -41,7 +49,7 @@
     <app-card [hidHeader]="true" cardClass="bg-c-red order-card custom-card-height">
       <h6 class="text-white">Articles Avec Stock Faible</h6>
       <h2 class="text-end text-white">
-        <i class="feather icon-shopping-cart float-start"></i><span>{{lowStockArticlesCount}}</span>
+        <i class="feather icon-shopping-cart float-start"></i><span>{{ lowStockArticlesCount }}</span>
       </h2>
       <p class="m-b-0"></p>
       <p class="m-b-0"></p>
@@ -78,12 +86,12 @@
               </thead>
               <tbody>
                 <tr *ngFor="let order of dashboardDto?.orders; let i = index">
-                  <th scope="row">{{i + 1}}</th>
-                  <td>{{order.code}}</td>
-                  <td>{{order.orderDate | date}}</td>
-                  <td>{{order.orderStatus}}</td>
-                  <td>{{order.clientName}}</td>
-                  <td style="color: rgb(222, 97, 97); font-weight: bolder;">{{order.returnDate | date}}</td>
+                  <th scope="row">{{ i + 1 }}</th>
+                  <td>{{ order.code }}</td>
+                  <td>{{ order.orderDate | date }}</td>
+                  <td>{{ order.orderStatus }}</td>
+                  <td>{{ order.clientName }}</td>
+                  <td style="color: rgb(222, 97, 97); font-weight: bolder">{{ order.returnDate | date }}</td>
                 </tr>
               </tbody>
             </table>
@@ -104,18 +112,16 @@
                 <tr>
                   <th>#</th>
                   <th>Nom Article</th>
-                  <th style="text-align: center;">Quantité en Stock</th>
-                  <th style="text-align: center;">Seuil de Stock</th>
+                  <th style="text-align: center">Quantité en Stock</th>
+                  <th style="text-align: center">Seuil de Stock</th>
                 </tr>
               </thead>
               <tbody>
                 <tr *ngFor="let article of lowStockArticlesList; let i = index">
-                  <th scope="row">{{i + 1}}</th>
-                  <td>{{article.name}}</td>
-                  <td style="color: rgb(225, 65, 65); font-weight: bolder;text-align: center;">{{article.dispoQuantity}}
-                  </td>
-                  <td style="color: rgb(225, 65, 65); font-weight: bolder;text-align: center;">{{article.minQuantity}}
-                  </td>
+                  <th scope="row">{{ i + 1 }}</th>
+                  <td>{{ article.name }}</td>
+                  <td style="color: rgb(225, 65, 65); font-weight: bolder; text-align: center">{{ article.dispoQuantity }} </td>
+                  <td style="color: rgb(225, 65, 65); font-weight: bolder; text-align: center">{{ article.minQuantity }} </td>
                 </tr>
               </tbody>
             </table>

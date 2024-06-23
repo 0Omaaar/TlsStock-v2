@@ -13,7 +13,7 @@ const API = 'http://localhost:8080/api/';
 export class ArticleService {
   private articlesCache: any[] | null = null;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   private createAuthorizationHeader(): HttpHeaders {
     return new HttpHeaders().set(
@@ -77,7 +77,19 @@ export class ArticleService {
       );
   }
 
-  clearCache(){
+  arithmeticAverageQuantity(articleId: number): Observable<any> {
+    return this.http.get(API + `predict/${articleId}`, {
+      headers: this.createAuthorizationHeader()
+    })
+  }
+
+  trainedModelQuantity(articleId: number): Observable<any> {
+    return this.http.get(API + `predict/model/${articleId}`, {
+      headers: this.createAuthorizationHeader()
+    })
+  }
+
+  clearCache() {
     this.articlesCache = null;
   }
 }

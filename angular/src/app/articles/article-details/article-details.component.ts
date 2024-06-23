@@ -21,6 +21,10 @@ import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { CommonModule } from '@angular/common';
+import { NgbCollapseModule } from '@ng-bootstrap/ng-bootstrap';
+import { ArticleService } from 'src/app/services/articles/article.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
+
 
 @Component({
   selector: 'app-article-details',
@@ -34,7 +38,8 @@ import { CommonModule } from '@angular/common';
     MatIconModule,
     MatFormFieldModule,
     MatInputModule,
-    MatDatepickerModule
+    MatDatepickerModule,
+    NgbCollapseModule
   ],
   templateUrl: './article-details.component.html',
   styleUrl: './article-details.component.scss'
@@ -44,13 +49,17 @@ export class ArticleDetailsComponent {
   private routerSubscription!: Subscription;
   qrCodeImageSrc!: string;
   articleDet: any;
+  isCollapsed = true;
+  predictedQuantity: any = null;
 
 
   constructor(
     private clientOrderService: ClientOrderService,
+    private articleService: ArticleService,
     public dialogRef: MatDialogRef<ArticleComponent>,
     @Inject(MAT_DIALOG_DATA) public article: any,
-    private router: Router
+    private router: Router,
+    private snackBar: MatSnackBar
   ) { }
 
   ngOnInit() {
@@ -72,6 +81,35 @@ export class ArticleDetailsComponent {
   closeDialog() {
     this.dialogRef.close();
   }
+
+  getPredictedQuantityByArithmeticAverage(articleId: number) {
+    this.predictedQuantity = null;
+
+    this.articleService.arithmeticAverageQuantity(articleId).subscribe(res => {
+      if (res != null) {
+        this.predictedQuantity = res;
+      } else {
+        this.snackBar.open("Erreur Survenue !", 'Close', {
+          duration: 5000
+        })
+      }
+    })
+  }
+
+  getPredictedQuantityByTrainedModel(articleId: number) {
+    this.predictedQuantity = null;
+
+    this.articleService.trainedModelQuantity(articleId).subscribe(res => {
+      if (res != null) {
+        this.predictedQuantity = res;
+      } else {
+        this.snackBar.open("Erreur Survenue !", 'Close', {
+          duration: 5000
+        })
+      }
+    })
+  }
+
 
   ngOnDestroy() {
     if (this.routerSubscription) {
