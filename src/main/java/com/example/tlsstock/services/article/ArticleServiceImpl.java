@@ -202,6 +202,7 @@ public class ArticleServiceImpl implements ArticleService{
                     SousCategory sousCategory = sousCategoryRepository.findById(Long.parseLong(data[8])).orElse(null);
 
                     if(category != null && sousCategory != null){
+                        article.setCategory(category);
                         article.setSousCategory(sousCategory);
                     }
                     articles.add(article);

@@ -2,9 +2,11 @@ package com.example.tlsstock.services.stock_movement;
 
 import com.example.tlsstock.dtos.StockMovementDto;
 import com.example.tlsstock.entities.Article;
+import com.example.tlsstock.entities.ArticleColor;
 import com.example.tlsstock.entities.OrderClient;
 import com.example.tlsstock.entities.StockMovement;
 import com.example.tlsstock.enums.TypeMvtStk;
+import com.example.tlsstock.repositories.ArticleColorRepository;
 import com.example.tlsstock.repositories.ArticleRepository;
 import com.example.tlsstock.repositories.OrderClientRepository;
 import com.example.tlsstock.repositories.StockMovementRepository;
@@ -35,6 +37,9 @@ public class StockMovementServiceImpl implements StockMovementService{
     @Autowired
     private OrderClientRepository orderClientRepository;
 
+    @Autowired
+    private ArticleColorRepository articleColorRepository;
+
     public StockMovementServiceImpl(StockMovementRepository stockMovementRepository,
                                     OrderClientRepository orderClientRepository) {
         this.stockMovementRepository = stockMovementRepository;
@@ -54,6 +59,15 @@ public class StockMovementServiceImpl implements StockMovementService{
                 if(stockMovementDto.getTypeMvt().equals(TypeMvtStk.CORRECTION_POS)
                         || stockMovementDto.getTypeMvt().equals(TypeMvtStk.ENTREE)){
                     article.setDispoQuantity(article.getDispoQuantity() + stockMovementDto.getQuantity());
+
+                    if(stockMovementDto.getArticleColorId() != null){
+                        ArticleColor articleColor = articleColorRepository.findById(stockMovementDto.getArticleColorId()).orElse(null);
+                        if(articleColor != null){
+                            articleColor.setDispoQuantity(articleColor.getDispoQuantity() + stockMovementDto.getQuantity());
+
+                            articleColorRepository.save(articleColor);
+                        }
+                    }
                     // Generate QR code image
                     String qrCodeText = "Code Article: " + article.getCode() + ", Nom: " + article.getName() +
                             ", Quantité Initiale: " + article.getQuantity() + ", Quantité Disponible: " + (article.getDispoQuantity());

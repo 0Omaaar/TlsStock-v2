@@ -235,13 +235,13 @@ public class OrderServiceImpl implements OrderService{
     }
 
 
-    @Scheduled(cron = "0 0 0 * * *")
+    @Scheduled(cron = "0 */2 * * * *")
     @Transactional
     public void checkReturnDate() throws IOException, WriterException {
         List<OrderClient> orderClients = orderClientRepository.findAll();
         for(OrderClient orderClient : orderClients){
             if(Objects.equals(orderClient.getReturnDate(), LocalDate.now())){
-               if(orderClient.getOrderStatus() != OrderStatus.RETURNED){
+               if(orderClient.getOrderStatus() == OrderStatus.LIVREE ){
                    orderClient.setOrderStatus(OrderStatus.RETURNED);
                    makeStockMovementEnter(orderClient);
                    try {
@@ -265,6 +265,11 @@ public class OrderServiceImpl implements OrderService{
             stockMovementDto.setTypeMvt(TypeMvtStk.ENTREE);
             stockMovementDto.setMvtDate(LocalDate.now());
             stockMovementDto.setArticleId(clientOrderLine.getArticle().getId());
+
+            if(clientOrderLine.getArticleColor() != null){
+                stockMovementDto.setArticleColor(String.valueOf(clientOrderLine.getArticleColor()));
+                stockMovementDto.setArticleColorId(clientOrderLine.getArticleColor().getId());
+            }
 
             stockMovementService.correctionStock(stockMovementDto);
         }
