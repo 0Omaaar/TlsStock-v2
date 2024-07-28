@@ -19,22 +19,34 @@ export class DashboardComponent implements OnInit {
   orderStatusPieData: any[] = [];
   pieChart!: Chart;
   lowStockArticlesCount: number = 0;
-  lowStockArticlesList : any[] = [];
+  lowStockArticlesList: any[] = [];
+  lastOrdersForReturn: any[] = [];
   @ViewChild('lowStockArticlesListElement') lowStockArticlesListElement!: ElementRef;
 
 
   constructor(
     private ordersService: ClientOrderService,
     private dashboardService: DashboardService
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.getData();
     this.ordersService.getOrders().subscribe((orders) => {
       const ordersByMonth = this.processOrdersData(orders);
       this.initLineChart(ordersByMonth);
+
+      this.getLastOrdersForReturn(orders);
+
     });
 
+  }
+
+  autoOrderReturn(id: number) {
+    console.log(id);
+  }
+
+  manualOrderReturn(id: number) {
+    console.log(id)
   }
 
   scrollToLowStock() {
@@ -53,9 +65,9 @@ export class DashboardComponent implements OnInit {
 
 
       data.articles.forEach((article: { dispoQuantity: number; minQuantity: number; }) => {
-        if(article.dispoQuantity <= article.minQuantity){
+        if (article.dispoQuantity <= article.minQuantity) {
           this.lowStockArticlesList.push(article);
-          this.lowStockArticlesCount ++;
+          this.lowStockArticlesCount++;
         }
       });
 
@@ -204,4 +216,23 @@ export class DashboardComponent implements OnInit {
       ]
     });
   }
+
+  getLastOrdersForReturn(orders: any) {
+    const date = new Date();
+
+    const year = date.getFullYear();
+    const month = ('0' + (date.getMonth() + 1)).slice(-2);
+    const day = ('0' + date.getDate()).slice(-2);
+
+    const today = `${year}-${month}-${day}`;
+
+
+    orders.map((order: any) => {
+      if (order.returnDate == today) {
+        this.lastOrdersForReturn.push(order);
+      }
+    })
+  }
+
+
 }

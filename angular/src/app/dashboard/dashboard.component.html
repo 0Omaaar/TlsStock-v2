@@ -59,12 +59,62 @@
 
   <!-- Charts Card -->
   <div class="col-md-12">
-    <app-card cardTitle="Commandes Par Mois" [options]="true" cardClass="tab-card tab-content">
-      <div class="charts">
-        <div class="line" [chart]="lineChart"></div>
-        <div class="pie" [chart]="pieChart"></div>
+    <div class="row">
+      <div class="col">
+        <app-card cardTitle="Retour Commandes" [options]="true" cardClass="tab-card tab-content">
+          <div class="table-responsive">
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Code</th>
+                  <th>Date Retour</th>
+                  <th>Operations</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let order of lastOrdersForReturn; let i = index">
+                  <td>{{ i + 1 }}</td>
+                  <td>{{ order.code }}</td>
+                  <td
+                    ><span class="return-date">{{ order.returnDate | date }}</span></td
+                  >
+                  <td>
+                    <button [matMenuTriggerFor]="menu" type="button" class="btn btn-icon btn-dark d-inline-flex m-1">
+                      <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
+                    </button>
+
+                    <mat-menu #menu="matMenu">
+                      <button mat-menu-item style="color: red" (click)="autoOrderReturn(order.id)">
+                        <i class="fa fa-home" aria-hidden="true" style="margin-right: 9px"></i> Retour Automatique
+                      </button>
+
+                      <button mat-menu-item (click)="manualOrderReturn(order.id)">
+                        <i class="fa fa-home" style="margin-right: 9px"></i> Retour Manuel
+                      </button>
+                    </mat-menu>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </app-card>
       </div>
-    </app-card>
+      <div class="col">
+        <app-card cardTitle="Commandes Par Mois" [options]="true" cardClass="tab-card tab-content">
+          <div class="charts">
+            <div class="row">
+              <div class="col">
+                <div class="line" [chart]="lineChart"></div>
+              </div>
+              <div class="col">
+                <div class="pie" [chart]="pieChart"></div>
+              </div>
+            </div>
+          </div>
+        </app-card>
+      </div>
+    </div>
   </div>
 
   <!-- Upcoming Orders Table -->
