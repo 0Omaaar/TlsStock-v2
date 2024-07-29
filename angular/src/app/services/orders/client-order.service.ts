@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Observable, ObservedValuesFromArray, of } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { UserStorageService } from '../storage/user-storage.service';
 import { ArticleService } from '../articles/article.service';
@@ -13,7 +13,7 @@ const API = 'http://localhost:8080/api/';
 export class ClientOrderService {
   private ordersCache: any[] | null = null;
 
-  constructor(private http: HttpClient, private articleService: ArticleService) {}
+  constructor(private http: HttpClient, private articleService: ArticleService) { }
 
   private createAuthorizationHeader(): HttpHeaders {
     return new HttpHeaders().set('Authorization', 'Bearer ' + UserStorageService.getToken());
@@ -53,7 +53,7 @@ export class ClientOrderService {
       });
   }
 
-  getOrdersByArticle(id: number): Observable<any>{
+  getOrdersByArticle(id: number): Observable<any> {
     return this.http.get(API + `article/${id}/orders`, {
       headers: this.createAuthorizationHeader()
     })
@@ -65,7 +65,13 @@ export class ClientOrderService {
     });
   }
 
-  clearCache(){
+  autoOrderReturn(id: number): Observable<any> {
+    return this.http.get(API + `return-order-auto/${id}`, {
+      headers: this.createAuthorizationHeader()
+    });
+  }
+
+  clearCache() {
     this.ordersCache = null;
   }
 }

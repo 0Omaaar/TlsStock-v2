@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
 import java.util.List;
 
-@RestController @RequestMapping("/api/")
+@RestController @RequestMapping("/api")
 public class ClientOrderController {
 
     @Autowired
@@ -56,7 +56,7 @@ public class ClientOrderController {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 
-    @PostMapping("order/save")
+    @PostMapping("/order/save")
     public ResponseEntity<?> saveOrder(@RequestBody OrderClientDto orderClientDto){
         OrderClientDto savedOrder = orderService.saveOrder(orderClientDto);
         if(savedOrder != null){
@@ -65,12 +65,22 @@ public class ClientOrderController {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 
-    @PutMapping("order/update")
+    @PutMapping("/order/update")
     public ResponseEntity<?> updateOrder(@RequestBody OrderClientDto orderClientDto){
         OrderClientDto updatedOrder = orderService.updateOrder(orderClientDto);
         if(updatedOrder != null){
             return ResponseEntity.ok(updatedOrder);
         }
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+    }
+
+    @GetMapping("/return-order-auto/{id}")
+    public ResponseEntity<?> returnOrderAuto(@PathVariable Long id){
+        try{
+            orderService.autoOrderReturn(id);
+            return ResponseEntity.ok().build();
+        }catch (Exception e){
+            return ResponseEntity.badRequest().build();
+        }
     }
 }

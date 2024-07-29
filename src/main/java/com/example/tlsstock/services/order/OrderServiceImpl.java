@@ -235,24 +235,42 @@ public class OrderServiceImpl implements OrderService{
     }
 
 
-    @Scheduled(cron = "0 */2 * * * *")
-    @Transactional
-    public void checkReturnDate() throws IOException, WriterException {
-        List<OrderClient> orderClients = orderClientRepository.findAll();
-        for(OrderClient orderClient : orderClients){
-            if(Objects.equals(orderClient.getReturnDate(), LocalDate.now())){
-               if(orderClient.getOrderStatus() == OrderStatus.LIVREE ){
-                   orderClient.setOrderStatus(OrderStatus.RETURNED);
-                   makeStockMovementEnter(orderClient);
-                   try {
-                       orderClientRepository.save(orderClient);
-                       System.out.println("Order status updated successfully for order: " + orderClient.getId());
-                   } catch (Exception e) {
-                       System.err.println("Error updating order status for order: " + orderClient.getId());
-                       e.printStackTrace();
-                   }
-               }
+//    @Scheduled(cron = "0 */2 * * * *")
+//    @Transactional
+//    public void checkReturnDate() throws IOException, WriterException {
+//        List<OrderClient> orderClients = orderClientRepository.findAll();
+//        for(OrderClient orderClient : orderClients){
+//            if(Objects.equals(orderClient.getReturnDate(), LocalDate.now())){
+//               if(orderClient.getOrderStatus() == OrderStatus.LIVREE ){
+//                   orderClient.setOrderStatus(OrderStatus.RETURNED);
+//                   makeStockMovementEnter(orderClient);
+//                   try {
+//                       orderClientRepository.save(orderClient);
+//                       System.out.println("Order status updated successfully for order: " + orderClient.getId());
+//                   } catch (Exception e) {
+//                       System.err.println("Error updating order status for order: " + orderClient.getId());
+//                       e.printStackTrace();
+//                   }
+//               }
+//            }
+//        }
+//    }
+
+    @Override @Transactional
+    public void autoOrderReturn(Long id) throws IOException, WriterException {
+        OrderClient orderClient = orderClientRepository.findById(id).orElse(null);
+        if(orderClient != null && orderClient.getOrderStatus().equals(OrderStatus.LIVREE)
+                && Objects.equals(orderClient.getReturnDate(), LocalDate.now())){
+            orderClient.setOrderStatus(OrderStatus.RETURNED);
+            try{
+                makeStockMovementEnter(orderClient);
+                orderClientRepository.save(orderClient);
+
+            }catch (Exception e){
+                e.printStackTrace();
             }
+
+
         }
     }
 

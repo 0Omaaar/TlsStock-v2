@@ -20,4 +20,6 @@ public interface OrderService {
     OrderClientDto updateStatus(OrderClientDto orderClientDto) throws IOException, WriterException;
 
     List<ClientOrderLineDto> getOrderLinesByArticleId(Long id);
+
+    void autoOrderReturn(Long id) throws IOException, WriterException;
 }

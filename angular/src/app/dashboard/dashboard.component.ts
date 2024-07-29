@@ -3,6 +3,8 @@ import { Chart, ChartModule } from 'angular-highcharts';
 import { ClientOrderService } from '../services/orders/client-order.service';
 import { DashboardService } from '../services/dashboard/dashboard.service';
 import { SharedModule } from '../theme/shared/shared.module';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { Router } from '@angular/router';
 // Define the OrderStatusKey type
 type OrderStatusKey = 'LIVREE' | 'EN_PREPARATION' | 'RETURNED';
 
@@ -26,7 +28,9 @@ export class DashboardComponent implements OnInit {
 
   constructor(
     private ordersService: ClientOrderService,
-    private dashboardService: DashboardService
+    private dashboardService: DashboardService,
+    private snackBar: MatSnackBar,
+    private router: Router
   ) { }
 
   ngOnInit() {
@@ -42,7 +46,20 @@ export class DashboardComponent implements OnInit {
   }
 
   autoOrderReturn(id: number) {
-    console.log(id);
+    this.ordersService.autoOrderReturn(id).subscribe(
+      (res: any) => {
+        this.router.navigateByUrl('dashboard');
+        this.snackBar.open('Commande Definie Retournee Avec Succes !', 'Close', {
+          duration: 5000
+        })
+      },
+      (error) => {
+        this.snackBar.open("Erreur Survenue !", 'Close', {
+          duration: 5000
+        });
+        this.router.navigateByUrl('dashboard');
+      }
+    )
   }
 
   manualOrderReturn(id: number) {
