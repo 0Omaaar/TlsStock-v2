@@ -76,11 +76,20 @@
                 <tr *ngFor="let order of lastOrdersForReturn; let i = index">
                   <td>{{ i + 1 }}</td>
                   <td>{{ order.code }}</td>
-                  <td
-                    ><span class="return-date">{{ order.returnDate | date }}</span></td
-                  >
                   <td>
-                    <button [matMenuTriggerFor]="menu" type="button" class="btn btn-icon btn-dark d-inline-flex m-1">
+                    @if (order.orderStatus == 'RETURNED') {
+                      <span class="return-date" style="background-color: rgb(56, 224, 56)">{{ order.returnDate | date }}</span>
+                    } @else {
+                      <span class="return-date">{{ order.returnDate | date }}</span>
+                    }
+                  </td>
+                  <td>
+                    <button
+                      [matMenuTriggerFor]="menu"
+                      type="button"
+                      class="btn btn-icon btn-dark d-inline-flex m-1"
+                      [disabled]="order.orderStatus == 'RETURNED'"
+                    >
                       <i class="fa fa-ellipsis-v" aria-hidden="true"></i>
                     </button>
 
