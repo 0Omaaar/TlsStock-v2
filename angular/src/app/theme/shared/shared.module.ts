@@ -45,7 +45,8 @@ import { NgbDropdownModule, NgbNavModule, NgbModule } from '@ng-bootstrap/ng-boo
     NgbNavModule,
     NgbModule,
     NgScrollbarModule,
-    MatMenuModule
+    MatMenuModule,
+    MatIconModule
   ],
   exports: [
     CommonModule,
@@ -59,7 +60,8 @@ import { NgbDropdownModule, NgbNavModule, NgbModule } from '@ng-bootstrap/ng-boo
     NgbDropdownModule,
     NgbNavModule,
     NgScrollbarModule,
-    MatMenuModule
+    MatMenuModule,
+    MatIconModule
   ],
   declarations: [DataFilterPipe, SpinnerComponent]
 })

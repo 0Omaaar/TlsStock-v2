@@ -63,7 +63,7 @@ export class DashboardComponent implements OnInit {
   }
 
   manualOrderReturn(id: number) {
-    console.log(id)
+    this.router.navigateByUrl('manual-order-return/' + id);
   }
 
   scrollToLowStock() {

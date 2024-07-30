@@ -1,0 +1,115 @@
+<div class="row">
+  <div class="col-sm-12">
+    @if (order) {
+      <app-card cardTitle="Commande {{ order.code }}" [options]="true">
+        <!-- Order Basic Infos -->
+        <div class="card">
+          <div class="card-header">
+            <h5>Commande Informations</h5>
+          </div>
+          <div class="card-body">
+            <div>
+              <div class="row mt-2">
+                <div class="col"
+                  ><div style="text-align: center; margin-top: 15%">
+                    <mat-icon>shopping_basket</mat-icon>
+                    <br />
+                    <span
+                      ><b>{{ order.clientOrderLines.length }}</b> Articles Commandé(s)</span
+                    >
+                  </div></div
+                >
+                <div class="col"
+                  ><div style="margin-top: 3%; margin-left: 15%">
+                    <p
+                      class="client"
+                      style="text-align: left; margin-left: 10%; font-size: larger; font-weight: bold; color: rgb(21, 150, 236)"
+                      >CLIENT</p
+                    >
+                    <p class="icon-text"
+                      ><mat-icon>person</mat-icon><span> {{ order.clientName }}</span></p
+                    >
+                    <p class="icon-text"
+                      ><mat-icon>email</mat-icon><span> {{ order.clientEmail }}</span></p
+                    >
+                    <p class="icon-text"
+                      ><mat-icon>phone</mat-icon><span>{{ order.clientPhone }}</span></p
+                    >
+                  </div></div
+                >
+                <div class="col"
+                  ><div style="margin-top: 3%; margin-left: 18%">
+                    <p
+                      class="client"
+                      style="text-align: left; margin-left: 19%; font-size: larger; font-weight: bold; color: rgb(21, 150, 236)"
+                      >COMMANDE</p
+                    >
+                    <p class="icon-text"
+                      ><mat-icon>gamepad</mat-icon><span>{{ order.code }}</span></p
+                    >
+                    <p class="icon-text"
+                      ><mat-icon>date_range</mat-icon
+                      ><span
+                        >D. Commande : <b>{{ order.orderDate | date }}</b></span
+                      ></p
+                    >
+                    <p class="icon-text"
+                      ><mat-icon>date_range</mat-icon
+                      ><span
+                        >D. Retour : <b>{{ order.returnDate | date }}</b></span
+                      ></p
+                    >
+                    <p class="icon-text">
+                      <mat-icon>shopping_cart</mat-icon
+                      ><span style="color: rgb(250, 67, 67); font-weight: bolder; font-size: large">{{ order.orderStatus }}</span>
+                    </p>
+                  </div></div
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Order Lines .. -->
+
+        <div class="card mt-4">
+          <div class="card-header">
+            <h5>Lignes Commande</h5>
+          </div>
+          <div class="card-body">
+            <table class="table table-border-style mt-3">
+              <thead>
+                <tr>
+                  <th>Code</th>
+                  <th>Image</th>
+                  <th>Nom</th>
+                  <th>Couleur</th>
+                  <th>Quantite Sortie</th>
+                  <th>Quantite Entree</th>
+                  <th>Operations</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (line of order.clientOrderLines; track $index) {
+                  <tr>
+                    <td>{{ line.articleCode }}</td>
+                    <td>cc</td>
+                    <td>{{ line.articleName }}</td>
+                    <td>{{ line.articleColor ? line.articleColor : '---' }}</td>
+                    <td>{{ line.quantity }}</td>
+                    <td>
+                      <input [value]="line.quantity" class="form-control" type="number" />
+                    </td>
+                    <td>
+                      <button>Retour</button>
+                    </td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </app-card>
+    }
+  </div>
+</div>

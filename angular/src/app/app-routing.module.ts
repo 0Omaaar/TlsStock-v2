@@ -23,6 +23,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { SousCategorieComponent } from './sousCategories/sous-categorie/sous-categorie.component';
 import { ArticlesSousCategoryComponent } from './sousCategories/articles-sous-category/articles-sous-category.component';
 import { PageNotFoundComponent } from './page-not-found/page-not-found.component';
+import { ManualOrderReturnComponent } from './dashboard/manual-order-return/manual-order-return.component';
 
 const routes: Routes = [
   {
@@ -55,6 +56,11 @@ const routes: Routes = [
       {
         path: 'dashboard',
         component: DashboardComponent,
+        canActivate: [authGuard],
+      },
+      {
+        path: 'manual-order-return/:id',
+        component: ManualOrderReturnComponent,
         canActivate: [authGuard],
       },
       {
