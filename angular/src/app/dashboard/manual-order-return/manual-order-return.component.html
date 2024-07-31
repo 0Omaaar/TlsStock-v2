@@ -93,20 +93,32 @@
                 @for (line of order.clientOrderLines; track $index) {
                   <tr>
                     <td>{{ line.articleCode }}</td>
-                    <td>cc</td>
+                    <td>{{ $index }}</td>
                     <td>{{ line.articleName }}</td>
                     <td>{{ line.articleColor ? line.articleColor : '---' }}</td>
                     <td>{{ line.quantity }}</td>
                     <td>
-                      <input [value]="line.quantity" class="form-control" type="number" />
+                      <input
+                        class="form-control"
+                        type="number"
+                        [(ngModel)]="order.clientOrderLines[$index].quantity"
+                        [max]="line.quantity"
+                      />
                     </td>
                     <td>
-                      <button>Retour</button>
+                      <mat-slide-toggle (change)="changeSlideToggle($index, $event.checked)"
+                        ><span style="color: rgb(240, 78, 78); font-weight: bold">CONFIRMER</span></mat-slide-toggle
+                      >
                     </td>
                   </tr>
                 }
               </tbody>
             </table>
+          </div>
+          <div class="card-footer">
+            <button style="margin-left: 89%" class="btn btn-outline-success" (click)="returnOrder(order)" [disabled]="disable"
+              >Sauvegarder</button
+            >
           </div>
         </div>
       </app-card>

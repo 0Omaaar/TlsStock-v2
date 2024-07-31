@@ -3,7 +3,7 @@ package com.example.tlsstock.dtos;
 import lombok.Data;
 
 @Data
-public class    ClientOrderLineDto {
+public class ClientOrderLineDto {
 
     private Long id;
 
