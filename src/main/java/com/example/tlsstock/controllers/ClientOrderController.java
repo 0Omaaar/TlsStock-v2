@@ -83,4 +83,14 @@ public class ClientOrderController {
             return ResponseEntity.badRequest().build();
         }
     }
+
+    @PostMapping("/return-order-manual")
+    public ResponseEntity<?> returnOrderManual(@RequestBody OrderClientDto orderClientDto){
+        try{
+            orderService.manualOrderReturn(orderClientDto);
+            return ResponseEntity.ok().build();
+        }catch (Exception e){
+            return ResponseEntity.badRequest().build();
+        }
+    }
 }

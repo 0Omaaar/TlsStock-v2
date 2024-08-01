@@ -1,7 +1,11 @@
 package com.example.tlsstock.dtos;
 
+import com.example.tlsstock.entities.Client;
+import com.example.tlsstock.entities.OrderClient;
 import com.example.tlsstock.enums.OrderStatus;
+import com.example.tlsstock.repositories.ClientRepository;
 import lombok.Data;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.Instant;
 import java.time.LocalDate;
@@ -29,5 +33,8 @@ public class OrderClientDto {
     private String clientPhone;
 
     private List<ClientOrderLineDto> clientOrderLines;
+
+    private ClientRepository clientRepository;
+
 
 }

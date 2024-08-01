@@ -71,6 +71,12 @@ export class ClientOrderService {
     });
   }
 
+  manualOrderReturn(orderDto: any): Observable<any> {
+    return this.http.post(API + 'return-order-manual', orderDto, {
+      headers: this.createAuthorizationHeader(),
+    })
+  }
+
   clearCache() {
     this.ordersCache = null;
   }

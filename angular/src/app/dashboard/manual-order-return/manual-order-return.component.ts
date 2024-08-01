@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ClientOrderService } from 'src/app/services/orders/client-order.service';
 import { SharedModule } from 'src/app/theme/shared/shared.module';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-manual-order-return',
@@ -17,10 +18,13 @@ export class ManualOrderReturnComponent {
   order: any;
   orderLines: any;
   confirmations: boolean[] = [];
+  quantityTemps: any[] = [];
   disable: boolean = true;
 
   constructor(private activatedRoute: ActivatedRoute,
-    private orderService: ClientOrderService
+    private orderService: ClientOrderService,
+    private snackBar: MatSnackBar,
+    private router: Router
   ) { }
 
   ngOnInit() {
@@ -28,11 +32,25 @@ export class ManualOrderReturnComponent {
     this.orderService.getOrder(this.orderId).subscribe(res => {
       this.order = res;
       this.confirmations = new Array(res.clientOrderLines.length).fill(false);
+      this.quantityTemps = res.clientOrderLines.map((line: any) => line.quantity);
     })
+
   }
 
   returnOrder(order: any) {
-    console.log(this.confirmations);
+    this.orderService.manualOrderReturn(order).subscribe(
+      (res: any) => {
+        this.snackBar.open("Commande Definie Comme RETOURNE !", 'Close', {
+          duration: 5000
+        });
+        this.router.navigateByUrl('dashboard')
+      },
+      (error: any) => {
+        this.snackBar.open("Erreur Survenue !", 'Close', {
+          duration: 5000
+        })
+      }
+    )
   }
 
   changeSlideToggle(index: number, checked: boolean) {

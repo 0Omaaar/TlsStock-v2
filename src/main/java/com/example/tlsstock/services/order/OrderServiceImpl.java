@@ -1,5 +1,6 @@
 package com.example.tlsstock.services.order;
 
+import com.example.tlsstock.dtos.ClientOrderLineConverter;
 import com.example.tlsstock.dtos.ClientOrderLineDto;
 import com.example.tlsstock.dtos.OrderClientDto;
 import com.example.tlsstock.dtos.StockMovementDto;
@@ -53,6 +54,7 @@ public class OrderServiceImpl implements OrderService{
 
     @Autowired
     private ArticleColorRepository articleColorRepository;
+
 
     @Override
     @Transactional
@@ -271,6 +273,24 @@ public class OrderServiceImpl implements OrderService{
             }
 
 
+        }
+    }
+
+    @Override @Transactional
+    public void manualOrderReturn(OrderClientDto orderClientDto) {
+        if(orderClientDto != null){
+            try{
+                OrderClient orderClient = orderClientRepository.findById(orderClientDto.getId()).orElse(null);
+                if(orderClient != null && orderClient.getOrderStatus().equals(OrderStatus.LIVREE)){
+                    orderClient.setOrderStatus(OrderStatus.RETURNED);
+                    orderClientRepository.save(orderClient);
+                    List<ClientOrderLine> clientOrderLines = ClientOrderLineConverter.dtoToEntityList(orderClientDto.getClientOrderLines(), articleRepository, articleColorRepository);
+                    orderClient.setClientOrderLines(clientOrderLines);
+                    makeStockMovementEnter(orderClient);
+                }
+            }catch (Exception e){
+                e.printStackTrace();
+            }
         }
     }
 
