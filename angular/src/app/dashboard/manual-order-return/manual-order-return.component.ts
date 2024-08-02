@@ -33,6 +33,8 @@ export class ManualOrderReturnComponent {
       this.order = res;
       this.confirmations = new Array(res.clientOrderLines.length).fill(false);
       this.quantityTemps = res.clientOrderLines.map((line: any) => line.quantity);
+
+      console.log(res)
     })
 
   }

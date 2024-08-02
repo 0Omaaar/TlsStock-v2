@@ -80,8 +80,8 @@
             <table class="table table-border-style mt-3">
               <thead>
                 <tr>
+                  <th>ID</th>
                   <th>Code</th>
-                  <th>Image</th>
                   <th>Nom</th>
                   <th>Couleur</th>
                   <th>Quantite Sortie</th>
@@ -92,8 +92,8 @@
               <tbody>
                 @for (line of order.clientOrderLines; track $index) {
                   <tr>
+                    <td>{{ $index + 1 }}</td>
                     <td>{{ line.articleCode }}</td>
-                    <td>{{ $index }}</td>
                     <td>{{ line.articleName }}</td>
                     <td>{{ line.articleColor ? line.articleColor : '---' }}</td>
                     <td>{{ quantityTemps[$index] }}</td>

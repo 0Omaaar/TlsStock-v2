@@ -29,7 +29,12 @@
               "rgbcolor",
               "file-saver",
               "jspdf-autotable",
-              "lodash"
+              "lodash",
+              "highcharts",
+              "highcharts/highcharts-gantt",
+              "highcharts/highmaps",
+              "highcharts/highstock",
+              "hex-color-to-color-name"
             ],
             "outputPath": "dist",
             "index": "src/index.html",
